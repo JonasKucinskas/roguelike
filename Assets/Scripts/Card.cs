@@ -3,28 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Card : MonoBehaviour
 {
-    public void OnMouseEnter()
+    private bool isDragging = false;
+    private Vector3 slotCoordinates;
+
+    Vector3 objectSreenCoord;
+
+    private void OnMouseEnter()
     {
         transform.Translate(Vector3.up);
     }
-    
-    public void OnMouseOver()
-    {
-    }
 
-    public void OnMouseExit()
+    private void OnMouseExit()
     {
         transform.Translate(Vector3.down);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        objectSreenCoord = Camera.main.WorldToScreenPoint(transform.position);
     }
 
-    // Update is called once per frame
-    void Update()
+   private void Update()
     {
-        
+        if (isDragging == true)
+        {
+            Vector3 objectCursorMoveScreen = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectSreenCoord.z);
+            Vector3 objectCursorMoveWorld = Camera.main.ScreenToWorldPoint(objectCursorMoveScreen);
+            transform.position = objectCursorMoveWorld;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            transform.position = slotCoordinates;
+            isDragging = false;
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        isDragging = true;
+    }
+
+    public void SetSlotCoordinates(Vector3 slot)
+    {
+        slotCoordinates = slot;
     }
 }

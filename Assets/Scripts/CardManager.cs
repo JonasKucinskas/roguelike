@@ -22,6 +22,7 @@ public class CardManager : MonoBehaviour
                 {
                     RandomCard.gameObject.SetActive(true);
                     RandomCard.transform.position=cardSlots[i].position;
+                    RandomCard.SetSlotCoordinates(cardSlots[i].position);
                     freeCardSlots[i]=false;
                     deck.Remove(RandomCard);
                     return;
@@ -34,14 +35,13 @@ public class CardManager : MonoBehaviour
     {
         
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         for(int i=0;i<freeCardSlots.Length;i++)
         DrawCard();
     }
 
-    // Update is called once per frame
     void Update()
     {
         
