@@ -4,28 +4,25 @@ using UnityEngine;
 
 public class TileScript : MonoBehaviour
 {
+    public bool IsHighlighted { get; private set; } = false;
     private Color originalColor;
     private Renderer rend;
-    // Start is called before the first frame update
+
     void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnMouseEnter()
     {
-        
+        IsHighlighted = true;
+        rend.material.color = Color.cyan; // Change to the highlight color.
     }
 
-	private void OnMouseEnter()
-	{
-        rend.material.color = Color.cyan;
-	}
-
-	private void OnMouseExit()
-	{
-        rend.material.color = originalColor;
-	}
+    void OnMouseExit()
+    {
+        IsHighlighted = false;
+        rend.material.color = originalColor; // Change back to the original color.
+    }
 }

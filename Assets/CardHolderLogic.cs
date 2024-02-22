@@ -6,16 +6,20 @@ public class CardHolderLogic : MonoBehaviour
 {
     void Start()
     {
-        // Ensure the Rigidbody is kinematic so it doesn't fall due to gravity
         var rb = gameObject.AddComponent<Rigidbody>();
         rb.isKinematic = true;
         rb.useGravity = false;
     }
-    private void OnTriggerEnter(Collider other)
+
+    /*private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Card")) // Ensure the object has the "Card" tag
+        Card cardScript = other.GetComponent<Card>();
+
+        // Only glue the card if it's ready to be glued.
+        if (cardScript != null && cardScript.isReadyToGlue)
         {
             GlueCardToHolder(other.gameObject);
+            cardScript.ResetGlueState(); // Reset the state once glued.
         }
     }
 
@@ -40,6 +44,6 @@ public class CardHolderLogic : MonoBehaviour
         }
 
         Debug.Log("Card glued to holder.");
-    }
+    }*/
 
 }
