@@ -9,6 +9,8 @@ public class Card : MonoBehaviour
     private Vector3 objectScreenCoord;
     private Vector3 offset;
     private bool isPlaced = false; // Flag to indicate whether the card is placed
+    [SerializeReference]
+    private LayerMask IgnoreMe;
 
     private void Start()
     {
@@ -47,10 +49,10 @@ public class Card : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 1000f, ~IgnoreMe))
             {
                 TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-                if (cubeHighlighter != null && cubeHighlighter.IsHighlighted)
+                if (cubeHighlighter != null )
                 {
                     PlaceCardOnCube(hit.transform);
                 }
@@ -83,7 +85,7 @@ public class Card : MonoBehaviour
     private void PlaceCardOnCube(Transform cubeTransform)
     {
         transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
-        transform.localScale *= 0.05f;
+        transform.localScale *= 2f;
         transform.SetParent(cubeTransform, worldPositionStays: true);
         IsDragging = false;
         isPlaced = true; // Mark the card as placed

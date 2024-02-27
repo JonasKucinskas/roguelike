@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsDragging: 0
+  IgnoreMe:
+    serializedVersion: 2
+    m_Bits: 32
 --- !u!212 &5669991604227019286
 SpriteRenderer:
   m_ObjectHideFlags: 0
