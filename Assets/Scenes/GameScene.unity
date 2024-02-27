@@ -918,7 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 7175217847228291942, guid: 3b1b77a672463f74e8f8a979be22d0e7, type: 3}
-  enemyPrefab: {fileID: 3666024557408437073, guid: 804ee1cef0dfe7b4f8966b9b9bf588ca, type: 3}
+  enemyPrefab: {fileID: 100116, guid: e5836d050fdb354479bcd0d285bf2f22, type: 3}
   Gap: 0.5
   Size: 1
   X: 4
