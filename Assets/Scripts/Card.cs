@@ -5,14 +5,28 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     Vector3 slotCoordinates;
-    public bool IsDragging = false;
+    private bool IsDragging = false;
     private Vector3 objectScreenCoord;
     private Vector3 offset;
     private bool isPlaced = false; // Flag to indicate whether the card is placed
 
+    [SerializeField]
+    float cardJumpSize = 6f;
+
+
     private void Start()
     {
         objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
+    }
+
+    private void OnMouseEnter()
+    {
+        transform.Translate(Vector3.up*cardJumpSize);
+    }
+
+    private void OnMouseExit()
+    {
+        transform.Translate(Vector3.down*cardJumpSize);
     }
 
     private void Update()
