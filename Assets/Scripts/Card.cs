@@ -103,4 +103,20 @@ public class Card : MonoBehaviour
     {
         slotCoordinates = slot;
     }
+
+    private void OnMouseEnter()
+    {
+        if(isPlaced==false)
+        {
+            transform.Translate(Vector3.up*0.25f);            
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if(isPlaced==false)
+        {
+            transform.Translate(Vector3.down*0.25f);            
+        }
+    }
 }
