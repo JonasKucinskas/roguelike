@@ -25,4 +25,21 @@ public class TileScript : MonoBehaviour
         IsHighlighted = false;
         rend.material.color = originalColor; // Change back to the original color.
     }
+
+    public static HashSet<Transform> OccupiedSlots = new HashSet<Transform>();
+
+    public static bool IsSlotOccupied(Transform slotTransform)
+    {
+        return OccupiedSlots.Contains(slotTransform);
+    }
+
+    public static void OccupySlot(Transform slotTransform)
+    {
+        OccupiedSlots.Add(slotTransform);
+    }
+
+    public static void FreeSlot(Transform slotTransform)
+    {
+        OccupiedSlots.Remove(slotTransform);
+    }
 }
