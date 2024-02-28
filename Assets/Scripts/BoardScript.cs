@@ -12,6 +12,7 @@ public class BoardScript : MonoBehaviour
     public float Size;
     public int X;
     public int Z;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +35,7 @@ public class BoardScript : MonoBehaviour
             for (int j = 0; j < z; j++)
             {
                 Vector3 coordinates = new Vector3(i*Size+i*Gap-midx, 0, j*Size+j*Gap-midz);
+                
                 GameObject tile = Instantiate(TilePrefab, coordinates, Quaternion.identity);
                 tile.transform.parent = transform;
                 tile.name = "Tile_" + i.ToString() + "_" + j.ToString();
