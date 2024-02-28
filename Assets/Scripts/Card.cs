@@ -9,12 +9,14 @@ public class Card : MonoBehaviour
     private Vector3 objectScreenCoord;
     private Vector3 offset;
     private bool isPlaced = false; // Flag to indicate whether the card is placed
+    private Vector3 originalPosition; // Store the original position of the card
     [SerializeReference]
     private LayerMask IgnoreMe;
 
     private void Start()
     {
         objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
+        originalPosition = transform.position; // Initialize original position
     }
 
     private void Update()
@@ -31,11 +33,11 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // Only allow dragging if the card has not been placed yet
         if (!isPlaced)
         {
             Debug.Log("Card clicked: " + gameObject.name);
             IsDragging = true;
+            originalPosition = transform.position; // Save the original position when dragging starts
             objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
             offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
         }
@@ -52,10 +54,21 @@ public class Card : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 1000f, ~IgnoreMe))
             {
                 TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-                if (cubeHighlighter != null )
+                if (cubeHighlighter != null && !TileScript.IsSlotOccupied(hit.transform))
                 {
                     PlaceCardOnCube(hit.transform);
                 }
+                else
+                {
+                    // If the block is occupied or not a valid placement, return to original position
+                    transform.position = originalPosition;
+                    Debug.Log("Cannot place card here, slot is already occupied or not valid.");
+                }
+            }
+            else
+            {
+                // If no valid hit, return to original position
+                transform.position = originalPosition;
             }
         }
     }
@@ -84,19 +97,30 @@ public class Card : MonoBehaviour
 
     private void PlaceCardOnCube(Transform cubeTransform)
     {
-        transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
-        transform.localScale *= 2f;
-        transform.SetParent(cubeTransform, worldPositionStays: true);
-        IsDragging = false;
-        isPlaced = true; // Mark the card as placed
-
-        var dragObject = GetComponent<DragObject>();
-        if (dragObject != null)
+        // Check if the slot is already occupied
+        if (!TileScript.IsSlotOccupied(cubeTransform))
         {
-            dragObject.enabled = false;
-        }
+            transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
+            transform.localScale *= 2f;
+            transform.SetParent(cubeTransform, worldPositionStays: true);
+            IsDragging = false;
+            isPlaced = true; // Mark the card as placed
 
-        Debug.Log("Card placed on cube.");
+            TileScript.OccupySlot(cubeTransform); // Mark the slot as occupied
+
+            var dragObject = GetComponent<DragObject>();
+            if (dragObject != null)
+            {
+                dragObject.enabled = false;
+            }
+
+            Debug.Log("Card placed on cube.");
+        }
+        else
+        {
+            // Optionally, add feedback to the player that the slot is occupied
+            Debug.Log("Cannot place card here, slot is already occupied.");
+        }
     }
 
     public void SetSlotCoordinates(Vector3 slot)
