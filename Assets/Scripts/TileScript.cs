@@ -7,6 +7,7 @@ public class TileScript : MonoBehaviour
     public bool IsHighlighted { get; private set; } = false;
     private Color originalColor;
     private Renderer rend;
+    public bool IsEnemyPresent = false;
 
     void Start()
     {
@@ -41,5 +42,23 @@ public class TileScript : MonoBehaviour
     public static void FreeSlot(Transform slotTransform)
     {
         OccupiedSlots.Remove(slotTransform);
+    }
+
+    // Call this method when you spawn an enemy on this tile
+    public void MarkEnemyPresence()
+    {
+        IsEnemyPresent = true;
+        Debug.Log("Marking enemy presence on: " + gameObject.name);
+    }
+
+    // Utility method to check if this tile has an enemy
+    public static bool IsEnemyOnTile(Transform tileTransform)
+    {
+        TileScript tileScript = tileTransform.GetComponent<TileScript>();
+        if (tileScript != null)
+        {
+            return tileScript.IsEnemyPresent;
+        }
+        return false;
     }
 }

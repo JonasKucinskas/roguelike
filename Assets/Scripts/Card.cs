@@ -93,45 +93,53 @@ public class Card : MonoBehaviour
             TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
             if (cubeHighlighter != null && cubeHighlighter.IsHighlighted)
             {
+                if (TileScript.IsEnemyOnTile(hit.transform))
+                {
+                    Debug.Log("Attempted to place card on a tile with an enemy present.");
+                    return; // Early return to prevent placing the card
+                }
                 PlaceCardOnCube(hit.transform);
             }
         }
     }
 
+
     private void PlaceCardOnCube(Transform cubeTransform)
     {
-        // Check if the slot is already occupied
-        if (!TileScript.IsSlotOccupied(cubeTransform))
+        if (!TileScript.IsSlotOccupied(cubeTransform) && !TileScript.IsEnemyOnTile(cubeTransform))
         {
             transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
             transform.localScale *= 2f;
             transform.SetParent(cubeTransform, worldPositionStays: true);
             IsDragging = false;
-            isPlaced = true; // Mark the card as placed
-
-            TileScript.OccupySlot(cubeTransform); // Mark the slot as occupied
-
+            isPlaced = true;
+            TileScript.OccupySlot(cubeTransform);
             var dragObject = GetComponent<DragObject>();
             if (dragObject != null)
             {
                 dragObject.enabled = false;
             }
-            
-            //Deactivates the card object and spawns a character
-            this.gameObject.SetActive(false);            
-            GameObject Model=CardModel;
-            Vector3 ModelPosition = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y-0.3f,this.gameObject.transform.position.z);
-            Instantiate(Particle,ModelPosition,Quaternion.Euler(0f, 90f, 0f),cubeTransform);
-            Instantiate(Model.gameObject,ModelPosition,Quaternion.Euler(0f, 90f, 0f),cubeTransform);
-            Debug.Log("Card placed on cube.");
 
+            // Optionally, deactivate the card and spawn a character model or effect
+            this.gameObject.SetActive(false);
+            GameObject model = CardModel;
+            Vector3 modelPosition = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y - 0.3f, this.gameObject.transform.position.z);
+
+            // Instantiate particle effect and character model
+            Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+            Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+
+            Debug.Log("Card placed on cube.");
         }
         else
         {
-            // Optionally, add feedback to the player that the slot is occupied
-            Debug.Log("Cannot place card here, slot is already occupied.");
+            Debug.Log("Cannot place card here, slot is already occupied or has an enemy.");
+
+            // Optionally, return the card to its original position or handle as desired
+            transform.position = originalPosition;
         }
     }
+
 
     private void SpawnCardModel()
     {
