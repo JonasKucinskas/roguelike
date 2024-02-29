@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Card : MonoBehaviour
@@ -12,7 +14,8 @@ public class Card : MonoBehaviour
     private Vector3 originalPosition; // Store the original position of the card
     [SerializeReference]
     private LayerMask IgnoreMe;
-
+    public GameObject CardModel;
+    public GameObject Particle;
     private void Start()
     {
         objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
@@ -113,8 +116,15 @@ public class Card : MonoBehaviour
             {
                 dragObject.enabled = false;
             }
-
+            
+            //Deactivates the card object and spawns a character
+            this.gameObject.SetActive(false);            
+            GameObject Model=CardModel;
+            Vector3 ModelPosition = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y-0.3f,this.gameObject.transform.position.z);
+            Instantiate(Particle,ModelPosition,Quaternion.Euler(0f, 90f, 0f),cubeTransform);
+            Instantiate(Model.gameObject,ModelPosition,Quaternion.Euler(0f, 90f, 0f),cubeTransform);
             Debug.Log("Card placed on cube.");
+
         }
         else
         {
@@ -123,6 +133,10 @@ public class Card : MonoBehaviour
         }
     }
 
+    private void SpawnCardModel()
+    {
+
+    }
     public void SetSlotCoordinates(Vector3 slot)
     {
         slotCoordinates = slot;
