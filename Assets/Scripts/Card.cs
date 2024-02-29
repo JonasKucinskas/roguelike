@@ -132,7 +132,8 @@ public class Card : MonoBehaviour
     {
         if(isPlaced==false)
         {
-            transform.Translate(Vector3.up*0.01f);            
+            transform.Translate(Vector3.up*0.01f);
+            transform.Translate(Vector3.back*0.1f);            
         }
     }
 
@@ -140,7 +141,8 @@ public class Card : MonoBehaviour
     {
         if(isPlaced==false)
         {
-            transform.Translate(Vector3.down*0.01f);            
+            transform.Translate(Vector3.down*0.01f);
+            transform.Translate(Vector3.forward*0.1f);             
         }
     }
 }

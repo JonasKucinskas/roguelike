@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CardManager : MonoBehaviour
 {
@@ -51,11 +52,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    public void OnHover()
-    {
-        
-    }
-
     void Start()
     {
         for(int i=0;i<freeCardSlots.Length;i++)
@@ -64,6 +60,9 @@ public class CardManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");            
+        }
     }
 }
