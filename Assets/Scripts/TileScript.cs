@@ -28,37 +28,9 @@ public class TileScript : MonoBehaviour
         rend.material.color = originalColor; // Change back to the original color.
     }
 
-    public static HashSet<Transform> OccupiedSlots = new HashSet<Transform>();
-
-    public static bool IsSlotOccupied(Transform slotTransform)
-    {
-        return OccupiedSlots.Contains(slotTransform);
-    }
-
     public bool IsOccupied()
     {
         return isFriendlyPresent || IsEnemyPresent;
-    }
-
-    public static void OccupySlot(Transform slotTransform)
-    {
-        OccupiedSlots.Add(slotTransform);
-    }
-
-    public static void FreeSlot(Transform slotTransform)
-    {
-        OccupiedSlots.Remove(slotTransform);
-    }
-
-    // Utility method to check if this tile has an enemy
-    public static bool IsEnemyOnTile(Transform tileTransform)
-    {
-        TileScript tileScript = tileTransform.GetComponent<TileScript>();
-        if (tileScript != null)
-        {
-            return tileScript.IsEnemyPresent;
-        }
-        return false;
     }
 
     public bool IsEnemyOnTile()
@@ -71,13 +43,13 @@ public class TileScript : MonoBehaviour
         return isFriendlyPresent;    
     }
 
-    public void SetFriendlyPresence(bool present)
+    public void SetFriendlyPresence(bool isPresent)
     {
-        isFriendlyPresent = present;
+        isFriendlyPresent = isPresent;
     }
 
-    public void SetEnemyPresence(bool present)
+    public void SetEnemyPresence(bool isPresent)
     {
-        IsEnemyPresent = present;
+        IsEnemyPresent = isPresent;
     }
 }

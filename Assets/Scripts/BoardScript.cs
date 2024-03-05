@@ -128,13 +128,12 @@ public class BoardScript : MonoBehaviour
                 //clicked not on friendly character.
                 return;
             }
-            //user clicked on friendly character, set it for moving.
+
             characterToMove = friendly.gameObject;
             Debug.Log("moving friendly object");
         }
         else
         {
-            //object is set for moving.
             TileScript tile = clickedObject.GetComponent<TileScript>();
             if (!tile)
             {
@@ -145,8 +144,8 @@ public class BoardScript : MonoBehaviour
             if (!tile.IsOccupied())
             {
                 //set characterToMove original tile friendly presence to false.
-                TileScript currentTileScript = characterToMove.transform.parent.GetComponent<TileScript>();
-                currentTileScript.SetFriendlyPresence(false);
+                TileScript originalTile = characterToMove.transform.parent.GetComponent<TileScript>();
+                originalTile.SetFriendlyPresence(false);
 
                 //user clicked on empty tile, when "characterToMove" gameobject is set, move object to clicked tile.
                 characterToMove.transform.SetParent(clickedObject.transform, false);

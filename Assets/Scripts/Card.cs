@@ -56,8 +56,8 @@ public class Card : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 1000f, ~IgnoreMe))
             {
-                TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-                if (cubeHighlighter != null && !TileScript.IsSlotOccupied(hit.transform))
+                TileScript tile = hit.collider.GetComponent<TileScript>();
+                if (tile != null && !tile.IsOccupied())
                 {
                     PlaceCardOnCube(hit.transform);
                 }
@@ -90,10 +90,10 @@ public class Card : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-            if (cubeHighlighter != null && cubeHighlighter.IsHighlighted)
+            TileScript tile = hit.collider.GetComponent<TileScript>();
+            if (tile != null && tile.IsHighlighted)
             {
-                if (TileScript.IsEnemyOnTile(hit.transform))
+                if (tile.IsEnemyOnTile())
                 {
                     Debug.Log("Attempted to place card on a tile with an enemy present.");
                     return; // Early return to prevent placing the card
@@ -108,15 +108,14 @@ public class Card : MonoBehaviour
     {
         TileScript tile = cubeTransform.GetComponent<TileScript>();
 
-        if (!TileScript.IsSlotOccupied(cubeTransform) && !TileScript.IsEnemyOnTile(cubeTransform))
+        if (!tile.IsOccupied())
         {
-            tile.IsOccupied();
             transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
             transform.localScale *= 2f;
             transform.SetParent(cubeTransform, worldPositionStays: true);
             IsDragging = false;
             isPlaced = true;
-            TileScript.OccupySlot(cubeTransform);
+            
             var dragObject = GetComponent<DragObject>();
             if (dragObject != null)
             {
