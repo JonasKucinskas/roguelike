@@ -106,8 +106,11 @@ public class Card : MonoBehaviour
 
     private void PlaceCardOnCube(Transform cubeTransform)
     {
+        TileScript tile = cubeTransform.GetComponent<TileScript>();
+
         if (!TileScript.IsSlotOccupied(cubeTransform) && !TileScript.IsEnemyOnTile(cubeTransform))
         {
+            tile.IsOccupied();
             transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
             transform.localScale *= 2f;
             transform.SetParent(cubeTransform, worldPositionStays: true);
@@ -128,6 +131,7 @@ public class Card : MonoBehaviour
             // Instantiate particle effect and character model
             Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
             Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+            tile.SetFriendlyPresence(true);
 
             Debug.Log("Card placed on cube.");
         }
