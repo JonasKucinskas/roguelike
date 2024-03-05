@@ -56,8 +56,8 @@ public class Card : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 1000f, ~IgnoreMe))
             {
-                TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-                if (cubeHighlighter != null && !TileScript.IsSlotOccupied(hit.transform))
+                TileScript tile = hit.collider.GetComponent<TileScript>();
+                if (tile != null && !tile.IsOccupied())
                 {
                     PlaceCardOnCube(hit.transform);
                 }
@@ -90,10 +90,10 @@ public class Card : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            TileScript cubeHighlighter = hit.collider.GetComponent<TileScript>();
-            if (cubeHighlighter != null && cubeHighlighter.IsHighlighted)
+            TileScript tile = hit.collider.GetComponent<TileScript>();
+            if (tile != null && tile.IsHighlighted)
             {
-                if (TileScript.IsEnemyOnTile(hit.transform))
+                if (tile.IsEnemyOnTile())
                 {
                     Debug.Log("Attempted to place card on a tile with an enemy present.");
                     return; // Early return to prevent placing the card
@@ -106,14 +106,16 @@ public class Card : MonoBehaviour
 
     private void PlaceCardOnCube(Transform cubeTransform)
     {
-        if (!TileScript.IsSlotOccupied(cubeTransform) && !TileScript.IsEnemyOnTile(cubeTransform))
+        TileScript tile = cubeTransform.GetComponent<TileScript>();
+
+        if (!tile.IsOccupied())
         {
             transform.position = cubeTransform.position + new Vector3(0.01f, 1f, 0);
             transform.localScale *= 2f;
             transform.SetParent(cubeTransform, worldPositionStays: true);
             IsDragging = false;
             isPlaced = true;
-            TileScript.OccupySlot(cubeTransform);
+            
             var dragObject = GetComponent<DragObject>();
             if (dragObject != null)
             {
@@ -128,6 +130,7 @@ public class Card : MonoBehaviour
             // Instantiate particle effect and character model
             Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
             Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+            tile.SetFriendlyPresence(true);
 
             Debug.Log("Card placed on cube.");
         }
