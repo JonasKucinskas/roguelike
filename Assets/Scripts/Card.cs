@@ -12,6 +12,9 @@ public class Card : MonoBehaviour
     private Vector3 offset;
     private bool isPlaced = false; // Flag to indicate whether the card is placed
     private Vector3 originalPosition; // Store the original position of the card
+    private float startYPosition; // Add this field to track the start Y position of the drag
+    private Vector3 originalScale; // To store the original scale
+    private Quaternion originalRotation; // To store the original rotation
     [SerializeReference]
     private LayerMask IgnoreMe;
     public GameObject CardModel;
@@ -27,24 +30,37 @@ public class Card : MonoBehaviour
         if (IsDragging)
         {
             DragCard();
-            if (Input.GetMouseButtonDown(0))
+
+            // Improved detection of mouse release, even outside the window
+            if (!Input.GetMouseButton(0))
             {
-                AttemptToPlaceCard();
+                IsDragging = false;
+                ResetCardToOriginalState(); // Reset card to original state when mouse is released
             }
         }
     }
+
+
 
     private void OnMouseDown()
     {
         if (!isPlaced)
         {
-            Debug.Log("Card clicked: " + gameObject.name);
             IsDragging = true;
             originalPosition = transform.position; // Save the original position when dragging starts
+            originalScale = transform.localScale; // Capture the original scale here
+            originalRotation = transform.rotation; // Save the original rotation
+
             objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
             offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
+
+            startYPosition = Input.mousePosition.y;
+            Debug.Log("Card clicked: " + gameObject.name);
         }
     }
+
+
+
 
     private void OnMouseUp()
     {
@@ -63,24 +79,41 @@ public class Card : MonoBehaviour
                 }
                 else
                 {
-                    // If the block is occupied or not a valid placement, return to original position
-                    transform.position = originalPosition;
-                    Debug.Log("Cannot place card here, slot is already occupied or not valid.");
+                    // If the block is occupied or not a valid placement, return to original state
+                    ResetCardToOriginalState();
                 }
             }
             else
             {
-                // If no valid hit, return to original position
-                transform.position = originalPosition;
+                // If no valid hit, return to original state
+                ResetCardToOriginalState();
             }
         }
     }
+
+    private void ResetCardToOriginalState()
+    {
+        transform.position = originalPosition;
+        transform.localScale = originalScale;
+        transform.rotation = originalRotation;
+        Debug.Log("Card returned to original state.");
+    }
+
 
     private void DragCard()
     {
         Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
         Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
         transform.position = cursorPosition;
+
+        // Adjust the card's scale based on vertical movement from startYPosition, proportional to originalScale
+        float deltaY = Input.mousePosition.y - startYPosition;
+        float scaleFactor = Mathf.Clamp(1 - deltaY / 1000.0f, 0.5f, 1f);
+        transform.localScale = originalScale * scaleFactor;
+
+        // Rotate back to vertical if needed
+        Quaternion targetRotation = Quaternion.Euler(0, originalRotation.eulerAngles.y, 0);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
     }
 
     private void AttemptToPlaceCard()
