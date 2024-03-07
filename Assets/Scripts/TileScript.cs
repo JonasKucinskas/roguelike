@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TileScript : MonoBehaviour
@@ -9,6 +7,8 @@ public class TileScript : MonoBehaviour
     private Renderer rend;
     private bool IsEnemyPresent = false;
     private bool isFriendlyPresent = false;
+    public int xPosition;
+    public int zPosition;    
 
     void Start()
     {
@@ -51,5 +51,15 @@ public class TileScript : MonoBehaviour
     public void SetEnemyPresence(bool isPresent)
     {
         IsEnemyPresent = isPresent;
+    }
+
+    public int GetXPosition()
+    {
+        return xPosition;
+    }
+
+    public int GetZPosition()
+    {
+        return zPosition;
     }
 }

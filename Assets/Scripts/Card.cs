@@ -129,7 +129,15 @@ public class Card : MonoBehaviour
 
             // Instantiate particle effect and character model
             Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
-            Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+            GameObject character = Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
+            
+            Friendly friendly = character.GetComponent<Friendly>();
+            friendly.friendlyName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
+            friendly.hp = 10;
+            friendly.damage = 10;
+            friendly.xPosition = tile.xPosition;
+            friendly.zPosition = tile.zPosition;
+
             tile.SetFriendlyPresence(true);
 
             Debug.Log("Card placed on cube.");
