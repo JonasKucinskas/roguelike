@@ -15,14 +15,18 @@ public class Card : MonoBehaviour
     private float startYPosition; // Add this field to track the start Y position of the drag
     private Vector3 originalScale; // To store the original scale
     private Quaternion originalRotation; // To store the original rotation
-    [SerializeReference]
+	private float initialMouseY; // Store initial Y position of the mouse for calculating drag distance
+	private float initialZDistance; // Store the initial Z distance from the camera to the object
+	private Vector3 cumulativeTranslation = Vector3.zero; // Track cumulative translations
+	[SerializeReference]
     private LayerMask IgnoreMe;
     public GameObject CardModel;
     public GameObject Particle;
+
     private void Start()
     {
         objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
-        originalPosition = transform.position; // Initialize original position
+        originalPosition = transform.position;
     }
 
     private void Update()
@@ -40,29 +44,40 @@ public class Card : MonoBehaviour
         }
     }
 
+	private void OnMouseDown()
+	{
+		if (!isPlaced)
+		{
+			IsDragging = true;
 
+			// Factor in cumulative translations to get the correct original position
+			originalPosition = transform.position - cumulativeTranslation;
 
-    private void OnMouseDown()
-    {
-        if (!isPlaced)
-        {
-            IsDragging = true;
-            originalPosition = transform.position; // Save the original position when dragging starts
-            originalScale = transform.localScale; // Capture the original scale here
-            originalRotation = transform.rotation; // Save the original rotation
+			originalScale = transform.localScale;
+			originalRotation = transform.rotation;
 
-            objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
-            offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
+			objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
+			offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
 
-            startYPosition = Input.mousePosition.y;
-            Debug.Log("Card clicked: " + gameObject.name);
-        }
-    }
+			startYPosition = Input.mousePosition.y;
+			Debug.Log("Card clicked: " + gameObject.name);
+		}
+	}
 
+	private void TranslateWithTracking()
+	{
+		Vector3 upTranslation = Vector3.up * 0.01f;
+		Vector3 backTranslation = Vector3.back * 0.1f;
 
+		// Apply translations
+		transform.Translate(upTranslation);
+		transform.Translate(backTranslation);
 
+		// Update cumulative translations
+		cumulativeTranslation += upTranslation + backTranslation;
+	}
 
-    private void OnMouseUp()
+	private void OnMouseUp()
     {
         if (IsDragging)
         {
@@ -79,44 +94,50 @@ public class Card : MonoBehaviour
                 }
                 else
                 {
-                    // If the block is occupied or not a valid placement, return to original state
                     ResetCardToOriginalState();
                 }
             }
             else
             {
-                // If no valid hit, return to original state
                 ResetCardToOriginalState();
             }
         }
     }
 
-    private void ResetCardToOriginalState()
-    {
-        transform.position = originalPosition;
-        transform.localScale = originalScale;
-        transform.rotation = originalRotation;
-        Debug.Log("Card returned to original state.");
-    }
+	private void ResetCardToOriginalState()
+	{
+		// Adjust original position to factor in cumulative translations
+		transform.position = originalPosition + cumulativeTranslation;
 
+		// Reset transformations
+		transform.localScale = originalScale;
+		transform.rotation = originalRotation;
 
-    private void DragCard()
-    {
-        Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
-        Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
-        transform.position = cursorPosition;
+		// Reset cumulative translations
+		cumulativeTranslation = Vector3.zero;
 
-        // Adjust the card's scale based on vertical movement from startYPosition, proportional to originalScale
-        float deltaY = Input.mousePosition.y - startYPosition;
-        float scaleFactor = Mathf.Clamp(1 - deltaY / 1000.0f, 0.5f, 1f);
-        transform.localScale = originalScale * scaleFactor;
+		Debug.Log("Card returned to original state.");
+	}
 
-        // Rotate back to vertical if needed
-        Quaternion targetRotation = Quaternion.Euler(0, originalRotation.eulerAngles.y, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
-    }
+	private void DragCard()
+	{
+		float currentMouseY = Input.mousePosition.y;
+		float deltaY = currentMouseY - initialMouseY; // Calculate the difference in mouseY position from when dragging started
 
-    private void AttemptToPlaceCard()
+		float zAdjustment = deltaY * 0.01f;
+
+		objectScreenCoord.z = Mathf.Clamp(initialZDistance + zAdjustment, initialZDistance, initialZDistance + 5.0f);
+
+		Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
+		Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
+
+		transform.position = cursorPosition;
+
+		Quaternion targetRotation = Quaternion.Euler(1, originalRotation.eulerAngles.y, 1);
+		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
+	}
+
+	private void AttemptToPlaceCard()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
