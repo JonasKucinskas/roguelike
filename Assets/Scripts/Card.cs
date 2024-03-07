@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour
 {
@@ -36,6 +37,11 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (!isPlaced)
         {
             Debug.Log("Card clicked: " + gameObject.name);
@@ -51,6 +57,12 @@ public class Card : MonoBehaviour
         if (IsDragging)
         {
             IsDragging = false;
+
+            //Checks if clicked on UI (PauseMenu)
+            if(EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -78,6 +90,11 @@ public class Card : MonoBehaviour
 
     private void DragCard()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
         Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
         transform.position = cursorPosition;
@@ -85,6 +102,11 @@ public class Card : MonoBehaviour
 
     private void AttemptToPlaceCard()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -154,7 +176,13 @@ public class Card : MonoBehaviour
     }
 
     private void OnMouseEnter()
-    {
+    {   
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if(isPlaced==false)
         {
             transform.Translate(Vector3.up*0.01f);
@@ -164,6 +192,11 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if(isPlaced==false)
         {
             transform.Translate(Vector3.down*0.01f);

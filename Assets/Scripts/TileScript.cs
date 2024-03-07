@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TileScript : MonoBehaviour
 {
@@ -18,12 +19,22 @@ public class TileScript : MonoBehaviour
 
     void OnMouseEnter()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         IsHighlighted = true;
         rend.material.color = Color.cyan; // Change to the highlight color.
     }
 
     void OnMouseExit()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         IsHighlighted = false;
         rend.material.color = originalColor; // Change back to the original color.
     }
