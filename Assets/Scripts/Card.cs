@@ -60,6 +60,9 @@ public class Card : MonoBehaviour
 			offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
 
 			startYPosition = Input.mousePosition.y;
+			initialMouseY = Input.mousePosition.y; // Store the initial mouse Y position for drag calculations
+			initialZDistance = objectScreenCoord.z; // Store the initial Z distance from the camera to the object
+
 			Debug.Log("Card clicked: " + gameObject.name);
 		}
 	}
@@ -124,9 +127,13 @@ public class Card : MonoBehaviour
 		float currentMouseY = Input.mousePosition.y;
 		float deltaY = currentMouseY - initialMouseY; // Calculate the difference in mouseY position from when dragging started
 
-		float zAdjustment = deltaY * 0.01f;
+		float zAdjustment = deltaY * 0.01f; // Adjust the depth based on the vertical mouse movement
 
-		objectScreenCoord.z = Mathf.Clamp(initialZDistance + zAdjustment, initialZDistance, initialZDistance + 5.0f);
+		// Ensure the card does not get closer to the camera than its original depth
+		float adjustedZ = Mathf.Max(initialZDistance, initialZDistance + zAdjustment);
+
+		// Use the adjusted Z for the objectScreenCoord.z value
+		objectScreenCoord.z = adjustedZ;
 
 		Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
 		Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
