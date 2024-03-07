@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragObject : MonoBehaviour
 {
@@ -16,6 +17,11 @@ public class DragObject : MonoBehaviour
 
     void OnMouseDown()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (!isGlued) // Check if not glued
         {
             offset = gameObject.transform.position - GetMouseWorldPos();
@@ -24,6 +30,11 @@ public class DragObject : MonoBehaviour
 
     void OnMouseDrag()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (!isGlued) // Check if not glued
         {
             transform.position = GetMouseWorldPos() + offset;

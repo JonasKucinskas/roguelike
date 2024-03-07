@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour
 {
@@ -44,28 +45,22 @@ public class Card : MonoBehaviour
         }
     }
 
-	private void OnMouseDown()
-	{
-		if (!isPlaced)
-		{
-			IsDragging = true;
-
-			// Factor in cumulative translations to get the correct original position
-			originalPosition = transform.position - cumulativeTranslation;
-
-			originalScale = transform.localScale;
-			originalRotation = transform.rotation;
-
-			objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
-			offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
-
-			startYPosition = Input.mousePosition.y;
-			initialMouseY = Input.mousePosition.y; // Store the initial mouse Y position for drag calculations
-			initialZDistance = objectScreenCoord.z; // Store the initial Z distance from the camera to the object
-
-			Debug.Log("Card clicked: " + gameObject.name);
-		}
-	}
+    private void OnMouseDown()
+    {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        if (!isPlaced)
+        {
+            Debug.Log("Card clicked: " + gameObject.name);
+            IsDragging = true;
+            originalPosition = transform.position; // Save the original position when dragging starts
+            objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
+            offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
+        }
+    }
 
 	private void TranslateWithTracking()
 	{
@@ -85,6 +80,12 @@ public class Card : MonoBehaviour
         if (IsDragging)
         {
             IsDragging = false;
+
+            //Checks if clicked on UI (PauseMenu)
+            if(EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -107,45 +108,25 @@ public class Card : MonoBehaviour
         }
     }
 
-	private void ResetCardToOriginalState()
-	{
-		// Adjust original position to factor in cumulative translations
-		transform.position = originalPosition + cumulativeTranslation;
-
-		// Reset transformations
-		transform.localScale = originalScale;
-		transform.rotation = originalRotation;
-
-		// Reset cumulative translations
-		cumulativeTranslation = Vector3.zero;
-
-		Debug.Log("Card returned to original state.");
-	}
-
-	private void DragCard()
-	{
-		float currentMouseY = Input.mousePosition.y;
-		float deltaY = currentMouseY - initialMouseY; // Calculate the difference in mouseY position from when dragging started
-
-		float zAdjustment = deltaY * 0.01f; // Adjust the depth based on the vertical mouse movement
-
-		// Ensure the card does not get closer to the camera than its original depth
-		float adjustedZ = Mathf.Max(initialZDistance, initialZDistance + zAdjustment);
-
-		// Use the adjusted Z for the objectScreenCoord.z value
-		objectScreenCoord.z = adjustedZ;
-
-		Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
-		Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
-
-		transform.position = cursorPosition;
-
-		Quaternion targetRotation = Quaternion.Euler(1, originalRotation.eulerAngles.y, 1);
-		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
-	}
+    private void DragCard()
+    {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z);
+        Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
+        transform.position = cursorPosition;
+    }
 
 	private void AttemptToPlaceCard()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -215,7 +196,13 @@ public class Card : MonoBehaviour
     }
 
     private void OnMouseEnter()
-    {
+    {   
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if(isPlaced==false)
         {
             transform.Translate(Vector3.up*0.01f);
@@ -225,6 +212,11 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if(isPlaced==false)
         {
             transform.Translate(Vector3.down*0.01f);

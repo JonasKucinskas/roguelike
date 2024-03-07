@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class BoardScript : MonoBehaviour
 {
@@ -105,7 +106,11 @@ public class BoardScript : MonoBehaviour
             //mouse not clicked
             return;
         }
-        
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
