@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class BoardScript : MonoBehaviour
 {
@@ -110,7 +111,11 @@ public class BoardScript : MonoBehaviour
             //mouse not clicked
             return;
         }
-        
+        //Checks if clicked on UI (PauseMenu)
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -154,7 +159,7 @@ public class BoardScript : MonoBehaviour
             Friendly friendly = characterToMove.GetComponent<Friendly>();
             if (Math.Abs(tile.zPosition - friendly.zPosition) > friendlyMovementLimit || Math.Abs(tile.xPosition - friendly.xPosition) > friendlyMovementLimit)
             {
-                //move only by two tiles in both directions.
+                //move only by x tiles in both directions.
                 return;
             }
 
