@@ -16,7 +16,7 @@ public class BoardScript : MonoBehaviour
     public int friendlyMovementLimit; //limit how many tiles can friendly character move in each direction. 
     private GameObject[,] tiles;
 
-    private GameObject characterToMove;
+    private Character characterToMove;
     
     // Start is called before the first frame update
     void Start()
@@ -85,11 +85,11 @@ public class BoardScript : MonoBehaviour
                 GameObject parentTile = tiles[i, j];
                 enemyObject.transform.SetParent(parentTile.transform);             
                 
-                Enemy enemy = enemyObject.GetComponent<Enemy>();
-                enemy.enemyName = $"enemy_{i}_{j}";
+                Enemy enemy = enemyObject.AddComponent<Enemy>();
+                enemy.characterName = $"enemy_{i}_{j}";
                 enemy.hp = 10;
                 enemy.damage = 10;
-                
+
                 TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
                 if (tileScript != null)
                 {
@@ -131,15 +131,15 @@ public class BoardScript : MonoBehaviour
 
         if (!characterToMove)
         {
-            Friendly friendly = clickedObject.GetComponent<Friendly>();
+            Character character = clickedObject.GetComponent<Character>();
 
-            if (!friendly)
+            if (!character || !character.isFriendly)
             {
                 //clicked not on friendly character.
                 return;
             }
 
-            characterToMove = friendly.gameObject;
+            characterToMove = character;
             Debug.Log("moving friendly object");
         }
         else
@@ -150,27 +150,9 @@ public class BoardScript : MonoBehaviour
                 //clicked not on a tile.
                 return;
             }
-            
-            if (tile.IsOccupied())
-            {
-                return;
-            }
 
-            Friendly friendly = characterToMove.GetComponent<Friendly>();
-            if (Math.Abs(tile.zPosition - friendly.zPosition) > friendlyMovementLimit || Math.Abs(tile.xPosition - friendly.xPosition) > friendlyMovementLimit)
-            {
-                //move only by x tiles in both directions.
-                return;
-            }
-
-            //set characterToMove original tile friendly presence to false.
-            TileScript originalTile = characterToMove.transform.parent.GetComponent<TileScript>();
-            originalTile.SetFriendlyPresence(false);
-            
-            //user clicked on empty tile, when "characterToMove" gameobject is set, move object to clicked tile.
-            characterToMove.transform.SetParent(clickedObject.transform, false);
+            characterToMove.Move(tile);
             characterToMove = null;
-            tile.SetFriendlyPresence(true);
         }
     }
 
