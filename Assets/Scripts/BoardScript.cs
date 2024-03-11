@@ -87,8 +87,8 @@ public class BoardScript : MonoBehaviour
                 
                 Enemy enemy = enemyObject.AddComponent<Enemy>();
                 enemy.characterName = $"enemy_{i}_{j}";
-                enemy.hp = 10;
-                enemy.damage = 10;
+                enemy.xPosition = i;
+                enemy.zPosition = j;
 
                 TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
                 if (tileScript != null)
