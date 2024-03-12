@@ -170,4 +170,9 @@ public class BoardScript : MonoBehaviour
             characterToMove = null;
         }
     }
+
+    void SpawnEnemy()
+    {
+        
+    }
 }

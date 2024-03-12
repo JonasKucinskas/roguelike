@@ -220,6 +220,11 @@ public class Card : MonoBehaviour
 
             tile.SetFriendlyPresence(true);
 
+
+			int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
+        	MovesLeft--;
+        	PlayerPrefs.SetInt("MovesLeft",MovesLeft);
+
 			Debug.Log("Card placed on cube.");
 		}
 		else

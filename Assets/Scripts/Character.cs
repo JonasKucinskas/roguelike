@@ -33,5 +33,9 @@ public abstract class Character : MonoBehaviour
         }
 
         gameObject.transform.SetParent(tile.gameObject.transform, false);
+
+        int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
+        MovesLeft--;
+        PlayerPrefs.SetInt("MovesLeft",MovesLeft);
     }
 }

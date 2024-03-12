@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CardManager : MonoBehaviour
 {
-  
+    public GameObject MovesLeftText;
     public List<Card> deck =new List<Card>();
     public Transform[] cardSlots;
     public bool[] freeCardSlots;
@@ -54,12 +54,21 @@ public class CardManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.SetInt("MovesLeft",3);
         for(int i=0;i<freeCardSlots.Length;i++)
         DrawCard();
     }
 
     void Update()
     {
-        
+        MovesLeftText.GetComponent<TextMeshProUGUI>().text="Moves left: "+ PlayerPrefs.GetInt("MovesLeft").ToString();
+        if(PlayerPrefs.GetInt("MovesLeft")==0)
+        {
+            Debug.LogWarning("ENEMY'S TURN");
+
+            //AFTER ENEMYS TURN GIVE 3 MOVES AGAIN
+            PlayerPrefs.SetInt("MovesLeft",3);           
+        }
+
     }
 }
