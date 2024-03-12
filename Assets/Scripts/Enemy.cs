@@ -1,4 +1,6 @@
 //Basic enemy type for now.
+using System;
+
 public class Enemy : Character
 {
 	private void Start()
@@ -9,6 +11,13 @@ public class Enemy : Character
 	}
     public override bool CanMove(TileScript tile)
     {
+        int xMaxMovement = 1;
+
+		if (Math.Abs(tile.zPosition - zPosition) > 0 || Math.Abs(tile.xPosition - xPosition) > xMaxMovement)
+        {
+            //move only in x axis by one tile.
+            return false;
+        }
         return true;
     }
 }

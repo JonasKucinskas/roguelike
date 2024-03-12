@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class BoardScript : MonoBehaviour
 {
@@ -13,16 +14,19 @@ public class BoardScript : MonoBehaviour
     public float Size;
     public int X;
     public int Z;
-    public int friendlyMovementLimit; //limit how many tiles can friendly character move in each direction. 
     private GameObject[,] tiles;
+    private List<Enemy> enemies;
 
     private Character characterToMove;
+    private TurnManager turnManager;
     
     // Start is called before the first frame update
     void Start()
     {
+        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        enemies = new List<Enemy>();
         MakeBoard(X, Z);
-        SpawnEnemies();
+        InitializeEnemies();
     }
 
     // Update is called once per frame
@@ -30,6 +34,7 @@ public class BoardScript : MonoBehaviour
     {
         HandleFriendlyMovement();
         CheckForCancelMovement();
+        HandleEnemyMovement();
     }
 
     //Creates board
@@ -57,12 +62,10 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-    void SpawnEnemies()
+    void InitializeEnemies()
     {
         System.Random random = new System.Random();
 
-        float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
-        float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
 
         for (int i = X / 2; i < X; i++)
         {
@@ -76,36 +79,18 @@ public class BoardScript : MonoBehaviour
                     continue;
                 }
 
-                // Spawn enemy on top of the tile.
-                Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
-                
-                GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
-                
-                // Set tile as parent.
-                GameObject parentTile = tiles[i, j];
-                enemyObject.transform.SetParent(parentTile.transform);             
-                
-                Enemy enemy = enemyObject.AddComponent<Enemy>();
-                enemy.characterName = $"enemy_{i}_{j}";
-                enemy.xPosition = i;
-                enemy.zPosition = j;
-
-                TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
-                if (tileScript != null)
-                {
-                    tileScript.SetEnemyPresence(true);
-                    Debug.Log($"Marking enemy presence on: {parentTile.name}"); // Confirm marking is intended.
-                }
-                else
-                {
-                    Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
-                }
+                SpawnEnemy(i, j);
             }
         }
     }
 
     void HandleFriendlyMovement(){
         
+        if (!turnManager.isPlayersTurn())
+        {
+            return;
+        }
+
         if (!Input.GetMouseButtonDown(0))
         {
             //mouse not clicked
@@ -171,8 +156,95 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+    void HandleEnemyMovement()
     {
+        if (turnManager.isPlayersTurn())
+        {
+            return;
+        }
+
+        foreach (Enemy enemy in enemies)
+        {
+            //enemy goes forward, if there are no friendly characters in the way,
+            //if there is friendly character in the way, 
+            bool isObstacleInTheWay = false;
+            for (int i = 0; i < enemy.xPosition; i++)
+            {
+                TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
+
+                if (tileinfront.IsFriendlyOnTile())
+                {
+                    isObstacleInTheWay = true;
+                    break;
+                }
+            }
+
+            if (!isObstacleInTheWay){
+                TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
+                enemy.Move(tile);
+                turnManager.EndEnemyTurn();
+                return;
+            }
+        }
+
+        //all current enemies are blocked, look for a path and if found, spawn enemy there.
+        for (int i = 0; i < Z; i++)
+        {
+            bool isObstacleInTheWay = false;
+            for (int j = 0; j < X; j++)
+            {
+                TileScript tile = tiles[i, j].GetComponent<TileScript>();
+
+                if (tile.IsFriendlyOnTile())
+                {
+                    isObstacleInTheWay = true;
+                    break;
+                }
+            }
+
+            if (!isObstacleInTheWay)
+            {
+                SpawnEnemy(X / 2, i);
+                break;
+            }
+        }
+        turnManager.EndEnemyTurn();
         
+        //if all paths blocked for enemies, and there are no paths towards the end of the board, 
+        //enemies do nothing.
+    }
+
+    void SpawnEnemy(int i, int j){
+        
+        //this should not be here:
+        float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
+        float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
+
+        // Spawn enemy on top of the tile.
+        Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
+        
+        GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
+        
+        // Set tile as parent.
+        GameObject parentTile = tiles[i, j];
+        enemyObject.transform.SetParent(parentTile.transform);             
+        
+        Enemy enemy = enemyObject.AddComponent<Enemy>();
+        enemy.characterName = $"enemy_{i}_{j}";
+        enemy.xPosition = i;
+        enemy.zPosition = j;
+        
+        enemies.Add(enemy);
+        
+        TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
+        if (tileScript != null)
+        {
+            tileScript.SetEnemyPresence(true);
+            Debug.Log($"Marking enemy presence on: {parentTile.name}"); // Confirm marking is intended.
+        }
+        else
+        {
+            Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
+        }
     }
 }
