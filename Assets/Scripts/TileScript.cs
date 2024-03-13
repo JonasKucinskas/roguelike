@@ -11,9 +11,10 @@ public class TileScript : MonoBehaviour
     private bool IsEnemyPresent = false;
     private bool isFriendlyPresent = false;
 	public int xPosition;
-    public int zPosition;    
+    public int zPosition;
+	private bool isStateHighlighted = false;
 
-    void Start()
+	void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
@@ -33,9 +34,13 @@ public class TileScript : MonoBehaviour
         {
             return;
         }
-        IsHighlighted = true;
-        rend.material.color = Color.cyan; // Change to the highlight color.
-    }
+		if (EventSystem.current.IsPointerOverGameObject() || isStateHighlighted)
+		{
+			return;
+		}
+		IsHighlighted = true;
+		rend.material.color = Color.cyan; // Change to the temporary highlight color.
+	}
 
     void OnMouseExit()
     {
@@ -44,7 +49,11 @@ public class TileScript : MonoBehaviour
         {
             return;
         }
-        IsHighlighted = false;
+		if (EventSystem.current.IsPointerOverGameObject() || isStateHighlighted)
+		{
+			return;
+		}
+		IsHighlighted = false;
         rend.material.color = originalColor; // Change back to the original color.
     }
 
@@ -90,10 +99,11 @@ public class TileScript : MonoBehaviour
 		var renderer = GetComponent<Renderer>();
 		if (renderer != null)
 		{
-			originalColor = renderer.material.color;
 			renderer.material.color = Color.yellow;
 		}
 	}
+
+
 
 	public void RemoveHighlight()
 	{
@@ -106,4 +116,34 @@ public class TileScript : MonoBehaviour
 			renderer.material.color = originalColor;
 		}
 	}
+
+	public void HighlightBasedOnOccupancy()
+	{
+		isStateHighlighted = true; // Now tracking highlight state
+		if (IsOccupied())
+		{
+			rend.material.color = Color.red; // Occupied tiles highlighted in red
+		}
+		else
+		{
+			rend.material.color = Color.cyan; // Unoccupied tiles highlighted in white
+		}
+	}
+
+	public static void HighlightTilesBasedOnOccupancy()
+    {
+        foreach (var tile in AllTiles)
+        {
+            tile.HighlightBasedOnOccupancy();
+        }
+    }
+
+    // New static method to reset tile highlights
+    public static void ResetTileHighlights()
+    {
+        foreach (var tile in AllTiles)
+        {
+            tile.RemoveHighlight();
+        }
+    }
 }

@@ -135,59 +135,42 @@ public class BoardScript : MonoBehaviour
 			Character character = clickedObject.GetComponent<Character>();
 			if (!character)
 			{
-				// Try getting the Character component from the parent, assuming clickedObject is a child of the character
 				character = clickedObject.transform.parent.GetComponent<Character>();
 			}
 
 			if (!character || !character.isFriendly)
 			{
-				Debug.Log("Clicked object is not a friendly character.");
-				return; // Clicked not on a friendly character.
+				return;
 			}
 
-			// Highlight the tile under the character
 			TileScript tileUnderCharacter = character.transform.parent.GetComponent<TileScript>();
 			if (tileUnderCharacter != null)
 			{
-				Debug.Log("Highlighting tile under character.");
-				if (lastHighlightedTile != null)
-				{
-					lastHighlightedTile.GetComponent<TileScript>().RemoveHighlight();
-				}
+				TileScript.HighlightTilesBasedOnOccupancy();
 				tileUnderCharacter.Highlight();
 				lastHighlightedTile = tileUnderCharacter.gameObject;
 			}
-			else
-			{
-				Debug.Log("Failed to find TileScript on character's parent.");
-			}
 
 			characterToMove = character;
-			Debug.Log("Ready to move friendly object.");
 		}
 		else
 		{
 			TileScript tile = clickedObject.GetComponent<TileScript>();
 			if (!tile)
 			{
-				// Try getting the TileScript component from the parent, assuming clickedObject is a child of the tile
 				tile = clickedObject.transform.parent.GetComponent<TileScript>();
 			}
 
-			if (!tile)
+			if (tile)
 			{
-				Debug.Log("Clicked object is not a tile.");
-				return; // Clicked not on a tile.
+				characterToMove.Move(tile);
+				TileScript.ResetTileHighlights();
+				if (lastHighlightedTile != null)
+				{
+					lastHighlightedTile = null;
+				}
+				characterToMove = null;
 			}
-
-			characterToMove.Move(tile); // Assuming this moves the character
-			Debug.Log("Character moved.");
-			if (lastHighlightedTile != null)
-			{
-				lastHighlightedTile.GetComponent<TileScript>().RemoveHighlight();
-				lastHighlightedTile = null;
-			}
-			characterToMove = null;
 		}
 	}
 
@@ -209,7 +192,8 @@ public class BoardScript : MonoBehaviour
 				TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
 				if (tileScript != null)
 				{
-					tileScript.RemoveHighlight();
+					//tileScript.RemoveHighlight();
+					TileScript.ResetTileHighlights();
 				}
 				lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 			}
