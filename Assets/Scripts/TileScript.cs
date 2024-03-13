@@ -1,23 +1,32 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TileScript : MonoBehaviour
 {
-    public bool IsHighlighted { get; private set; } = false;
+	public static List<TileScript> AllTiles = new List<TileScript>();
+	public bool IsHighlighted { get; private set; } = false;
     private Color originalColor;
     private Renderer rend;
     private bool IsEnemyPresent = false;
     private bool isFriendlyPresent = false;
-    public int xPosition;
+	public int xPosition;
     public int zPosition;    
 
     void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
-    }
+		AllTiles.Add(this);
+	}
 
-    void OnMouseEnter()
+	void OnDestroy()
+	{
+		// Remove this tile from the list of all tiles
+		AllTiles.Remove(this);
+	}
+
+	void OnMouseEnter()
     {
         //Checks if clicked on UI (PauseMenu)
         if(EventSystem.current.IsPointerOverGameObject())
@@ -73,4 +82,28 @@ public class TileScript : MonoBehaviour
     {
         return zPosition;
     }
+
+	public void Highlight()
+	{
+		Debug.Log("Highlighting tile");
+		//IsHighlighted = true;
+		var renderer = GetComponent<Renderer>();
+		if (renderer != null)
+		{
+			originalColor = renderer.material.color;
+			renderer.material.color = Color.yellow;
+		}
+	}
+
+	public void RemoveHighlight()
+	{
+		// Ensure the tile has a Renderer component
+		IsHighlighted = false;
+		var renderer = GetComponent<Renderer>();
+		if (renderer != null)
+		{
+			// Restore the original color
+			renderer.material.color = originalColor;
+		}
+	}
 }

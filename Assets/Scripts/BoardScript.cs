@@ -14,7 +14,8 @@ public class BoardScript : MonoBehaviour
     public int X;
     public int Z;
     public int friendlyMovementLimit; //limit how many tiles can friendly character move in each direction. 
-    private GameObject[,] tiles;
+	GameObject lastHighlightedTile = null;
+	private GameObject[,] tiles;
 
     private Character characterToMove;
     
@@ -127,34 +128,68 @@ public class BoardScript : MonoBehaviour
 
         GameObject clickedObject = hit.collider.gameObject;
         Debug.Log("Clicked on: " + clickedObject.name);
-        
 
-        if (!characterToMove)
-        {
-            Character character = clickedObject.GetComponent<Character>();
 
-            if (!character || !character.isFriendly)
-            {
-                //clicked not on friendly character.
-                return;
-            }
+		if (!characterToMove)
+		{
+			Character character = clickedObject.GetComponent<Character>();
+			if (!character)
+			{
+				// Try getting the Character component from the parent, assuming clickedObject is a child of the character
+				character = clickedObject.transform.parent.GetComponent<Character>();
+			}
 
-            characterToMove = character;
-            Debug.Log("moving friendly object");
-        }
-        else
-        {
-            TileScript tile = clickedObject.GetComponent<TileScript>();
-            if (!tile)
-            {
-                //clicked not on a tile.
-                return;
-            }
+			if (!character || !character.isFriendly)
+			{
+				Debug.Log("Clicked object is not a friendly character.");
+				return; // Clicked not on a friendly character.
+			}
 
-            characterToMove.Move(tile);
-            characterToMove = null;
-        }
-    }
+			// Highlight the tile under the character
+			TileScript tileUnderCharacter = character.transform.parent.GetComponent<TileScript>();
+			if (tileUnderCharacter != null)
+			{
+				Debug.Log("Highlighting tile under character.");
+				if (lastHighlightedTile != null)
+				{
+					lastHighlightedTile.GetComponent<TileScript>().RemoveHighlight();
+				}
+				tileUnderCharacter.Highlight();
+				lastHighlightedTile = tileUnderCharacter.gameObject;
+			}
+			else
+			{
+				Debug.Log("Failed to find TileScript on character's parent.");
+			}
+
+			characterToMove = character;
+			Debug.Log("Ready to move friendly object.");
+		}
+		else
+		{
+			TileScript tile = clickedObject.GetComponent<TileScript>();
+			if (!tile)
+			{
+				// Try getting the TileScript component from the parent, assuming clickedObject is a child of the tile
+				tile = clickedObject.transform.parent.GetComponent<TileScript>();
+			}
+
+			if (!tile)
+			{
+				Debug.Log("Clicked object is not a tile.");
+				return; // Clicked not on a tile.
+			}
+
+			characterToMove.Move(tile); // Assuming this moves the character
+			Debug.Log("Character moved.");
+			if (lastHighlightedTile != null)
+			{
+				lastHighlightedTile.GetComponent<TileScript>().RemoveHighlight();
+				lastHighlightedTile = null;
+			}
+			characterToMove = null;
+		}
+	}
 
     void CheckForCancelMovement()
     {
@@ -164,12 +199,24 @@ public class BoardScript : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log("Movement canceled");
-            characterToMove = null;
-        }
-    }
+		if (Input.GetMouseButtonDown(1)) // Right-click to cancel
+		{
+			Debug.Log("Movement canceled");
+
+			if (lastHighlightedTile != null)
+			{
+				// Access the TileScript component and call RemoveHighlight
+				TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
+				if (tileScript != null)
+				{
+					tileScript.RemoveHighlight();
+				}
+				lastHighlightedTile = null; // Clear the reference to the last highlighted tile
+			}
+
+			characterToMove = null; // Clear the reference to the character to move
+		}
+	}
 
     void SpawnEnemy()
     {
