@@ -212,7 +212,9 @@ public class BoardScript : MonoBehaviour
                 }
             }
 
-            if (!isObstacleInTheWay)
+            bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
+
+            if (!isObstacleInTheWay && isEnemyOnTheEdge)
             {
                 TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
                 enemy.Move(tile);
@@ -229,7 +231,7 @@ public class BoardScript : MonoBehaviour
             {
                 TileScript tile = tiles[j, i].GetComponent<TileScript>();
 
-                if (tile.IsFriendlyOnTile())
+                if (tile.IsOccupied())
                 {
                     isObstacleInTheWay = true;
                     break;
