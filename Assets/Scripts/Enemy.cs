@@ -11,7 +11,7 @@ public class Enemy : Character
 	}
     public override bool CanMove(TileScript tile)
     {
-        int xMaxMovement = 1;
+        int xMaxMovement = 2;
 
 		if (Math.Abs(tile.zPosition - zPosition) > 0 || Math.Abs(tile.xPosition - xPosition) > xMaxMovement)
         {

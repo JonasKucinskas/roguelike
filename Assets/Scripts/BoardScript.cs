@@ -12,7 +12,7 @@ public class BoardScript : MonoBehaviour
     public int X;
     public int Z;
     private GameObject[,] tiles;
-    private List<Enemy> enemies;
+    public List<Enemy> enemies;
 	GameObject lastHighlightedTile = null;
     private Character characterToMove;
     private TurnManager turnManager;
@@ -201,20 +201,43 @@ public class BoardScript : MonoBehaviour
             //if there is friendly character in the way, it looks for a free path towards the end of the board
             // and spawns enemy on that path.
             bool isObstacleInTheWay = false;
+            bool SecondTileInFrontExists=false;
+            TileScript NextTileInFront=null;
             for (int i = 0; i < enemy.xPosition; i++)
             {
                 TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
-
-                if (tileinfront.IsFriendlyOnTile())
+                if(i!=0)
                 {
-                    isObstacleInTheWay = true;
-                    break;
+                    NextTileInFront = tiles[i-1, enemy.zPosition].GetComponent<TileScript>();
+                    if(NextTileInFront!=null)
+                    {
+                        SecondTileInFrontExists=true;
+                    }                    
                 }
+
+                if(SecondTileInFrontExists)
+                {
+                    if (tileinfront.IsFriendlyOnTile() && !NextTileInFront.IsOccupied())
+                    {
+                        Debug.Log(i+" Is moving");
+                        enemy.Move(NextTileInFront);
+                        turnManager.EndEnemyTurn();
+                        return;
+                    }                    
+                }
+
+                if (tileinfront.IsOccupied())
+                {
+                    isObstacleInTheWay=true;
+                }      
             }
 
-            if (!isObstacleInTheWay)
+            bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
+
+            if (!isObstacleInTheWay && isEnemyOnTheEdge)
             {
                 TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
+                Debug.Log(enemy.xPosition+"X " + enemy.zPosition+"Y" +" Is moving");
                 enemy.Move(tile);
                 turnManager.EndEnemyTurn();
                 return;
@@ -229,7 +252,7 @@ public class BoardScript : MonoBehaviour
             {
                 TileScript tile = tiles[j, i].GetComponent<TileScript>();
 
-                if (tile.IsFriendlyOnTile())
+                if (tile.IsOccupied())
                 {
                     isObstacleInTheWay = true;
                     break;
