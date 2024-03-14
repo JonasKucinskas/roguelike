@@ -201,9 +201,4 @@ public class BoardScript : MonoBehaviour
 			characterToMove = null; // Clear the reference to the character to move
 		}
 	}
-
-    void SpawnEnemy()
-    {
-        
-    }
 }
