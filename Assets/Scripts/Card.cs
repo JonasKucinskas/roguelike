@@ -23,9 +23,11 @@ public class Card : MonoBehaviour
 	private LayerMask IgnoreMe;
 	public GameObject CardModel;
 	public GameObject Particle;
+    private TurnManager turnManager;
 
 	private void Start()
 	{
+		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
 		originalPosition = transform.position;
 	}
@@ -220,11 +222,8 @@ public class Card : MonoBehaviour
 
             tile.SetFriendlyPresence(true);
 
-
-			int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
-        	MovesLeft--;
-        	PlayerPrefs.SetInt("MovesLeft",MovesLeft);
-
+			turnManager.SubtractPlayerMove();
+			
 			Debug.Log("Card placed on cube.");
 		}
 		else
@@ -235,12 +234,7 @@ public class Card : MonoBehaviour
 			transform.position = originalPosition;
 		}
 	}
-
-
-	private void SpawnCardModel()
-	{
-
-	}
+	
 	public void SetSlotCoordinates(Vector3 slot)
 	{
 		slotCoordinates = slot;

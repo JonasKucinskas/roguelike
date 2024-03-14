@@ -103,9 +103,12 @@ public abstract class Character : MonoBehaviour
             tile.SetEnemyPresence(true);
         }
 
-        CheckMovePath(originalTile,tile);
+        //CheckMovePath(originalTile,tile);
 
         gameObject.transform.SetParent(tile.gameObject.transform, false);
+
+        xPosition = tile.xPosition;
+        zPosition = tile.zPosition;
 
         int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;

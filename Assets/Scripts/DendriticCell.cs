@@ -10,8 +10,6 @@ public class DendriticCell : Character
     }
     public override bool CanMove(TileScript tile)
     {
-        isFriendly = true;
-
         int zMaxMovement = 2;
         int xMaxMovement = 2;
 

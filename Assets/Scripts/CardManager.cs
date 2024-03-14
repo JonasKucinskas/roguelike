@@ -54,7 +54,6 @@ public class CardManager : MonoBehaviour
 
     void Start()
     {
-        PlayerPrefs.SetInt("MovesLeft",3);
         for(int i=0;i<freeCardSlots.Length;i++)
         DrawCard();
     }
@@ -62,13 +61,7 @@ public class CardManager : MonoBehaviour
     void Update()
     {
         MovesLeftText.GetComponent<TextMeshProUGUI>().text="Moves left: "+ PlayerPrefs.GetInt("MovesLeft").ToString();
-        if(PlayerPrefs.GetInt("MovesLeft")==0)
-        {
-            Debug.LogWarning("ENEMY'S TURN");
-
-            //AFTER ENEMYS TURN GIVE 3 MOVES AGAIN
-            PlayerPrefs.SetInt("MovesLeft",3);           
-        }
+        
 
     }
 }
