@@ -1,32 +1,46 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TileScript : MonoBehaviour
 {
-    public bool IsHighlighted { get; private set; } = false;
+	public static List<TileScript> AllTiles = new List<TileScript>();
+	public bool IsHighlighted { get; private set; } = false;
     private Color originalColor;
     private Renderer rend;
     private bool IsEnemyPresent = false;
     private bool isFriendlyPresent = false;
-    public int xPosition;
-    public int zPosition;    
+	public int xPosition;
+    public int zPosition;
+	private bool isStateHighlighted = false;
 
-    void Start()
+	void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
-    }
+		AllTiles.Add(this);
+	}
 
-    void OnMouseEnter()
+	void OnDestroy()
+	{
+		// Remove this tile from the list of all tiles
+		AllTiles.Remove(this);
+	}
+
+	void OnMouseEnter()
     {
         //Checks if clicked on UI (PauseMenu)
         if(EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
-        IsHighlighted = true;
-        rend.material.color = Color.cyan; // Change to the highlight color.
-    }
+		if (EventSystem.current.IsPointerOverGameObject() || isStateHighlighted)
+		{
+			return;
+		}
+		IsHighlighted = true;
+		rend.material.color = Color.cyan; // Change to the temporary highlight color.
+	}
 
     void OnMouseExit()
     {
@@ -35,7 +49,11 @@ public class TileScript : MonoBehaviour
         {
             return;
         }
-        IsHighlighted = false;
+		if (EventSystem.current.IsPointerOverGameObject() || isStateHighlighted)
+		{
+			return;
+		}
+		IsHighlighted = false;
         rend.material.color = originalColor; // Change back to the original color.
     }
 
@@ -72,5 +90,60 @@ public class TileScript : MonoBehaviour
     public int GetZPosition()
     {
         return zPosition;
+    }
+
+	public void Highlight()
+	{
+		Debug.Log("Highlighting tile");
+		//IsHighlighted = true;
+		var renderer = GetComponent<Renderer>();
+		if (renderer != null)
+		{
+			renderer.material.color = Color.yellow;
+		}
+	}
+
+
+
+	public void RemoveHighlight()
+	{
+		// Ensure the tile has a Renderer component
+		IsHighlighted = false;
+		var renderer = GetComponent<Renderer>();
+		if (renderer != null)
+		{
+			// Restore the original color
+			renderer.material.color = originalColor;
+		}
+	}
+
+	public void HighlightBasedOnOccupancy()
+	{
+		isStateHighlighted = true; // Now tracking highlight state
+		if (IsOccupied())
+		{
+			rend.material.color = Color.red; // Occupied tiles highlighted in red
+		}
+		else
+		{
+			rend.material.color = Color.cyan; // Unoccupied tiles highlighted in white
+		}
+	}
+
+	public static void HighlightTilesBasedOnOccupancy()
+    {
+        foreach (var tile in AllTiles)
+        {
+            tile.HighlightBasedOnOccupancy();
+        }
+    }
+
+    // New static method to reset tile highlights
+    public static void ResetTileHighlights()
+    {
+        foreach (var tile in AllTiles)
+        {
+            tile.RemoveHighlight();
+        }
     }
 }

@@ -16,7 +16,7 @@ public class BoardScript : MonoBehaviour
     public int Z;
     private GameObject[,] tiles;
     private List<Enemy> enemies;
-
+	GameObject lastHighlightedTile = null;
     private Character characterToMove;
     private TurnManager turnManager;
     
@@ -66,7 +66,6 @@ public class BoardScript : MonoBehaviour
     {
         System.Random random = new System.Random();
 
-
         for (int i = X / 2; i < X; i++)
         {
             for (int j = 0; j < Z; j++)
@@ -84,7 +83,8 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-    void HandleFriendlyMovement(){
+    void HandleFriendlyMovement()
+    {
         
         if (!turnManager.isPlayersTurn())
         {
@@ -112,34 +112,51 @@ public class BoardScript : MonoBehaviour
 
         GameObject clickedObject = hit.collider.gameObject;
         Debug.Log("Clicked on: " + clickedObject.name);
-        
 
-        if (!characterToMove)
-        {
-            Character character = clickedObject.GetComponent<Character>();
 
-            if (!character || !character.isFriendly)
-            {
-                //clicked not on friendly character.
-                return;
-            }
+		if (!characterToMove)
+		{
+			Character character = clickedObject.GetComponent<Character>();
+			if (!character)
+			{
+				character = clickedObject.transform.parent.GetComponent<Character>();
+			}
 
-            characterToMove = character;
-            Debug.Log("moving friendly object");
-        }
-        else
-        {
-            TileScript tile = clickedObject.GetComponent<TileScript>();
-            if (!tile)
-            {
-                //clicked not on a tile.
-                return;
-            }
+			if (!character || !character.isFriendly)
+			{
+				return;
+			}
 
-            characterToMove.Move(tile);
-            characterToMove = null;
-        }
-    }
+			TileScript tileUnderCharacter = character.transform.parent.GetComponent<TileScript>();
+			if (tileUnderCharacter != null)
+			{
+				TileScript.HighlightTilesBasedOnOccupancy();
+				tileUnderCharacter.Highlight();
+				lastHighlightedTile = tileUnderCharacter.gameObject;
+			}
+
+			characterToMove = character;
+		}
+		else
+		{
+			TileScript tile = clickedObject.GetComponent<TileScript>();
+			if (!tile)
+			{
+				tile = clickedObject.transform.parent.GetComponent<TileScript>();
+			}
+
+			if (tile)
+			{
+				characterToMove.Move(tile);
+				TileScript.ResetTileHighlights();
+				if (lastHighlightedTile != null)
+				{
+					lastHighlightedTile = null;
+				}
+				characterToMove = null;
+			}
+		}
+	}
 
     void CheckForCancelMovement()
     {
@@ -149,12 +166,24 @@ public class BoardScript : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log("Movement canceled");
-            characterToMove = null;
+		if (Input.GetMouseButtonDown(1)) // Right-click to cancel
+		{
+			Debug.Log("Movement canceled");
         }
-    }
+        if (lastHighlightedTile != null)
+		{
+			// Access the TileScript component and call RemoveHighlight
+			TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
+			if (tileScript != null)
+			{
+				//tileScript.RemoveHighlight();
+				TileScript.ResetTileHighlights();
+			}
+			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
+		}
+
+		characterToMove = null; // Clear the reference to the character to move
+	}
 
     void HandleEnemyMovement()
     {
@@ -208,14 +237,15 @@ public class BoardScript : MonoBehaviour
                 break;
             }
         }
+
         turnManager.EndEnemyTurn();
         
         //if all paths blocked for enemies, and there are no paths towards the end of the board, 
         //enemies do nothing.
     }
 
-    void SpawnEnemy(int i, int j){
-        
+    void SpawnEnemy(int i, int j)
+    {
         //this should not be here:
         float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
         float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
