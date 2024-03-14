@@ -21,8 +21,6 @@ public abstract class Character : MonoBehaviour
     {
         List<Transform> tilesBetween = new List<Transform>();
 
-        Debug.Log("Start: "+StartTile.name);
-        Debug.Log("End: "+EndTile.name);
         string[] StartTileCoords=StartTile.name.Split('_');
         string[] EndTileCoords=EndTile.name.Split('_');
 
@@ -74,12 +72,30 @@ public abstract class Character : MonoBehaviour
         TilesInBetween =GetTilesBetween(StartTile,EndTile);
         foreach(Transform tile in TilesInBetween)
         {
-            Transform Enemy=tile.Find("alien character(Clone)");
-            if(Enemy!=null)
+            if(isFriendly)
             {
-                tile.gameObject.GetComponent<TileScript>().SetEnemyPresence(false);
-                Destroy(Enemy.gameObject);
+                Transform Enemy=tile.Find("alien character(Clone)");
+                if(Enemy!=null)
+                {
+                    tile.gameObject.GetComponent<TileScript>().SetEnemyPresence(false);
+                    tile.parent.GetComponent<BoardScript>().enemies.Remove(Enemy.gameObject.GetComponent<Enemy>());
+                    Destroy(Enemy.gameObject);
+                }                
             }
+            else
+            {
+                Transform Enemy=tile.Find("FootmanHP(Clone)");
+                if(Enemy==null)
+                {
+                    Enemy=tile.Find("FootmanPBR(Clone)");                    
+                }
+                if(Enemy!=null)
+                {
+                    tile.gameObject.GetComponent<TileScript>().SetFriendlyPresence(false);
+                    Destroy(Enemy.gameObject);
+                }    
+            }
+
         }
     }
     public void Move(TileScript tile)
@@ -103,7 +119,7 @@ public abstract class Character : MonoBehaviour
             tile.SetEnemyPresence(true);
         }
 
-        //CheckMovePath(originalTile,tile);
+        CheckMovePath(originalTile,tile);
 
         gameObject.transform.SetParent(tile.gameObject.transform, false);
 
