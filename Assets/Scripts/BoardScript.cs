@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.EventSystems;
-using System.Linq;
 
 public class BoardScript : MonoBehaviour
 {
@@ -135,6 +132,7 @@ public class BoardScript : MonoBehaviour
 				lastHighlightedTile = tileUnderCharacter.gameObject;
 			}
 
+            Debug.Log("Moving friendly");
 			characterToMove = character;
 		}
 		else
@@ -145,16 +143,20 @@ public class BoardScript : MonoBehaviour
 				tile = clickedObject.transform.parent.GetComponent<TileScript>();
 			}
 
-			if (tile)
+			if (!tile)
 			{
-				characterToMove.Move(tile);
-				TileScript.ResetTileHighlights();
-				if (lastHighlightedTile != null)
-				{
-					lastHighlightedTile = null;
-				}
-				characterToMove = null;
-			}
+                return;
+            }
+
+            characterToMove.Move(tile);
+            TileScript.ResetTileHighlights();
+            
+            if (lastHighlightedTile != null)
+            {
+                lastHighlightedTile = null;
+            }
+
+            characterToMove = null;
 		}
 	}
 
@@ -166,9 +168,9 @@ public class BoardScript : MonoBehaviour
             return;
         }
 
-		if (Input.GetMouseButtonDown(1)) // Right-click to cancel
+		if (!Input.GetMouseButtonDown(1)) // Right-click to cancel
 		{
-			Debug.Log("Movement canceled");
+            return;
         }
         if (lastHighlightedTile != null)
 		{
@@ -176,12 +178,13 @@ public class BoardScript : MonoBehaviour
 			TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
 			if (tileScript != null)
 			{
-				//tileScript.RemoveHighlight();
+				tileScript.RemoveHighlight();
 				TileScript.ResetTileHighlights();
 			}
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
 
+		Debug.Log("Movement canceled");
 		characterToMove = null; // Clear the reference to the character to move
 	}
 
@@ -195,7 +198,8 @@ public class BoardScript : MonoBehaviour
         foreach (Enemy enemy in enemies)
         {
             //enemy goes forward, if there are no friendly characters in the way,
-            //if there is friendly character in the way, 
+            //if there is friendly character in the way, it looks for a free path towards the end of the board
+            // and spawns enemy on that path.
             bool isObstacleInTheWay = false;
             for (int i = 0; i < enemy.xPosition; i++)
             {
@@ -208,7 +212,8 @@ public class BoardScript : MonoBehaviour
                 }
             }
 
-            if (!isObstacleInTheWay){
+            if (!isObstacleInTheWay)
+            {
                 TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
                 enemy.Move(tile);
                 turnManager.EndEnemyTurn();
@@ -216,13 +221,13 @@ public class BoardScript : MonoBehaviour
             }
         }
 
-        //all current enemies are blocked, look for a path and if found, spawn enemy there.
+        //all current enemies are blocked, look for a free path and if found, spawn enemy there.
         for (int i = 0; i < Z; i++)
         {
             bool isObstacleInTheWay = false;
             for (int j = 0; j < X; j++)
             {
-                TileScript tile = tiles[i, j].GetComponent<TileScript>();
+                TileScript tile = tiles[j, i].GetComponent<TileScript>();
 
                 if (tile.IsFriendlyOnTile())
                 {
