@@ -32,6 +32,7 @@ public class BoardScript : MonoBehaviour
         HandleFriendlyMovement();
         CheckForCancelMovement();
         HandleEnemyMovement();
+        CheckWinConditions();
     }
 
     //Creates board
@@ -303,6 +304,14 @@ public class BoardScript : MonoBehaviour
         else
         {
             Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
+        }
+    }
+
+    void CheckWinConditions()
+    {
+        if(enemies.Count==0)
+        {
+            FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().VictoryMenuUI.SetActive(true);
         }
     }
 }
