@@ -137,7 +137,16 @@ public class TileScript : MonoBehaviour
             tile.HighlightBasedOnOccupancy();
         }
     }
-
+    public static void HighlightTilesBasedOnWalkable(Character character)
+    {
+        foreach (var tile in AllTiles)
+        {
+			if (character.GetComponent<DendriticCell>().CanMove(tile))
+			{
+                tile.HighlightBasedOnOccupancy();
+            }
+        }
+    }
     // New static method to reset tile highlights
     public static void ResetTileHighlights()
     {

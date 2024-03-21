@@ -128,8 +128,10 @@ public class BoardScript : MonoBehaviour
 			TileScript tileUnderCharacter = character.transform.parent.GetComponent<TileScript>();
 			if (tileUnderCharacter != null)
 			{
-				TileScript.HighlightTilesBasedOnOccupancy();
-				tileUnderCharacter.Highlight();
+                //TileScript.HighlightTilesBasedOnOccupancy();
+                TileScript.HighlightTilesBasedOnWalkable(character);
+
+                tileUnderCharacter.Highlight();
 				lastHighlightedTile = tileUnderCharacter.gameObject;
 			}
 
