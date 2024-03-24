@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -98,7 +99,33 @@ public abstract class Character : MonoBehaviour
 
         }
     }
-    public void Move(TileScript tile)
+
+	private IEnumerator MoveToTile(TileScript targetTile)
+	{
+		Vector3 startPosition = transform.position; // Starting position
+		float yOffset = startPosition.y - targetTile.transform.position.y;
+		Vector3 endPosition = targetTile.transform.position + new Vector3(0, yOffset, 0); // Adjusted destination to maintain height
+
+		float timeToMove = 0.8f; // Duration of the move in seconds, adjust as needed
+		float elapsedTime = 0;
+
+		while (elapsedTime < timeToMove)
+		{
+			float t = elapsedTime / timeToMove; // Normalized time
+												// Apply easing function for smooth start and end
+			float smoothStepT = t * t * (3f - 2f * t);
+
+			// Interpolate position with easing
+			transform.position = Vector3.Lerp(startPosition, endPosition, smoothStepT);
+			elapsedTime += Time.deltaTime; // Update elapsed time
+			yield return null; // Wait until next frame
+		}
+
+		// Ensure the character is exactly at the target position
+		transform.position = endPosition;
+	}
+
+	public void Move(TileScript tile)
     {
         if (tile.IsOccupied() || !CanMove(tile))
         {
@@ -120,8 +147,9 @@ public abstract class Character : MonoBehaviour
         }
 
         CheckMovePath(originalTile,tile);
+		StartCoroutine(MoveToTile(tile));
 
-        gameObject.transform.SetParent(tile.gameObject.transform, false);
+		gameObject.transform.SetParent(tile.gameObject.transform, false);
 
         xPosition = tile.xPosition;
         zPosition = tile.zPosition;
