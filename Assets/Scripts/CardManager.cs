@@ -16,14 +16,6 @@ public class CardManager : MonoBehaviour
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         DrawCards(initialCards, true);
-        
-        //sub to events.
-        foreach (GameObject go in drawnCards)
-        {
-            Card card = go.GetComponent<Card>();
-            card.OnCardMovedFromHand += HandleCardMovedFromHand;
-            card.OnCardMovedToHand += HandleCardMovedToHand;
-        }
     }
 
     void Update()
@@ -73,7 +65,6 @@ public class CardManager : MonoBehaviour
 
             if (!card)
             {
-                Debug.Log("no cad");
                 return;
             }
 
@@ -113,17 +104,23 @@ public class CardManager : MonoBehaviour
 
     private Vector3 CalculateCardPosition(int index, int totalCards)
     {
-        //todo calculate gap dynamically based on number of cards.
         float gap = -100f;
         
         //if initial cards list is empty, this will break, but its fine for now
         float cardWidth = initialCards[0].GetComponent<RectTransform>().sizeDelta.x;
         float totalWidth = (totalCards - 1) * (cardWidth + gap);
-        float initialX = -totalWidth / 2f;
 
         int midpoint = totalCards / 2;
         int posY = -250;
+        float canvasWidth = canvas.GetComponent<RectTransform>().rect.width;
 
+        //if cards dont fit into the screen, make gap smaller.
+        if (totalWidth > canvasWidth)
+        {
+            gap = -((cardWidth * totalCards) - canvasWidth) / totalCards;   
+            totalWidth = (totalCards - 1) * (cardWidth + gap);
+        }
+        
         if (totalCards % 2 == 0 && index >= midpoint)
         {
             posY -= Mathf.Abs(midpoint - index - 1) * 20;
@@ -132,7 +129,8 @@ public class CardManager : MonoBehaviour
         {
             posY -= Mathf.Abs(midpoint - index) * 20;
         }
-
+        
+        float initialX = -totalWidth / 2f;
         float posX = initialX + index * (cardWidth + gap);
         return new Vector3(posX, posY, 0);
     }
@@ -171,6 +169,11 @@ public class CardManager : MonoBehaviour
         newCard.transform.SetParent(canvas.transform.Find("Cards"), false);
         newCard.transform.localScale = new Vector3(0.7f, 0.7f, 1);
         newCard.transform.localRotation = Quaternion.Euler(0, 0, rotation);
+        
+        //sub to events.
+        newCard.GetComponent<Card>().OnCardMovedFromHand += HandleCardMovedFromHand;
+        newCard.GetComponent<Card>().OnCardMovedToHand += HandleCardMovedToHand;
+        
         drawnCards.Add(newCard);
     }
 }

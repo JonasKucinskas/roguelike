@@ -77,7 +77,6 @@ public class Card : MonoBehaviour
 			originalScale = transform.localScale;
 			originalRotation = transform.rotation;
 
-
 			objectScreenCoord = Camera.main.WorldToScreenPoint(transform.position);
 			offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectScreenCoord.z));
 
@@ -135,7 +134,6 @@ public class Card : MonoBehaviour
 		// Adjust original position to factor in cumulative translations
 		transform.position = originalPosition + cumulativeTranslation;
 		OnCardMovedToHand?.Invoke(this);
-		Debug.Log("RETURN INVOKED");
 		// Reset transformations
 		transform.localScale = originalScale;
 		transform.rotation = originalRotation;
@@ -173,7 +171,7 @@ public class Card : MonoBehaviour
 		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
 
 
-		if (transform.position.y >= originalPosition.y / 2 && !hasMovedAboveThreshold)
+		if (!hasMovedAboveThreshold)
 		{
 			OnCardMovedFromHand?.Invoke(this);
 			hasMovedAboveThreshold = true;

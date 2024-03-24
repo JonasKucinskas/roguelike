@@ -117,7 +117,10 @@ public class BoardScript : MonoBehaviour
 			Character character = clickedObject.GetComponent<Character>();
 			if (!character)
 			{
-				character = clickedObject.transform.parent.GetComponent<Character>();
+                if (clickedObject.transform.parent)
+                {
+				    character = clickedObject.transform.parent.GetComponent<Character>();
+                }
 			}
 
 			if (!character || !character.isFriendly)
