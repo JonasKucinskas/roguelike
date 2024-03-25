@@ -132,7 +132,17 @@ public class CardManager : MonoBehaviour
         
         float initialX = -totalWidth / 2f;
         float posX = initialX + index * (cardWidth + gap);
-        return new Vector3(posX, posY, 0);
+        float posZ = 0;
+
+        //make every other card slightly behind its neighbor.
+        //this prevents cards gliching when camera is moving.
+        if (index % 2 == 0)
+        {
+            posZ = -0.1f;
+        }
+
+
+        return new Vector3(posX, posY, posZ);
     }
 
     private int CalculateCardRotation(int index, int totalCards)
