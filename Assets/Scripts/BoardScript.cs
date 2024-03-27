@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
 public class BoardScript : MonoBehaviour
 {
@@ -16,15 +17,15 @@ public class BoardScript : MonoBehaviour
 	GameObject lastHighlightedTile = null;
     private Character characterToMove;
     private TurnManager turnManager;
-    
-    // Start is called before the first frame update
-    void Start()
+
+	// Start is called before the first frame update
+	void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         enemies = new List<Enemy>();
         MakeBoard(X, Z);
         InitializeEnemies();
-    }
+	}
 
     // Update is called once per frame
     void Update()
@@ -33,7 +34,7 @@ public class BoardScript : MonoBehaviour
         CheckForCancelMovement();
         HandleEnemyMovement();
         CheckWinConditions();
-    }
+	}
 
     //Creates board
     void MakeBoard(int x, int z)
@@ -312,7 +313,9 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-    void CheckWinConditions()
+	
+
+	void CheckWinConditions()
     {
         if(enemies.Count==0)
         {
