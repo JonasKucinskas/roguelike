@@ -4,7 +4,7 @@ using UnityEngine.UI; // Import this namespace to work with UI elements
 public class PlayerHealth : MonoBehaviour
 {
 	public Sprite heartSprite; // Assign your heart sprite in the inspector
-	public int numberOfLives = 3; // Number of lives
+	public int numberOfLives = 2; // Number of lives
 	private int currentHealth; // To track the current health of the player
 
 	// Starting position and spacing for the hearts
@@ -73,6 +73,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		// Example usage: if (Input.GetKeyDown(KeyCode.Space)) { TakeDamage(1); }
 		TakeDamageToPlayerHealth();
+		CheckIfPlayerIsDead();
 	}
 
 	private void TakeDamageToPlayerHealth()
@@ -80,6 +81,12 @@ public class PlayerHealth : MonoBehaviour
 		if (TileScript.IsEnemyInLastRow())
 		{
 			TakeDamage(1);
+			Debug.Log("gyvebes " + currentHealth);
 		}
+	}
+
+	private void CheckIfPlayerIsDead()
+	{
+		if(currentHealth == 0) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
 	}
 }
