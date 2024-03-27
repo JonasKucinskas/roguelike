@@ -16,15 +16,22 @@ public class BoardScript : MonoBehaviour
 	GameObject lastHighlightedTile = null;
     private Character characterToMove;
     private TurnManager turnManager;
-    
-    // Start is called before the first frame update
-    void Start()
+	private PlayerHealth playerHealth;
+
+	// Start is called before the first frame update
+	void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         enemies = new List<Enemy>();
         MakeBoard(X, Z);
         InitializeEnemies();
-    }
+
+		GameObject health = GameObject.FindWithTag("Health");
+		if (health != null)
+		{
+			playerHealth = health.GetComponent<PlayerHealth>();
+		}
+	}
 
     // Update is called once per frame
     void Update()
