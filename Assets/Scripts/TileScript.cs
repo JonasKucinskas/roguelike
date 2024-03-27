@@ -92,6 +92,41 @@ public class TileScript : MonoBehaviour
         return zPosition;
     }
 
+	public void RemoveChildren()
+	{
+		// Iterate over all children and destroy them
+		for (int i = transform.childCount - 1; i >= 0; i--)
+		{
+			Destroy(transform.GetChild(i).gameObject);
+		}
+
+		// After removing children, reset presence flags
+		SetEnemyPresence(false);
+		SetFriendlyPresence(false);
+	}
+
+	public bool CheckForEnemyInLastRow()
+    {
+        if (xPosition == 0 && IsEnemyPresent) return true;
+        else return false;
+    }
+
+	public static bool IsEnemyInLastRow()
+	{
+		foreach (var tile in AllTiles)
+		{
+			if (tile.CheckForEnemyInLastRow())
+			{
+				Debug.Log("Enemy detected on tile (" + tile.xPosition + "," + tile.zPosition + ")");
+				tile.RemoveChildren();
+				return true; // Enemy is in the last row
+			}
+		}
+		return false; // No enemy in the last row
+	}
+
+	
+
 	public void Highlight()
 	{
 		Debug.Log("Highlighting tile");

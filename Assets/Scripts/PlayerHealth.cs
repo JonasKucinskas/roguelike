@@ -72,5 +72,14 @@ public class PlayerHealth : MonoBehaviour
 	void Update()
 	{
 		// Example usage: if (Input.GetKeyDown(KeyCode.Space)) { TakeDamage(1); }
+		TakeDamageToPlayerHealth();
+	}
+
+	private void TakeDamageToPlayerHealth()
+	{
+		if (TileScript.IsEnemyInLastRow())
+		{
+			TakeDamage(1);
+		}
 	}
 }
