@@ -357,11 +357,9 @@ public class BoardScript : MonoBehaviour
     {
         if(enemies.Count==0)
         {
-            int B = FindFirstObjectByType<PlayerHealth>().numberOfLives;
             //Extra if for some optimisation :)
-            if(B!=0)
+            if(FindFirstObjectByType<PlayerHealth>().currentHealth!=0)
             {
-                Debug.Log(B);
                 FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().VictoryMenuUI.SetActive(true);                
             }
         }

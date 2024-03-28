@@ -5,7 +5,7 @@ public class PlayerHealth : MonoBehaviour
 {
 	public Sprite heartSprite; // Assign your heart sprite in the inspector
 	public int numberOfLives = 2; // Number of lives
-	private int currentHealth; // To track the current health of the player
+	public int currentHealth; // To track the current health of the player
 
 	// Starting position and spacing for the hearts
 	public Vector3 startPosition;
