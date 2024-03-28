@@ -176,11 +176,19 @@ public abstract class Character : MonoBehaviour
     }
     private bool Attack(Enemy enemy)
 	{
+        hp--;
         bool isDead=enemy.TakeDamage(damage);
         int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft", MovesLeft);
         
+        if(hp<=0)
+        {
+            Destroy(this.gameObject);
+            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
+            this.GetComponentInParent<TileScript>().SetEnemyPresence(false);
+        }
         return isDead;
+
     }
 }

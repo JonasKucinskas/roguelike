@@ -64,7 +64,6 @@ public class NeutrophilCell : Character
 
                     if (x == xPosition && z == zPosition) //veikejo langelis
                     {
-                        //veikejo langelis
                     }
                     else
                     {
@@ -102,14 +101,18 @@ public class NeutrophilCell : Character
                                 }
                                 board.FinishAtack();
                             }
+                            board.FinishAtack();
                         }
                         else
                         {
                             Debug.Log("Nera tokio langelio");
+                            board.FinishAtack();
                         }
                     }
                 }
             }
+            //DEAL DAMAGE TO SELF
+            this.TakeDamage(4);
         }
     }
 
@@ -119,6 +122,7 @@ public class NeutrophilCell : Character
 
         if (hp <= 0)
         {
+            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
             Destroy(gameObject);
             return true;
         }
