@@ -1,8 +1,11 @@
 //Basic enemy type for now.
 using System;
+using TMPro;
+using UnityEngine;
 
 public class Enemy : Character
 {
+    public GameObject HpText;
 	private void Start()
     {
 		hp = 10;
@@ -19,5 +22,10 @@ public class Enemy : Character
             return false;
         }
         return true;
+    }
+
+    void Update()
+    {
+        HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
     }
 }

@@ -14,6 +14,7 @@ public abstract class Character : MonoBehaviour
     public int zPosition;    
     public bool isFriendly;
 
+
     public abstract bool CanMove(TileScript tile);
 
 

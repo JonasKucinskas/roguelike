@@ -127,5 +127,5 @@ MonoBehaviour:
   IgnoreMe:
     serializedVersion: 2
     m_Bits: 32
-  CardModel: {fileID: 1812659917213882, guid: 705458a9eac3ae740932e6aa33f3ca89, type: 3}
+  CardModel: {fileID: 100048, guid: 272ec112bddec644a8af6599107e74f7, type: 3}
   Particle: {fileID: 137528217491939346, guid: c658fb12851689f4fa01ea010e41f702, type: 3}

@@ -239,7 +239,7 @@ public class Card : MonoBehaviour
         Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
         GameObject character = Instantiate(model.gameObject, modelPosition, Quaternion.Euler(0f, 90f, 0f), cubeTransform);
         
-        DendriticCell friendly = character.AddComponent<DendriticCell>();
+        DendriticCell friendly = character.GetComponent<DendriticCell>();
         friendly.characterName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
         friendly.xPosition = tile.xPosition;
         friendly.zPosition = tile.zPosition;

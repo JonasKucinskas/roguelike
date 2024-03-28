@@ -1,8 +1,10 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class DendriticCell : Character
 {
+    public GameObject HpText;
     private void Start()
     {
         hp = 10;
@@ -20,6 +22,11 @@ public class DendriticCell : Character
             return false;
         }
         return true;
+    }
+
+    void Update()
+    {
+        HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
     }
 
     /*public override bool CanMove(TileScript tile)

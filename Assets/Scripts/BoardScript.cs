@@ -154,7 +154,6 @@ public class BoardScript : MonoBehaviour
 			{
                 return;
             }
-
             characterToMove.Move(tile);
             TileScript.ResetTileHighlights();
             
@@ -294,7 +293,7 @@ public class BoardScript : MonoBehaviour
         GameObject parentTile = tiles[i, j];
         enemyObject.transform.SetParent(parentTile.transform);             
         
-        Enemy enemy = enemyObject.AddComponent<Enemy>();
+        Enemy enemy = enemyObject.GetComponent<Enemy>();
         enemy.characterName = $"enemy_{i}_{j}";
         enemy.xPosition = i;
         enemy.zPosition = j;
