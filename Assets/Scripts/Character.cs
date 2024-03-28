@@ -14,7 +14,6 @@ public abstract class Character : MonoBehaviour
     public int zPosition;    
     public bool isFriendly;
 
-
     public abstract bool CanMove(TileScript tile);
 
 
@@ -158,5 +157,27 @@ public abstract class Character : MonoBehaviour
         int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft",MovesLeft);
+    }
+    public bool Attack(TileScript tile)
+	{
+        Enemy e = tile.GetComponentInChildren<Enemy>();
+        if (!e)
+        {
+            Debug.Log("no enemy in attack tile");
+            throw new Exception("no enemy in attack tile");
+        }
+        bool b=Attack(e);
+        Debug.Log(b);
+        tile.SetEnemyPresence(!b);
+        return b;
+    }
+    private bool Attack(Enemy enemy)
+	{
+        bool isDead=enemy.TakeDamage(damage);
+        int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
+        MovesLeft--;
+        PlayerPrefs.SetInt("MovesLeft", MovesLeft);
+        
+        return isDead;
     }
 }

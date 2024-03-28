@@ -155,15 +155,28 @@ public class BoardScript : MonoBehaviour
 			{
                 return;
             }
-            characterToMove.Move(tile);
-            TileScript.ResetTileHighlights();
-            
-            if (lastHighlightedTile != null)
+            if (tile.IsEnemyOnTile())
             {
-                lastHighlightedTile = null;
+                Enemy e = tile.GetComponentInChildren<Enemy>();
+                if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
+                {
+                    RemoveEnemy(e);
+                }
+                TileScript.HighlightTilesBasedOnWalkable(lastHighlightedTile.GetComponentInChildren<Character>());
             }
+            else
+            {
+                characterToMove.Move(tile);
+                TileScript.ResetTileHighlights();
 
-            characterToMove = null;
+                if (lastHighlightedTile != null)
+                {
+                    lastHighlightedTile = null;
+                }
+
+                characterToMove = null;
+            }
+            
 		}
 	}
 
