@@ -23,9 +23,21 @@ public class Enemy : Character
         }
         return true;
     }
-
     void Update()
     {
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
+    }
+    public bool TakeDamage(int damage)
+    {
+        Debug.Log("Priešo hp prieš ataka = " + hp);
+        hp = hp - damage;
+        Debug.Log("Priešo hp po atakos = " + hp);
+
+        if (hp <= 0)
+        {
+            Destroy(gameObject);
+            return true;
+        }
+        return false;
     }
 }

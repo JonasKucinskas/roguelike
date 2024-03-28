@@ -176,7 +176,7 @@ public class TileScript : MonoBehaviour
     {
         foreach (var tile in AllTiles)
         {
-			if (character.GetComponent<DendriticCell>().CanMove(tile))
+			if (character.GetComponent<NeutrophilCell>().CanMove(tile))
 			{
                 tile.HighlightBasedOnOccupancy();
             }

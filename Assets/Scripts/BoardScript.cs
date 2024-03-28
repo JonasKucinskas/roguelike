@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -320,5 +321,10 @@ public class BoardScript : MonoBehaviour
         {
             FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().VictoryMenuUI.SetActive(true);
         }
+    }
+
+    public void RemoveEnemy(Enemy enem)
+    {
+        enemies.Remove(enem);
     }
 }

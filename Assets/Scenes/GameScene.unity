@@ -3610,7 +3610,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 12
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7184,12 +7184,6 @@ MonoBehaviour:
   MovesLeftText: {fileID: 1020525565}
   initialCards:
   - {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
-  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
   canvas: {fileID: 605084863}
 --- !u!4 &1983123564 stripped
 Transform:
@@ -7689,6 +7683,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deck
       objectReference: {fileID: 0}
+    - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
+      propertyPath: cards.Array.data[1]
+      value: 
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+    - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
+      propertyPath: cards.Array.data[3]
+      value: 
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+    - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
+      propertyPath: cards.Array.data[5]
+      value: 
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+    - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
+      propertyPath: cards.Array.data[6]
+      value: 
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+    - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
+      propertyPath: cards.Array.data[7]
+      value: 
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
