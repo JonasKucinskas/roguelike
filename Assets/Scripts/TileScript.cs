@@ -119,6 +119,7 @@ public class TileScript : MonoBehaviour
 			if (tile.CheckForEnemyInLastRow())
 			{
 				Debug.Log("Enemy detected on tile (" + tile.xPosition + "," + tile.zPosition + ")");
+				tile.GetComponentInParent<BoardScript>().enemies.Remove(tile.GetComponentInChildren<Enemy>());
 				tile.RemoveChildren();
 				return true; // Enemy is in the last row
 			}
@@ -164,11 +165,15 @@ public class TileScript : MonoBehaviour
 		}
 	}
 
-	public static void HighlightTilesBasedOnOccupancy()
+	public static void GetWalkableTiles(Character character)
     {
+		List<TileScript>tiles = new List<TileScript>();
         foreach (var tile in AllTiles)
         {
-            tile.HighlightBasedOnOccupancy();
+			if (character.GetComponent<NeutrophilCell>().CanMove(tile))
+			{
+                tiles.Add(tile);
+            }
         }
     }
     public static void HighlightTilesBasedOnWalkable(Character character)

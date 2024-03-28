@@ -8,7 +8,6 @@ public class Enemy : Character
     public GameObject HpText;
 	private void Start()
     {
-		hp = 10;
         damage = 10;
         isFriendly = false;    
 	}
@@ -29,9 +28,9 @@ public class Enemy : Character
     }
     public bool TakeDamage(int damage)
     {
-        //Debug.Log("Priešo hp prieš ataka = " + hp);
+        //Debug.Log("Prieso hp pries ataka = " + hp);
         hp = hp - damage;
-        //Debug.Log("Priešo hp po atakos = " + hp);
+        //Debug.Log("Prieso hp po atakos = " + hp);
 
         if (hp <= 0)
         {

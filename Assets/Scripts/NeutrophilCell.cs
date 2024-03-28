@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class NeutrophilCell : Character
 {
+    public GameObject HpText;
     private bool isClicked = false;
     private TurnManager turnManager;
 
@@ -31,6 +33,7 @@ public class NeutrophilCell : Character
 
     private void Update()
     {
+        HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
         string tileName = "Tile_" + xPosition + "_" + zPosition;
         GameObject tileObject = GameObject.Find(tileName);
         var tile = tileObject.GetComponent<TileScript>();
@@ -39,7 +42,6 @@ public class NeutrophilCell : Character
         {
             ActivatePower();
             isClicked = true;
-            turnManager.SubtractPlayerMove();
         }
         else
             isClicked = false;
@@ -51,14 +53,14 @@ public class NeutrophilCell : Character
         {
             GameObject boardObject = GameObject.Find("Board");
             BoardScript board = boardObject.GetComponent<BoardScript>();
-
+            turnManager.SubtractPlayerMove();
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
             for (int x = xPosition - 1; x <= xPosition + 1; x++)
             {
                 for (int z = zPosition - 1; z <= zPosition + 1; z++)
                 {
                     string tileName = "Tile_" + x + "_" + z;
-                    //Debug.Log("Ieškomas langelis: " + tileName);
+                    //Debug.Log("Ieï¿½komas langelis: " + tileName);
 
                     if (x == xPosition && z == zPosition) //veikejo langelis
                     {

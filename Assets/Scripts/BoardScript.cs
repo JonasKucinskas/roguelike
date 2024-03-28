@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
+using Random = UnityEngine.Random;
 
 public class BoardScript : MonoBehaviour
 {
@@ -160,12 +161,24 @@ public class BoardScript : MonoBehaviour
             }
             if (tile.IsEnemyOnTile())
             {
-                Enemy e = tile.GetComponentInChildren<Enemy>();
-                if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
+                if(characterToMove.CanMove(tile))
                 {
-                    RemoveEnemy(e);
+                    Enemy e = tile.GetComponentInChildren<Enemy>();
+                    if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
+                    {
+                        RemoveEnemy(e);
+                    }
+                    TileScript.ResetTileHighlights();
+
+                    if (lastHighlightedTile != null)
+                    {
+                        lastHighlightedTile = null;
+                    }
+
+                    characterToMove = null;
+                    tile.IsSelected = false;//
+                    Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
                 }
-                TileScript.HighlightTilesBasedOnWalkable(lastHighlightedTile.GetComponentInChildren<Character>());
             }
             else
             {
@@ -218,7 +231,7 @@ public class BoardScript : MonoBehaviour
 
     void HandleEnemyMovement()
     {
-        if (turnManager.isPlayersTurn())
+        if (turnManager.isPlayersTurn()|| enemies.Count==0)
         {
             return;
         }
@@ -229,30 +242,33 @@ public class BoardScript : MonoBehaviour
             //if there is friendly character in the way, it looks for a free path towards the end of the board
             // and spawns enemy on that path.
             bool isObstacleInTheWay = false;
-            bool SecondTileInFrontExists=false;
-            TileScript NextTileInFront=null;
+
+            // bool SecondTileInFrontExists=false;  PLEASE DONT DELETE MIGHT NEED LATER <3
+            // TileScript NextTileInFront=null;
+
             for (int i = 0; i < enemy.xPosition; i++)
             {
                 TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
-                if(i!=0)
-                {
-                    NextTileInFront = tiles[i-1, enemy.zPosition].GetComponent<TileScript>();
-                    if(NextTileInFront!=null)
-                    {
-                        SecondTileInFrontExists=true;
-                    }                    
-                }
 
-                if(SecondTileInFrontExists)
-                {
-                    if (tileinfront.IsFriendlyOnTile() && !NextTileInFront.IsOccupied())
-                    {
-                        Debug.Log(i+" Is moving");
-                        enemy.Move(NextTileInFront);
-                        turnManager.EndEnemyTurn();
-                        return;
-                    }                    
-                }
+                // if(i!=0)
+                // {
+                //     NextTileInFront = tiles[i-1, enemy.zPosition].GetComponent<TileScript>();
+                //     if(NextTileInFront!=null)
+                //     {
+                //         SecondTileInFrontExists=true;
+                //     }                    
+                // }
+                //                                      PLEASE DONT DELETE MIGHT NEED LATER <3
+                // if(SecondTileInFrontExists)
+                // {
+                //     if (tileinfront.IsFriendlyOnTile() && !NextTileInFront.IsOccupied())
+                //     {
+                //         Debug.Log(i+" Is moving");
+                //         enemy.Move(NextTileInFront);
+                //         turnManager.EndEnemyTurn();
+                //         return;
+                //     }                    
+                // }
 
                 if (tileinfront.IsOccupied())
                 {
@@ -319,6 +335,7 @@ public class BoardScript : MonoBehaviour
         enemy.characterName = $"enemy_{i}_{j}";
         enemy.xPosition = i;
         enemy.zPosition = j;
+        enemy.hp=Random.Range(5,15);
         
         enemies.Add(enemy);
         
