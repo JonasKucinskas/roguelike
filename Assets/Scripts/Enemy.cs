@@ -29,9 +29,9 @@ public class Enemy : Character
     }
     public bool TakeDamage(int damage)
     {
-        Debug.Log("Priešo hp prieš ataka = " + hp);
+        //Debug.Log("Priešo hp prieš ataka = " + hp);
         hp = hp - damage;
-        Debug.Log("Priešo hp po atakos = " + hp);
+        //Debug.Log("Priešo hp po atakos = " + hp);
 
         if (hp <= 0)
         {

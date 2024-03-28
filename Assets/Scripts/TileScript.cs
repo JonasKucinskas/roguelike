@@ -14,6 +14,7 @@ public class TileScript : MonoBehaviour
 	public int xPosition;
     public int zPosition;
 	private bool isStateHighlighted = false;
+	public bool IsSelected { get; set; } = false;
 
 	void Start()
     {
@@ -137,8 +138,6 @@ public class TileScript : MonoBehaviour
 			renderer.material.color = Color.yellow;
 		}
 	}
-
-
 
 	public void RemoveHighlight()
 	{

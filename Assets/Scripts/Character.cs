@@ -146,6 +146,9 @@ public abstract class Character : MonoBehaviour
             tile.SetEnemyPresence(true);
         }
 
+        originalTile.IsSelected = false;//
+        Debug.Log("Is Tile_" + originalTile.xPosition + "_" + originalTile.zPosition + " selected? " + originalTile.IsSelected);//
+
         CheckMovePath(originalTile,tile);
 		StartCoroutine(MoveToTile(tile));
 

@@ -6,12 +6,14 @@ using System;
 public class NeutrophilCell : Character
 {
     private bool isClicked = false;
+    private TurnManager turnManager;
 
     private void Start()
     {
         hp = 10;
         damage = 10;
         isFriendly = true;
+        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
     }
 
     public override bool CanMove(TileScript tile)
@@ -29,10 +31,15 @@ public class NeutrophilCell : Character
 
     private void Update()
     {
-        if (Input.GetMouseButton(1))
+        string tileName = "Tile_" + xPosition + "_" + zPosition;
+        GameObject tileObject = GameObject.Find(tileName);
+        var tile = tileObject.GetComponent<TileScript>();
+
+        if (Input.GetKey(KeyCode.Space ) && turnManager.isPlayersTurn() && tile.IsSelected)
         {
             ActivatePower();
             isClicked = true;
+            turnManager.SubtractPlayerMove();
         }
         else
             isClicked = false;
@@ -43,8 +50,7 @@ public class NeutrophilCell : Character
         if (isClicked == false)
         {
             GameObject boardObject = GameObject.Find("Board");
-
-            Debug.Log("-----------------");
+            BoardScript board = boardObject.GetComponent<BoardScript>();
 
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
             for (int x = xPosition - 1; x <= xPosition + 1; x++)
@@ -52,11 +58,11 @@ public class NeutrophilCell : Character
                 for (int z = zPosition - 1; z <= zPosition + 1; z++)
                 {
                     string tileName = "Tile_" + x + "_" + z;
-                    Debug.Log("Ieškomas langelis: " + tileName);
+                    //Debug.Log("Ieškomas langelis: " + tileName);
 
                     if (x == xPosition && z == zPosition) //veikejo langelis
                     {
-                        //sunaikinti veikeja arba  nieko nedaryti
+                        //veikejo langelis
                     }
                     else
                     {
@@ -68,22 +74,31 @@ public class NeutrophilCell : Character
 
                             if (tile.IsEnemyOnTile() == true)
                             {
-                                var characterObject = tileObject.transform.GetChild(0); //3 pozicijoje yra draugiskas veikejas
+                                var characterObject = tileObject.transform.GetChild(0);
                                 Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
                                 Enemy enemy = characterObject.GetComponent<Enemy>();
                                 bool isDead = enemy.TakeDamage(5);
 
-                                if(isDead == true)
+                                if (isDead == true)
                                 {
                                     tile.SetEnemyPresence(false);
-                                    BoardScript board = boardObject.GetComponent<BoardScript>();
                                     board.RemoveEnemy(enemy);
                                 }
+
+                                board.FinishAtack();
                             }
                             if (tile.IsFriendlyOnTile() == true)
                             {
-                                var character = tileObject.transform.GetChild(0); //1 pozicijoje yra prieso veikejas
+                                var characterObject = tileObject.transform.GetChild(0);
                                 Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
+                                NeutrophilCell friendly = characterObject.GetComponent<NeutrophilCell>();
+                                bool isDead = friendly.TakeDamage(5);
+
+                                if (isDead == true)
+                                {
+                                    tile.SetFriendlyPresence(false);
+                                }
+                                board.FinishAtack();
                             }
                         }
                         else
@@ -94,5 +109,17 @@ public class NeutrophilCell : Character
                 }
             }
         }
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        hp = hp - damage;
+
+        if (hp <= 0)
+        {
+            Destroy(gameObject);
+            return true;
+        }
+        return false;
     }
 }

@@ -142,7 +142,10 @@ public class BoardScript : MonoBehaviour
 
             Debug.Log("Moving friendly");
 			characterToMove = character;
-		}
+            
+            tileUnderCharacter.IsSelected = true;//
+            Debug.Log("Is Tile_" + tileUnderCharacter.xPosition + "_" + tileUnderCharacter.zPosition + " selected? " + tileUnderCharacter.IsSelected);//
+        }
 		else
 		{
 			TileScript tile = clickedObject.GetComponent<TileScript>();
@@ -175,9 +178,12 @@ public class BoardScript : MonoBehaviour
                 }
 
                 characterToMove = null;
+                tile.IsSelected = false;//
+                Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//
             }
             
 		}
+           
 	}
 
     void CheckForCancelMovement()
@@ -200,7 +206,9 @@ public class BoardScript : MonoBehaviour
 			{
 				tileScript.RemoveHighlight();
 				TileScript.ResetTileHighlights();
-			}
+                tileScript.IsSelected = false;//
+                Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+            }
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
 
@@ -339,5 +347,25 @@ public class BoardScript : MonoBehaviour
     public void RemoveEnemy(Enemy enem)
     {
         enemies.Remove(enem);
+    }
+
+    public void FinishAtack()
+    {
+        if (lastHighlightedTile != null)
+        {
+            // Access the TileScript component and call RemoveHighlight
+            TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
+            if (tileScript != null)
+            {
+                tileScript.RemoveHighlight();
+                TileScript.ResetTileHighlights();
+                tileScript.IsSelected = false;//
+                Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+            }
+            lastHighlightedTile = null; // Clear the reference to the last highlighted tile
+        }
+
+        characterToMove = null;
+        Debug.Log("Attack done");
     }
 }
