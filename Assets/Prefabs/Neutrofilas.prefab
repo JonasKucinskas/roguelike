@@ -445,6 +445,7 @@ MonoBehaviour:
   zPosition: 0
   isFriendly: 0
   HpText: {fileID: 4505832288623749646}
+  neutrAnimator: {fileID: 5912894489969214330}
 --- !u!65 &-8898998201223200128
 BoxCollider:
   m_ObjectHideFlags: 0

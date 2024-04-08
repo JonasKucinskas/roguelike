@@ -9,6 +9,7 @@ public class NeutrophilCell : Character
     public GameObject HpText;
     private bool isClicked = false;
     private TurnManager turnManager;
+    [SerializeField] Animator neutrAnimator;
 
     private void Start()
     {
@@ -54,6 +55,7 @@ public class NeutrophilCell : Character
             GameObject boardObject = GameObject.Find("Board");
             BoardScript board = boardObject.GetComponent<BoardScript>();
             turnManager.SubtractPlayerMove();
+            neutrAnimator.Play("simpleAttack");
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
             for (int x = xPosition - 1; x <= xPosition + 1; x++)
             {
