@@ -347,7 +347,7 @@ public class BoardScript : MonoBehaviour
     }
 
 
-void StartNewLevel()
+    void StartNewLevel()
     {
 		enemies = new List<Enemy>();
 		MakeBoard(X, Z);
