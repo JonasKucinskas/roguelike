@@ -9,9 +9,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject PauseMenuUI;
     public GameObject VictoryMenuUI;
     public GameObject DefeatMenuUI;
+	public GameObject BonusSelectUI;
 
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
