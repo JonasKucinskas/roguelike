@@ -280,6 +280,7 @@ public class BoardScript : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
 	IEnumerator EnemyMovement()
     {
         for(int w = 0; w < EnemyTurnCount;w++)
@@ -345,20 +346,19 @@ public class BoardScript : MonoBehaviour
         turnManager.EndEnemyTurn();
         StartedEnemyTurn=false;      
     }
-
-
-void StartNewLevel()
+=======
+	void StartNewLevel()
     {
 		enemies = new List<Enemy>();
 		MakeBoard(X, Z);
 		InitializeEnemies();
 	}
+>>>>>>> 25a3ae1 (bonus screen appears)
 
 	void CheckWinConditions()
     {
         if(enemies.Count==0)
         {
-            //Extra if for some optimisation :)
             if(FindFirstObjectByType<PlayerHealth>().currentHealth!=0)
             {
                 FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);

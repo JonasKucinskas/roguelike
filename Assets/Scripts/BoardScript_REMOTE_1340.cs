@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,10 +19,6 @@ public class BoardScript : MonoBehaviour
 	GameObject lastHighlightedTile = null;
     private Character characterToMove;
     private TurnManager turnManager;
-
-    private int EnemyTurnCount=3;
-
-    private bool StartedEnemyTurn=false;
 
 	// Start is called before the first frame update
 	void Start()
@@ -236,13 +231,89 @@ public class BoardScript : MonoBehaviour
 
     void HandleEnemyMovement()
     {
-        
-        if (turnManager.isPlayersTurn()|| enemies.Count==0 || StartedEnemyTurn)
+        if (turnManager.isPlayersTurn()|| enemies.Count==0)
         {
             return;
         }
-        StartedEnemyTurn=true;
-        StartCoroutine(EnemyMovement());
+
+        foreach (Enemy enemy in enemies)
+        {
+            //enemy goes forward, if there are no friendly characters in the way,
+            //if there is friendly character in the way, it looks for a free path towards the end of the board
+            // and spawns enemy on that path.
+            bool isObstacleInTheWay = false;
+
+            // bool SecondTileInFrontExists=false;  PLEASE DONT DELETE MIGHT NEED LATER <3
+            // TileScript NextTileInFront=null;
+
+            for (int i = 0; i < enemy.xPosition; i++)
+            {
+                TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
+
+                // if(i!=0)
+                // {
+                //     NextTileInFront = tiles[i-1, enemy.zPosition].GetComponent<TileScript>();
+                //     if(NextTileInFront!=null)
+                //     {
+                //         SecondTileInFrontExists=true;
+                //     }                    
+                // }
+                //                                      PLEASE DONT DELETE MIGHT NEED LATER <3
+                // if(SecondTileInFrontExists)
+                // {
+                //     if (tileinfront.IsFriendlyOnTile() && !NextTileInFront.IsOccupied())
+                //     {
+                //         Debug.Log(i+" Is moving");
+                //         enemy.Move(NextTileInFront);
+                //         turnManager.EndEnemyTurn();
+                //         return;
+                //     }                    
+                // }
+
+                if (tileinfront.IsOccupied())
+                {
+                    isObstacleInTheWay=true;
+                }      
+            }
+
+            bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
+
+            if (!isObstacleInTheWay && isEnemyOnTheEdge)
+            {
+                TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
+                Debug.Log(enemy.xPosition+"X " + enemy.zPosition+"Y" +" Is moving");
+                enemy.Move(tile);
+                turnManager.EndEnemyTurn();
+                return;
+            }
+        }
+
+        //all current enemies are blocked, look for a free path and if found, spawn enemy there.
+        for (int i = 0; i < Z; i++)
+        {
+            bool isObstacleInTheWay = false;
+            for (int j = 0; j < X; j++)
+            {
+                TileScript tile = tiles[j, i].GetComponent<TileScript>();
+
+                if (tile.IsOccupied())
+                {
+                    isObstacleInTheWay = true;
+                    break;
+                }
+            }
+
+            if (!isObstacleInTheWay)
+            {
+                SpawnEnemy(X / 2, i);
+                break;
+            }
+        }
+
+        turnManager.EndEnemyTurn();
+        
+        //if all paths blocked for enemies, and there are no paths towards the end of the board, 
+        //enemies do nothing.
     }
 
     void SpawnEnemy(int i, int j)
@@ -280,74 +351,7 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-	IEnumerator EnemyMovement()
-    {
-        for(int w = 0; w < EnemyTurnCount;w++)
-        {
-            bool EnemyMoved=false;
-            foreach (Enemy enemy in enemies)
-            {
-                //enemy goes forward, if there are no friendly characters in the way,
-                //if there is friendly character in the way, it looks for a free path towards the end of the board
-                // and spawns enemy on that path.
-                bool isObstacleInTheWay = false;
-
-                for (int i = 0; i < enemy.xPosition; i++)
-                {
-                    TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
-
-                    if (tileinfront.IsOccupied())
-                    {
-                        isObstacleInTheWay=true;
-                    }      
-                }
-
-                bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
-
-                if (!isObstacleInTheWay && isEnemyOnTheEdge)
-                {
-                    TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
-                    Debug.Log(enemy.xPosition+"X " + enemy.zPosition+"Y" +" Is moving");
-                    enemy.Move(tile);
-                    EnemyMoved=true;
-                    yield return new WaitForSeconds(1f);
-                    break;
-                }
-            }
-
-            if(!EnemyMoved)
-            {
-                //all current enemies are blocked, look for a free path and if found, spawn enemy there.
-                for (int i = 0; i < Z; i++)
-                {
-                    bool isObstacleInTheWay = false;
-                    for (int j = 0; j < X; j++)
-                    {
-                        TileScript tile = tiles[j, i].GetComponent<TileScript>();
-
-                        if (tile.IsOccupied())
-                        {
-                            isObstacleInTheWay = true;
-                            break;
-                        }
-                    }
-
-                    if (!isObstacleInTheWay)
-                    {
-                        SpawnEnemy(X / 2, i);
-                        yield return new WaitForSeconds(1f);
-                        break;
-                    }
-                }
-            }
-        }
-
-        turnManager.EndEnemyTurn();
-        StartedEnemyTurn=false;      
-    }
-
-
-void StartNewLevel()
+	void StartNewLevel()
     {
 		enemies = new List<Enemy>();
 		MakeBoard(X, Z);

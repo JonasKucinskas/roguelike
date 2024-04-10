@@ -346,22 +346,13 @@ public class BoardScript : MonoBehaviour
         StartedEnemyTurn=false;      
     }
 
-
-void StartNewLevel()
-    {
-		enemies = new List<Enemy>();
-		MakeBoard(X, Z);
-		InitializeEnemies();
-	}
-
 	void CheckWinConditions()
     {
         if(enemies.Count==0)
         {
-            //Extra if for some optimisation :)
             if(FindFirstObjectByType<PlayerHealth>().currentHealth!=0)
             {
-                FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+                FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().VictoryMenuUI.SetActive(true);                
             }
         }
     }
