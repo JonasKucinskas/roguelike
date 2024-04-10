@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
-using TMPro; // Namespace for TextMeshPro
+using TMPro;
+using UnityEngine.UI; // Namespace for TextMeshPro
 
 [System.Serializable]
 public class Bonus
@@ -17,6 +18,9 @@ public class BonusManager : MonoBehaviour
 	public TextMeshProUGUI topButtonText;
 	public TextMeshProUGUI middleButtonText;
 	public TextMeshProUGUI bottomButtonText;
+	public Button topButton;
+	public Button middleButton;
+	public Button bottomButton;
 
 	private List<Bonus> selectedBonuses; // Stores the bonuses selected for display
 
@@ -25,6 +29,10 @@ public class BonusManager : MonoBehaviour
 		InitializeBonuses();
 		AssignBonusTextToButtons();
 		// You can also load bonuses from a file or database here
+
+		topButton.onClick.AddListener(delegate { ApplyBonus(0); });
+		middleButton.onClick.AddListener(delegate { ApplyBonus(1); });
+		bottomButton.onClick.AddListener(delegate { ApplyBonus(2); });
 	}
 
 	void InitializeBonuses()
@@ -73,5 +81,20 @@ public class BonusManager : MonoBehaviour
 		return selected;
 	}
 
-	// Add other methods to handle bonus selection, application, etc.
+	public void ApplyBonus(int bonusIndex)
+	{
+		// Check if the bonusIndex is within the range of selectedBonuses
+		/*if (bonusIndex < 0 || bonusIndex >= selectedBonuses.Count)
+		{
+			Debug.LogError("Bonus index out of range");
+			return;
+		}*/
+		FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(false);
+		// Get the selected bonus based on the index
+		Bonus selectedBonus = selectedBonuses[bonusIndex];
+
+		Debug.Log("Applying bonus: " + selectedBonus.bonusName);
+
+		
+	}
 }
