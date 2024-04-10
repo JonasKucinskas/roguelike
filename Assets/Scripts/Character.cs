@@ -16,90 +16,6 @@ public abstract class Character : MonoBehaviour
 
     public abstract bool CanMove(TileScript tile);
 
-
-    //Don't ask how this works i used chatgpt, i have no fucking clue.
-    public List<Transform> GetTilesBetween(TileScript StartTile, TileScript EndTile)
-    {
-        List<Transform> tilesBetween = new List<Transform>();
-
-        string[] StartTileCoords=StartTile.name.Split('_');
-        string[] EndTileCoords=EndTile.name.Split('_');
-
-        int[] Tilex=new int[2];
-        int[] Tiley=new int[2];
-
-        Tilex[0] = int.Parse(StartTileCoords[1]);
-        Tiley[0] = int.Parse(StartTileCoords[2]);
-
-        Tilex[1] = int.Parse(EndTileCoords[1]);
-        Tiley[1] = int.Parse(EndTileCoords[2]);
-
-
-        int dx = Math.Abs(Tilex[1] - Tilex[0]);
-        int dy = Math.Abs(Tiley[1] - Tiley[0]);
-
-        int sx = Tilex[0] < Tilex[1] ? 1 : -1;
-        int sy = Tiley[0] < Tiley[1] ? 1 : -1;
-
-        int err = dx - dy;
-        int x = Tilex[0];
-        int y = Tiley[0];
-
-        while (true)
-        {
-            tilesBetween.Add(StartTile.transform.parent.Find("Tile_" + x + "_"+y));
-
-            if (x == Tilex[1] && y == Tiley[1])
-                break;
-
-            int e2 = 2 * err;
-            if (e2 > -dy)
-            {
-                err -= dy;
-                x += sx;
-            }
-            if (e2 < dx)
-            {
-                err += dx;
-                y += sy;
-            }
-        }
-
-        return tilesBetween;
-    }
-    public void CheckMovePath(TileScript StartTile, TileScript EndTile)
-    {
-        List<Transform> TilesInBetween;
-        TilesInBetween =GetTilesBetween(StartTile,EndTile);
-        foreach(Transform tile in TilesInBetween)
-        {
-            if(isFriendly)
-            {
-                Transform Enemy=tile.Find("alien character(Clone)");
-                if(Enemy!=null)
-                {
-                    tile.gameObject.GetComponent<TileScript>().SetEnemyPresence(false);
-                    tile.parent.GetComponent<BoardScript>().enemies.Remove(Enemy.gameObject.GetComponent<Enemy>());
-                    Destroy(Enemy.gameObject);
-                }                
-            }
-            else
-            {
-                Transform Enemy=tile.Find("FootmanHP(Clone)");
-                if(Enemy==null)
-                {
-                    Enemy=tile.Find("FootmanPBR(Clone)");                    
-                }
-                if(Enemy!=null)
-                {
-                    tile.gameObject.GetComponent<TileScript>().SetFriendlyPresence(false);
-                    Destroy(Enemy.gameObject);
-                }    
-            }
-
-        }
-    }
-
 	private IEnumerator MoveToTile(TileScript targetTile)
 	{
 		Vector3 startPosition = transform.position; // Starting position
@@ -149,7 +65,6 @@ public abstract class Character : MonoBehaviour
         originalTile.IsSelected = false;//
         Debug.Log("Is Tile_" + originalTile.xPosition + "_" + originalTile.zPosition + " selected? " + originalTile.IsSelected);//
 
-        CheckMovePath(originalTile,tile);
 		StartCoroutine(MoveToTile(tile));
 
 		gameObject.transform.SetParent(tile.gameObject.transform, false);
@@ -161,6 +76,7 @@ public abstract class Character : MonoBehaviour
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft",MovesLeft);
     }
+    
     public bool Attack(TileScript tile)
 	{
         Enemy e = tile.GetComponentInChildren<Enemy>();
