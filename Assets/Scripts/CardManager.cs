@@ -11,12 +11,15 @@ public class CardManager : MonoBehaviour
     public GameObject canvas;
     int draggedCardIndex;
     private TurnManager turnManager;
+    private bool isDragging = false;
 
     void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         DrawCards(initialCards, true);
     }
+
+
 
     void Update()
     {
@@ -26,14 +29,17 @@ public class CardManager : MonoBehaviour
 
     private void HandleCardMovedFromHand(Card card)
     {
-        //if card is returned to hand after used dragged it out..
+        //if card is returned to hand after used dragged it out.
         draggedCardIndex = drawnCards.IndexOf(card.gameObject);
         drawnCards.Remove(card.gameObject);
+        isDragging = true;
         DrawCards(drawnCards);
     }
 
     private void HandleCardMovedToHand(Card card)
     {
+        //card returned from hand after being dragged.
+        isDragging = false;
         drawnCards.Insert(draggedCardIndex, card.gameObject);
         DrawCards(drawnCards);
     }
@@ -99,6 +105,13 @@ public class CardManager : MonoBehaviour
                 cardObjects[i].transform.localPosition = coords;
                 cardObjects[i].transform.localRotation = Quaternion.Euler(0, 0, rotation);
             }
+
+            //update original status of the card.
+
+            Card card = cardObjects[i].GetComponent<Card>();
+            card.originalPosition = coords;
+            card.originalScale = new Vector3(0.7f, 0.7f, 1);
+            card.originalRotation = Quaternion.Euler(0, 0, rotation);
         }
     }
 
@@ -141,7 +154,6 @@ public class CardManager : MonoBehaviour
             posZ = -0.1f;
         }
 
-
         return new Vector3(posX, posY, posZ);
     }
 
@@ -168,6 +180,7 @@ public class CardManager : MonoBehaviour
             {
                 rotation = (midpoint - index) * 5 - 10;
             }
+            //else this is the midpoint and rotation is 0.
         }
 
         return rotation;
@@ -185,5 +198,11 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().OnCardMovedToHand += HandleCardMovedToHand;
         
         drawnCards.Add(newCard);
+    }
+
+    //is any card being dragged?
+    public bool IsDragging()
+    {
+        return isDragging;
     }
 }

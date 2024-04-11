@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
+  m_IndirectSpecularColor: {r: 0.47181702, g: 0.355771, b: 0.2556258, a: 1}
   m_IndirectSpecularColor: {r: 0.47181696, g: 0.355771, b: 0.25562602, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -2052,7 +2053,7 @@ Canvas:
   m_GameObject: {fileID: 605084863}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 629771269}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
