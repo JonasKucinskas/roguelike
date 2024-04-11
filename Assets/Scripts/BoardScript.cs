@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,112 +8,116 @@ using Random = UnityEngine.Random;
 
 public class BoardScript : MonoBehaviour
 {
-    public GameObject TilePrefab;
-    public GameObject enemyPrefab;
+	public GameObject TilePrefab;
+	public GameObject enemyPrefab;
 
-    public float Gap;
-    public float Size;
-    public int X;
-    public int Z;
-    private GameObject[,] tiles;
-    public List<Enemy> enemies;
+	public float Gap;
+	public float Size;
+	public int X;
+	public int Z;
+	private GameObject[,] tiles;
+	public List<Enemy> enemies;
 	GameObject lastHighlightedTile = null;
-    private Character characterToMove;
-    private TurnManager turnManager;
+	private Character characterToMove;
+	private TurnManager turnManager;
+
+	private int EnemyTurnCount = 1;
+
+	private bool StartedEnemyTurn = false;
 
 	// Start is called before the first frame update
 	void Start()
-    {
-        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        enemies = new List<Enemy>();
-        MakeBoard(X, Z);
-        InitializeEnemies();
+	{
+		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+		enemies = new List<Enemy>();
+		MakeBoard(X, Z);
+		InitializeEnemies();
 	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        HandleFriendlyMovement();
-        CheckForCancelMovement();
-        HandleEnemyMovement();
-        CheckWinConditions();
+	// Update is called once per frame
+	void Update()
+	{
+		HandleFriendlyMovement();
+		CheckForCancelMovement();
+		HandleEnemyMovement();
+		CheckWinConditions();
 	}
 
-    //Creates board
-    void MakeBoard(int x, int z)
-    {
-        tiles = new GameObject[x, z]; // Initialize the array with the board dimensions
+	//Creates board
+	void MakeBoard(int x, int z)
+	{
+		tiles = new GameObject[x, z]; // Initialize the array with the board dimensions
 
-        float midx = ((x - 1) * Size + (x - 1) * Gap) / 2;
-        float midz = ((z - 1) * Size + (z - 1) * Gap) / 2;
-        for (int i = 0; i < x; i++)
-        {
-            for (int j = 0; j < z; j++)
-            {
-                Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, 0, j * Size + j * Gap - midz);
-                GameObject tileGameObject = Instantiate(TilePrefab, coordinates, Quaternion.identity);
-                tileGameObject.transform.parent = transform;
-                tileGameObject.name = "Tile_" + i.ToString() + "_" + j.ToString();
-                
-                tiles[i, j] = tileGameObject; // Store the tile reference in the array
-            
-                TileScript tile = tileGameObject.GetComponentInChildren<TileScript>();
-                tile.xPosition = i;
-                tile.zPosition = j;
-            }
-        }
-    }
+		float midx = ((x - 1) * Size + (x - 1) * Gap) / 2;
+		float midz = ((z - 1) * Size + (z - 1) * Gap) / 2;
+		for (int i = 0; i < x; i++)
+		{
+			for (int j = 0; j < z; j++)
+			{
+				Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, 0, j * Size + j * Gap - midz);
+				GameObject tileGameObject = Instantiate(TilePrefab, coordinates, Quaternion.identity);
+				tileGameObject.transform.parent = transform;
+				tileGameObject.name = "Tile_" + i.ToString() + "_" + j.ToString();
 
-    void InitializeEnemies()
-    {
-        System.Random random = new System.Random();
+				tiles[i, j] = tileGameObject; // Store the tile reference in the array
 
-        for (int i = X / 2; i < X; i++)
-        {
-            for (int j = 0; j < Z; j++)
-            {
-                int randomNumber = random.Next(100);
+				TileScript tile = tileGameObject.GetComponentInChildren<TileScript>();
+				tile.xPosition = i;
+				tile.zPosition = j;
+			}
+		}
+	}
 
-                // 50% chance to spawn an enemy.
-                if (randomNumber > 50)
-                {
-                    continue;
-                }
+	void InitializeEnemies()
+	{
+		System.Random random = new System.Random();
 
-                SpawnEnemy(i, j);
-            }
-        }
-    }
+		for (int i = X / 2; i < X; i++)
+		{
+			for (int j = 0; j < Z; j++)
+			{
+				int randomNumber = random.Next(100);
 
-    void HandleFriendlyMovement()
-    {
-        
-        if (!turnManager.isPlayersTurn())
-        {
-            return;
-        }
+				// 50% chance to spawn an enemy.
+				if (randomNumber > 50)
+				{
+					continue;
+				}
 
-        if (!Input.GetMouseButtonDown(0))
-        {
-            //mouse not clicked
-            return;
-        }
-        //Checks if clicked on UI (PauseMenu)
-        if(EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+				SpawnEnemy(i, j);
+			}
+		}
+	}
 
-        if (!Physics.Raycast(ray, out hit))
-        {
-            //no raycast
-            return;
-        }
+	void HandleFriendlyMovement()
+	{
 
-        GameObject clickedObject = hit.collider.gameObject;
-        Debug.Log("Clicked on: " + clickedObject.name);
+		if (!turnManager.isPlayersTurn())
+		{
+			return;
+		}
+
+		if (!Input.GetMouseButtonDown(0))
+		{
+			//mouse not clicked
+			return;
+		}
+		//Checks if clicked on UI (PauseMenu)
+		if (EventSystem.current.IsPointerOverGameObject())
+		{
+			return;
+		}
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (!Physics.Raycast(ray, out hit))
+		{
+			//no raycast
+			return;
+		}
+
+		GameObject clickedObject = hit.collider.gameObject;
+		Debug.Log("Clicked on: " + clickedObject.name);
 
 
 		if (!characterToMove)
@@ -120,10 +125,10 @@ public class BoardScript : MonoBehaviour
 			Character character = clickedObject.GetComponent<Character>();
 			if (!character)
 			{
-                if (clickedObject.transform.parent)
-                {
-				    character = clickedObject.transform.parent.GetComponent<Character>();
-                }
+				if (clickedObject.transform.parent)
+				{
+					character = clickedObject.transform.parent.GetComponent<Character>();
+				}
 			}
 
 			if (!character || !character.isFriendly)
@@ -134,19 +139,19 @@ public class BoardScript : MonoBehaviour
 			TileScript tileUnderCharacter = character.transform.parent.GetComponent<TileScript>();
 			if (tileUnderCharacter != null)
 			{
-                //TileScript.HighlightTilesBasedOnOccupancy();
-                TileScript.HighlightTilesBasedOnWalkable(character);
+				//TileScript.HighlightTilesBasedOnOccupancy();
+				TileScript.HighlightTilesBasedOnWalkable(character);
 
-                tileUnderCharacter.Highlight();
+				tileUnderCharacter.Highlight();
 				lastHighlightedTile = tileUnderCharacter.gameObject;
 			}
 
-            Debug.Log("Moving friendly");
+			Debug.Log("Moving friendly");
 			characterToMove = character;
-            
-            tileUnderCharacter.IsSelected = true;//
-            Debug.Log("Is Tile_" + tileUnderCharacter.xPosition + "_" + tileUnderCharacter.zPosition + " selected? " + tileUnderCharacter.IsSelected);//
-        }
+
+			tileUnderCharacter.IsSelected = true;//
+			Debug.Log("Is Tile_" + tileUnderCharacter.xPosition + "_" + tileUnderCharacter.zPosition + " selected? " + tileUnderCharacter.IsSelected);//
+		}
 		else
 		{
 			TileScript tile = clickedObject.GetComponent<TileScript>();
@@ -157,61 +162,61 @@ public class BoardScript : MonoBehaviour
 
 			if (!tile)
 			{
-                return;
-            }
-            if (tile.IsEnemyOnTile())
-            {
-                if(characterToMove.CanMove(tile))
-                {
-                    Enemy e = tile.GetComponentInChildren<Enemy>();
-                    if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
-                    {
-                        RemoveEnemy(e);
-                    }
-                    TileScript.ResetTileHighlights();
+				return;
+			}
+			if (tile.IsEnemyOnTile())
+			{
+				if (characterToMove.CanMove(tile))
+				{
+					Enemy e = tile.GetComponentInChildren<Enemy>();
+					if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
+					{
+						RemoveEnemy(e);
+					}
+					TileScript.ResetTileHighlights();
 
-                    if (lastHighlightedTile != null)
-                    {
-                        lastHighlightedTile = null;
-                    }
+					if (lastHighlightedTile != null)
+					{
+						lastHighlightedTile = null;
+					}
 
-                    characterToMove = null;
-                    tile.IsSelected = false;//
-                    Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
-                }
-            }
-            else
-            {
-                characterToMove.Move(tile);
-                TileScript.ResetTileHighlights();
+					characterToMove = null;
+					tile.IsSelected = false;//
+					Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
+				}
+			}
+			else
+			{
+				characterToMove.Move(tile);
+				TileScript.ResetTileHighlights();
 
-                if (lastHighlightedTile != null)
-                {
-                    lastHighlightedTile = null;
-                }
+				if (lastHighlightedTile != null)
+				{
+					lastHighlightedTile = null;
+				}
 
-                characterToMove = null;
-                tile.IsSelected = false;//
-                Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//
-            }
-            
+				characterToMove = null;
+				tile.IsSelected = false;//
+				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//
+			}
+
 		}
-           
+
 	}
 
-    void CheckForCancelMovement()
-    {
+	void CheckForCancelMovement()
+	{
 
-        if (!characterToMove)
-        {
-            return;
-        }
+		if (!characterToMove)
+		{
+			return;
+		}
 
 		if (!Input.GetMouseButtonDown(1)) // Right-click to cancel
 		{
-            return;
-        }
-        if (lastHighlightedTile != null)
+			return;
+		}
+		if (lastHighlightedTile != null)
 		{
 			// Access the TileScript component and call RemoveHighlight
 			TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
@@ -219,9 +224,9 @@ public class BoardScript : MonoBehaviour
 			{
 				tileScript.RemoveHighlight();
 				TileScript.ResetTileHighlights();
-                tileScript.IsSelected = false;//
-                Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
-            }
+				tileScript.IsSelected = false;//
+				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+			}
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
 
@@ -229,164 +234,158 @@ public class BoardScript : MonoBehaviour
 		characterToMove = null; // Clear the reference to the character to move
 	}
 
-    void HandleEnemyMovement()
-    {
-        if (turnManager.isPlayersTurn()|| enemies.Count==0)
-        {
-            return;
-        }
+	void HandleEnemyMovement()
+	{
 
-        foreach (Enemy enemy in enemies)
-        {
-            //enemy goes forward, if there are no friendly characters in the way,
-            //if there is friendly character in the way, it looks for a free path towards the end of the board
-            // and spawns enemy on that path.
-            bool isObstacleInTheWay = false;
+		if (turnManager.isPlayersTurn() || enemies.Count == 0 || StartedEnemyTurn)
+		{
+			return;
+		}
+		StartedEnemyTurn = true;
+		StartCoroutine(EnemyMovement());
+	}
 
-            // bool SecondTileInFrontExists=false;  PLEASE DONT DELETE MIGHT NEED LATER <3
-            // TileScript NextTileInFront=null;
+	void SpawnEnemy(int i, int j)
+	{
+		//this should not be here:
+		float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
+		float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
 
-            for (int i = 0; i < enemy.xPosition; i++)
-            {
-                TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
+		// Spawn enemy on top of the tile.
+		Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
 
-                // if(i!=0)
-                // {
-                //     NextTileInFront = tiles[i-1, enemy.zPosition].GetComponent<TileScript>();
-                //     if(NextTileInFront!=null)
-                //     {
-                //         SecondTileInFrontExists=true;
-                //     }                    
-                // }
-                //                                      PLEASE DONT DELETE MIGHT NEED LATER <3
-                // if(SecondTileInFrontExists)
-                // {
-                //     if (tileinfront.IsFriendlyOnTile() && !NextTileInFront.IsOccupied())
-                //     {
-                //         Debug.Log(i+" Is moving");
-                //         enemy.Move(NextTileInFront);
-                //         turnManager.EndEnemyTurn();
-                //         return;
-                //     }                    
-                // }
+		GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
 
-                if (tileinfront.IsOccupied())
-                {
-                    isObstacleInTheWay=true;
-                }      
-            }
+		// Set tile as parent.
+		GameObject parentTile = tiles[i, j];
+		enemyObject.transform.SetParent(parentTile.transform);
 
-            bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
+		Enemy enemy = enemyObject.GetComponent<Enemy>();
+		enemy.characterName = $"enemy_{i}_{j}";
+		enemy.xPosition = i;
+		enemy.zPosition = j;
+		enemy.hp = Random.Range(5, 15);
 
-            if (!isObstacleInTheWay && isEnemyOnTheEdge)
-            {
-                TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
-                Debug.Log(enemy.xPosition+"X " + enemy.zPosition+"Y" +" Is moving");
-                enemy.Move(tile);
-                turnManager.EndEnemyTurn();
-                return;
-            }
-        }
+		enemies.Add(enemy);
 
-        //all current enemies are blocked, look for a free path and if found, spawn enemy there.
-        for (int i = 0; i < Z; i++)
-        {
-            bool isObstacleInTheWay = false;
-            for (int j = 0; j < X; j++)
-            {
-                TileScript tile = tiles[j, i].GetComponent<TileScript>();
+		TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
+		if (tileScript != null)
+		{
+			tileScript.SetEnemyPresence(true);
+			Debug.Log($"Marking enemy presence on: {parentTile.name}"); // Confirm marking is intended.
+		}
+		else
+		{
+			Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
+		}
+	}
 
-                if (tile.IsOccupied())
-                {
-                    isObstacleInTheWay = true;
-                    break;
-                }
-            }
+	IEnumerator EnemyMovement()
+	{
+		for (int w = 0; w < EnemyTurnCount; w++)
+		{
+			bool EnemyMoved = false;
+			foreach (Enemy enemy in enemies)
+			{
+				//enemy goes forward, if there are no friendly characters in the way,
+				//if there is friendly character in the way, it looks for a free path towards the end of the board
+				// and spawns enemy on that path.
+				bool isObstacleInTheWay = false;
 
-            if (!isObstacleInTheWay)
-            {
-                SpawnEnemy(X / 2, i);
-                break;
-            }
-        }
+				for (int i = 0; i < enemy.xPosition; i++)
+				{
+					TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
 
-        turnManager.EndEnemyTurn();
-        
-        //if all paths blocked for enemies, and there are no paths towards the end of the board, 
-        //enemies do nothing.
-    }
+					if (tileinfront.IsOccupied())
+					{
+						isObstacleInTheWay = true;
+					}
+				}
 
-    void SpawnEnemy(int i, int j)
-    {
-        //this should not be here:
-        float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
-        float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
+				bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
 
-        // Spawn enemy on top of the tile.
-        Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
-        
-        GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
-        
-        // Set tile as parent.
-        GameObject parentTile = tiles[i, j];
-        enemyObject.transform.SetParent(parentTile.transform);             
-        
-        Enemy enemy = enemyObject.GetComponent<Enemy>();
-        enemy.characterName = $"enemy_{i}_{j}";
-        enemy.xPosition = i;
-        enemy.zPosition = j;
-        enemy.hp=Random.Range(5,15);
-        
-        enemies.Add(enemy);
-        
-        TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
-        if (tileScript != null)
-        {
-            tileScript.SetEnemyPresence(true);
-            Debug.Log($"Marking enemy presence on: {parentTile.name}"); // Confirm marking is intended.
-        }
-        else
-        {
-            Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
-        }
-    }
+				if (!isObstacleInTheWay && isEnemyOnTheEdge)
+				{
+					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
+					Debug.Log(enemy.xPosition + "X " + enemy.zPosition + "Y" + " Is moving");
+					enemy.Move(tile);
+					EnemyMoved = true;
+					yield return new WaitForSeconds(1f);
+					break;
+				}
+			}
 
-	
+			if (!EnemyMoved)
+			{
+				//all current enemies are blocked, look for a free path and if found, spawn enemy there.
+				for (int i = 0; i < Z; i++)
+				{
+					bool isObstacleInTheWay = false;
+					for (int j = 0; j < X; j++)
+					{
+						TileScript tile = tiles[j, i].GetComponent<TileScript>();
+
+						if (tile.IsOccupied())
+						{
+							isObstacleInTheWay = true;
+							break;
+						}
+					}
+
+					if (!isObstacleInTheWay)
+					{
+						SpawnEnemy(X / 2, i);
+						yield return new WaitForSeconds(1f);
+						break;
+					}
+				}
+			}
+		}
+
+		turnManager.EndEnemyTurn();
+		StartedEnemyTurn = false;
+	}
+
+	void StartNewLevel()
+	{
+		enemies = new List<Enemy>();
+		MakeBoard(X, Z);
+		InitializeEnemies();
+	}
 
 	void CheckWinConditions()
-    {
-        if(enemies.Count==0)
-        {
-            //Extra if for some optimisation :)
-            if(FindFirstObjectByType<PlayerHealth>().currentHealth!=0)
-            {
-                FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().VictoryMenuUI.SetActive(true);                
-            }
-        }
-    }
+	{
+		if (enemies.Count == 0)
+		{
+			if (FindFirstObjectByType<PlayerHealth>().currentHealth != 0)
+			{
+				FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+			}
+		}
+	}
 
-    public void RemoveEnemy(Enemy enem)
-    {
-        enemies.Remove(enem);
-    }
+	public void RemoveEnemy(Enemy enem)
+	{
+		enemies.Remove(enem);
+	}
 
-    public void FinishAtack()
-    {
-        if (lastHighlightedTile != null)
-        {
-            // Access the TileScript component and call RemoveHighlight
-            TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
-            if (tileScript != null)
-            {
-                tileScript.RemoveHighlight();
-                TileScript.ResetTileHighlights();
-                tileScript.IsSelected = false;//
-                Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
-            }
-            lastHighlightedTile = null; // Clear the reference to the last highlighted tile
-        }
+	public void FinishAtack()
+	{
+		if (lastHighlightedTile != null)
+		{
+			// Access the TileScript component and call RemoveHighlight
+			TileScript tileScript = lastHighlightedTile.GetComponent<TileScript>();
+			if (tileScript != null)
+			{
+				tileScript.RemoveHighlight();
+				TileScript.ResetTileHighlights();
+				tileScript.IsSelected = false;//
+				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+			}
+			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
+		}
 
-        characterToMove = null;
-        Debug.Log("Attack done");
-    }
+		characterToMove = null;
+		Debug.Log("Attack done");
+	}
 }

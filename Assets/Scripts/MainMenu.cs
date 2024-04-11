@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.Audio;
+using UnityEngine.UI;
+
 public class MainMenu : MonoBehaviour
 {
 
     public TMP_Dropdown ResolutionDropdown;
     Resolution[] Resolutions;
     int CurrentResolutionIndex = 0;
-    public AudioMixer MainMixer;    
+    public AudioMixer MainMixer;
+
+    public Slider MasterSlider;
+    public Slider MusicSlider;
+    public Slider SFXSlider;
 
     void Start()
     {
@@ -32,6 +38,7 @@ public class MainMenu : MonoBehaviour
         ResolutionDropdown.AddOptions(ScreenSizes);
         ResolutionDropdown.value=CurrentResolutionIndex;
         ResolutionDropdown.RefreshShownValue();
+        SetMusicValueFromPP();
     }
 
     public void PlayGame()
@@ -56,8 +63,61 @@ public class MainMenu : MonoBehaviour
         Screen.SetResolution(resolution.width,resolution.height, Screen.fullScreen);
     }
 
+    private void SetMusicValueFromPP()
+	{
+        float Master = 1;
+        if (PlayerPrefs.HasKey("MasterVolumeValue"))
+        {
+            Master = PlayerPrefs.GetFloat("MasterVolumeValue");
+        }
+        float SFX = 1;
+        if (PlayerPrefs.HasKey("SFXVolumeValue"))
+        {
+            SFX = PlayerPrefs.GetFloat("SFXVolumeValue");
+        }
+        float Music = 1;
+        if (PlayerPrefs.HasKey("MusicVolumeValue"))
+        {
+            Music = PlayerPrefs.GetFloat("MusicVolumeValue");
+        }
+        SetVolume(Master);
+        SetVolumeSFX(SFX);
+        SetVolumeMusic(Music);
+    }
+    public void SetSliderValueFromPP()
+    {
+        float Master = 1;
+        if (PlayerPrefs.HasKey("MasterVolumeValue"))
+        {
+            Master = PlayerPrefs.GetFloat("MasterVolumeValue");
+        }
+        float SFX = 1;
+        if (PlayerPrefs.HasKey("SFXVolumeValue"))
+        {
+            SFX = PlayerPrefs.GetFloat("SFXVolumeValue");
+        }
+        float Music = 1;
+        if (PlayerPrefs.HasKey("MusicVolumeValue"))
+        {
+            Music = PlayerPrefs.GetFloat("MusicVolumeValue");
+        }
+        MasterSlider.value = Master;
+        SFXSlider.value = SFX;
+        MusicSlider.value = Music;
+    }
     public void SetVolume(float volume)
     {
-        MainMixer.SetFloat("Volume",volume);
+        MainMixer.SetFloat("Volume", Mathf.Log10(volume) * 20f);
+        PlayerPrefs.SetFloat("MasterVolumeValue", volume);
+    }
+    public void SetVolumeSFX(float volume)
+    {
+        MainMixer.SetFloat("SFX", Mathf.Log10(volume) * 20f);
+        PlayerPrefs.SetFloat("SFXVolumeValue", volume);
+    }
+    public void SetVolumeMusic(float volume)
+    {
+        MainMixer.SetFloat("Music", Mathf.Log10(volume) * 20f);
+        PlayerPrefs.SetFloat("MusicVolumeValue", volume);
     }
 }
