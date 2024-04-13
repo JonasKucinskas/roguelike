@@ -262,12 +262,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 3672037275992918328}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1 &6378616181522320572
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,6 +391,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8898998201223200128}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4324748052170057985}
   m_SourcePrefab: {fileID: 100100000, guid: d38eba361880ca147911c1af09b64189, type: 3}
 --- !u!4 &4932657263646667979 stripped
 Transform:
@@ -444,3 +447,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.4268489, y: 2.0775018, z: 1}
   m_Center: {x: -0.017407656, y: 1.0335, z: 0}
+--- !u!114 &4324748052170057985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710424728265076337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef2c571a630e4f4abc3d3388cf3f8c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: 
+  hp: 0
+  damage: 0
+  xPosition: 0
+  zPosition: 0
+  isFriendly: 0
+  HpText: {fileID: 4505832288623749646}
+  neutrAnimator: {fileID: 5912894489969214330}

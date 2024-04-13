@@ -38,7 +38,7 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
             if(startingAnimation)
             {
-                endPosition = originalPosition + new Vector3(0f, _verticalMoveAmmount, 2f);
+                endPosition = currentPosition + new Vector3(0f, _verticalMoveAmmount, 2f);
                 endScale = _startScale * _scaleAmmount;
                 endRotation = Quaternion.Euler(Vector3.zero);
             }
@@ -52,7 +52,7 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
             Vector3 lerpedPos = Vector3.Lerp(currentPosition, endPosition, elapsedTime / _moveTime);
             Vector3 lerpedScale = Vector3.Lerp(transform.localScale, endScale, elapsedTime / _moveTime);
-            Quaternion lerpedRotation = Quaternion.Lerp(transform.rotation, endRotation, elapsedTime / _moveTime);
+            Quaternion lerpedRotation = Quaternion.Slerp(transform.rotation, endRotation, elapsedTime / _moveTime);
             
 
             gameObject.GetComponent<RectTransform>().anchoredPosition3D = lerpedPos;
