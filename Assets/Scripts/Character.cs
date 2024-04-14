@@ -1,8 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour
@@ -14,15 +11,27 @@ public abstract class Character : MonoBehaviour
     public int zPosition;    
     public bool isFriendly;
 
+    protected AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
     public abstract bool CanMove(TileScript tile);
 
 	private IEnumerator MoveToTile(TileScript targetTile)
 	{
-		Vector3 startPosition = transform.position; // Starting position
+        if (audioManager != null)
+            StartCoroutine(audioManager.PlaySound(audioManager.moving, 0.0f));
+        else
+            Debug.Log("AudioManager is null");
+
+        Vector3 startPosition = transform.position; // Starting position
 		float yOffset = startPosition.y - targetTile.transform.position.y;
 		Vector3 endPosition = targetTile.transform.position + new Vector3(0, yOffset, 0); // Adjusted destination to maintain height
 
-		float timeToMove = 0.8f; // Duration of the move in seconds, adjust as needed
+        float timeToMove = 1.8f; //0.8f; // Duration of the move in seconds, adjust as needed
 		float elapsedTime = 0;
 
 		while (elapsedTime < timeToMove)
@@ -79,6 +88,8 @@ public abstract class Character : MonoBehaviour
     
     public bool Attack(TileScript tile)
 	{
+        NormalAttackSound();
+
         Enemy e = tile.GetComponentInChildren<Enemy>();
         if (!e)
         {
@@ -90,8 +101,12 @@ public abstract class Character : MonoBehaviour
         tile.SetEnemyPresence(!b);
         return b;
     }
+    public abstract void NormalAttackSound();
+    public abstract void IdleSound();
     private bool Attack(Enemy enemy)
 	{
+        NormalAttackSound();
+
         hp--;
         bool isDead=enemy.TakeDamage(damage);
         int MovesLeft = PlayerPrefs.GetInt("MovesLeft");

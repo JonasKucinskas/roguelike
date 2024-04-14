@@ -28,6 +28,23 @@ public class DendriticCell : Character
     {
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
     }
+    public override void NormalAttackSound()
+    {
+        if (audioManager != null)
+        { }
+            //audioManager.PlaySound(audioManager.neutrophilAttack);
+        else
+            Debug.Log("AudioManager is null");
+    }
+
+    public override void IdleSound()
+    {
+        if (audioManager != null)
+        { }
+            //audioManager.PlaySound(audioManager.neutrophilAttack);
+        else
+            Debug.Log("AudioManager is null");
+    }
 
     /*public override bool CanMove(TileScript tile)
     {

@@ -6,11 +6,28 @@ using UnityEngine;
 public class Enemy : Character
 {
     public GameObject HpText;
-	private void Start()
+
+    private float timeCounter = 0.0f;
+    private float randomTime = 0.0f;
+
+    private void Start()
     {
         damage = 10;
         isFriendly = false;    
 	}
+    private void Update()
+    {
+        HpText.GetComponentInChildren<TextMeshPro>().text = hp.ToString();
+
+        if (timeCounter > randomTime)
+        {
+            randomTime = UnityEngine.Random.Range(5.0f, 20.0f);
+            timeCounter = 0.0f;
+            IdleSound();
+        }
+
+        timeCounter += Time.deltaTime;
+    }
     public override bool CanMove(TileScript tile)
     {
         int xMaxMovement = 2;
@@ -22,10 +39,7 @@ public class Enemy : Character
         }
         return true;
     }
-    void Update()
-    {
-        HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
-    }
+
     public bool TakeDamage(int damage)
     {
         //Debug.Log("Prieso hp pries ataka = " + hp);
@@ -38,5 +52,25 @@ public class Enemy : Character
             return true;
         }
         return false;
+    }
+    public override void NormalAttackSound()
+    {
+        if (audioManager != null)
+        {
+            StartCoroutine(audioManager.PlaySound(audioManager.virusAttack, 0.0f));
+        }
+        else
+            Debug.Log("AudioManager is null");
+    }
+
+    public override void IdleSound()
+    {
+        if (audioManager != null)
+        {
+            StartCoroutine(audioManager.PlaySound(audioManager.virusIdle1, 0.0f));
+            StartCoroutine(audioManager.PlaySound(audioManager.virusIdle2, UnityEngine.Random.Range(3.0f, 8.0f)));
+        }
+        else
+            Debug.Log("AudioManager is null");
     }
 }
