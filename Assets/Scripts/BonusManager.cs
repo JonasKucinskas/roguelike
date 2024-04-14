@@ -21,6 +21,7 @@ public class BonusManager : MonoBehaviour
 	public Button topButton;
 	public Button middleButton;
 	public Button bottomButton;
+	public BoardScript boardScript;
 
 	private List<Bonus> selectedBonuses; // Stores the bonuses selected for display
 
@@ -83,18 +84,12 @@ public class BonusManager : MonoBehaviour
 
 	public void ApplyBonus(int bonusIndex)
 	{
-		// Check if the bonusIndex is within the range of selectedBonuses
-		/*if (bonusIndex < 0 || bonusIndex >= selectedBonuses.Count)
-		{
-			Debug.LogError("Bonus index out of range");
-			return;
-		}*/
 		FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(false);
-		// Get the selected bonus based on the index
+
 		Bonus selectedBonus = selectedBonuses[bonusIndex];
 
 		Debug.Log("Applying bonus: " + selectedBonus.bonusName);
 
-		
+		boardScript.StartNewLevel();
 	}
 }

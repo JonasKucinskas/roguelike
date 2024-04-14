@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181696, g: 0.355771, b: 0.25562602, a: 1}
+  m_IndirectSpecularColor: {r: 0.4718169, g: 0.35577098, b: 0.25562584, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4682,6 +4682,8 @@ MonoBehaviour:
   topButton: {fileID: 227105627}
   middleButton: {fileID: 1114402446}
   bottomButton: {fileID: 781083800}
+  boardScript: {fileID: 1433215423}
+  target: {fileID: 1689965582}
 --- !u!1001 &1353519219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5807,6 +5809,10 @@ PrefabInstance:
       value: BonusSelect
       objectReference: {fileID: 0}
     - target: {fileID: 8091321509614343940, guid: f3300e0aa4319ad4588512985a442206, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091321509614343940, guid: f3300e0aa4319ad4588512985a442206, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -5852,7 +5858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208762678488891404, guid: f3300e0aa4319ad4588512985a442206, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -111
       objectReference: {fileID: 0}
     - target: {fileID: 9208762678488891404, guid: f3300e0aa4319ad4588512985a442206, type: 3}
       propertyPath: m_LocalRotation.w

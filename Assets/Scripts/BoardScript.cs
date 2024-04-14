@@ -20,6 +20,8 @@ public class BoardScript : MonoBehaviour
 	GameObject lastHighlightedTile = null;
 	private Character characterToMove;
 	private TurnManager turnManager;
+	private TileScript tile;
+	private bool levelStarted = true; //made so that the game isnt won after completing a single level
 
 	private int EnemyTurnCount = 1;
 
@@ -346,11 +348,13 @@ public class BoardScript : MonoBehaviour
 		StartedEnemyTurn = false;
 	}
 
-	void StartNewLevel()
+	public void StartNewLevel()
 	{
+		tile.ClearAllTiles();
 		enemies = new List<Enemy>();
-		MakeBoard(X, Z);
+		levelStarted = true;
 		InitializeEnemies();
+		
 	}
 
 	void CheckWinConditions()
@@ -359,7 +363,8 @@ public class BoardScript : MonoBehaviour
 		{
 			if (FindFirstObjectByType<PlayerHealth>().currentHealth != 0)
 			{
-				FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+				if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+				levelStarted = false;
 			}
 		}
 	}

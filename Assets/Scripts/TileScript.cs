@@ -104,6 +104,7 @@ public class TileScript : MonoBehaviour
 
 		// After removing children, reset presence flags
 		SetEnemyPresence(false);
+		//SetFriendlyPresence(false);
 	}
 
 	public bool CheckForEnemyInLastRow()
