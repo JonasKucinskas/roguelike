@@ -11,6 +11,9 @@ public class NeutrophilCell : Character
     private TurnManager turnManager;
     [SerializeField] Animator neutrAnimator;
 
+    private float timeCounter = 0.0f;
+    private float randomTime = 0.0f;
+
     private void Start()
     {
         hp = 10;
@@ -34,6 +37,15 @@ public class NeutrophilCell : Character
 
     private void Update()
     {
+        if (timeCounter > randomTime)
+        {
+            randomTime = 2.542f;
+            timeCounter = 0.0f;
+            IdleSound();
+        }
+
+        timeCounter += Time.deltaTime;
+
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
         string tileName = "Tile_" + xPosition + "_" + zPosition;
         GameObject tileObject = GameObject.Find(tileName);
@@ -52,6 +64,11 @@ public class NeutrophilCell : Character
     {
         if (isClicked == false)
         {
+            if (audioManager != null)
+                StartCoroutine(audioManager.PlaySound(audioManager.neutrophilSpecialAttack, 1.4f));
+            else
+                Debug.Log("AudioManager is null");
+
             GameObject boardObject = GameObject.Find("Board");
             BoardScript board = boardObject.GetComponent<BoardScript>();
             turnManager.SubtractPlayerMove();
@@ -129,5 +146,26 @@ public class NeutrophilCell : Character
             return true;
         }
         return false;
+    }
+
+    public override void NormalAttackSound()
+    {
+        if (audioManager != null)
+        {
+            StartCoroutine(audioManager.PlaySound(audioManager.neutrophilAttack, 0.0f));
+        }
+        else
+            Debug.Log("AudioManager is null");
+    }
+
+    public override void IdleSound()
+    {
+        if (audioManager != null)
+        {
+            //StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle1, 0.0f));
+            StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle2, 1.0f));
+        }
+        else
+            Debug.Log("AudioManager is null");
     }
 }
