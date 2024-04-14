@@ -20,7 +20,6 @@ public class BoardScript : MonoBehaviour
 	GameObject lastHighlightedTile = null;
 	private Character characterToMove;
 	private TurnManager turnManager;
-	private TileScript tile;
 	private bool levelStarted = true; //made so that the game isnt won after completing a single level
 
 	private int EnemyTurnCount = 1;
@@ -350,7 +349,6 @@ public class BoardScript : MonoBehaviour
 
 	public void StartNewLevel()
 	{
-		tile.ClearAllTiles();
 		enemies = new List<Enemy>();
 		levelStarted = true;
 		InitializeEnemies();
