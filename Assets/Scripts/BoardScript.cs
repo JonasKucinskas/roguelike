@@ -349,6 +349,7 @@ public class BoardScript : MonoBehaviour
 
 	public void StartNewLevel()
 	{
+		TileScript.ClearAllTiles();
 		enemies = new List<Enemy>();
 		levelStarted = true;
 		InitializeEnemies();

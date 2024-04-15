@@ -94,17 +94,29 @@ public class TileScript : MonoBehaviour
         return zPosition;
     }
 
+	public static void ClearAllTiles()
+	{
+		foreach (TileScript tile in AllTiles)
+		{
+			if (tile != null)
+			{
+				tile.RemoveChildren();
+			}
+		}
+	}
 	public void RemoveChildren()
 	{
-		// Iterate over all children and destroy them
+		Debug.Log("Starting to remove children from: " + gameObject.name + " with child count: " + transform.childCount);
+
 		for (int i = transform.childCount - 1; i >= 0; i--)
 		{
-			Destroy(transform.GetChild(i).gameObject);
+			GameObject child = transform.GetChild(i).gameObject;
+			Debug.Log("Destroying child: " + child.name);
+			Destroy(child);
 		}
 
-		// After removing children, reset presence flags
 		SetEnemyPresence(false);
-		//SetFriendlyPresence(false);
+		SetFriendlyPresence(false);
 	}
 
 	public bool CheckForEnemyInLastRow()
