@@ -4683,7 +4683,6 @@ MonoBehaviour:
   middleButton: {fileID: 1114402446}
   bottomButton: {fileID: 781083800}
   boardScript: {fileID: 1433215423}
-  target: {fileID: 1689965582}
 --- !u!1001 &1353519219
 PrefabInstance:
   m_ObjectHideFlags: 0
