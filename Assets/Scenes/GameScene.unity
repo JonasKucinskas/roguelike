@@ -7515,6 +7515,7 @@ MonoBehaviour:
   MovesLeftText: {fileID: 1020525565}
   initialCards:
   - {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+  - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
   canvas: {fileID: 605084863}
 --- !u!4 &1983123564 stripped
 Transform:

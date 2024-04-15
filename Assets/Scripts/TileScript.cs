@@ -170,7 +170,7 @@ public class TileScript : MonoBehaviour
 		List<TileScript>tiles = new List<TileScript>();
         foreach (var tile in AllTiles)
         {
-			if (character.GetComponent<NeutrophilCell>().CanMove(tile))
+			if (character.GetComponent<Character>().CanMove(tile))
 			{
                 tiles.Add(tile);
             }
@@ -180,7 +180,7 @@ public class TileScript : MonoBehaviour
     {
         foreach (var tile in AllTiles)
         {
-			if (character.GetComponent<NeutrophilCell>().CanMove(tile))
+			if (character.GetComponent<Character>().CanMove(tile))
 			{
                 tile.HighlightBasedOnOccupancy();
             }

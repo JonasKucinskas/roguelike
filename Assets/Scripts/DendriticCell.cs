@@ -11,18 +11,6 @@ public class DendriticCell : Character
         damage = 10;
         isFriendly = true;
     }
-    public override bool CanMove(TileScript tile)
-    {
-        int zMaxMovement = 1;
-        int xMaxMovement = 1;
-
-		if (Math.Abs(tile.zPosition - zPosition) > zMaxMovement || Math.Abs(tile.xPosition - xPosition) > xMaxMovement)
-        {
-            //move only by x tiles in both directions.
-            return false;
-        }
-        return true;
-    }
 
     void Update()
     {
@@ -46,7 +34,7 @@ public class DendriticCell : Character
             Debug.Log("AudioManager is null");
     }
 
-    /*public override bool CanMove(TileScript tile)
+    public override bool CanMove(TileScript tile)
     {
         int zMaxMovement = 1;
         int xMaxMovement = 1;
@@ -60,5 +48,5 @@ public class DendriticCell : Character
         if ((tile.zPosition == zPosition + 2 && tile.xPosition == xPosition) || (tile.zPosition == zPosition - 2 && tile.xPosition == xPosition)
             || (tile.xPosition == xPosition + 2 && tile.zPosition == zPosition) || (tile.xPosition == xPosition - 2 && tile.zPosition == zPosition)) return true;
         return false;
-    }*/
+    }
 }

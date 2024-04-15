@@ -70,7 +70,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
         GameObject character = Instantiate(CardModel, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
         
-        NeutrophilCell friendly = character.GetComponent<NeutrophilCell>();
+        Character friendly = character.GetComponent<Character>();
         friendly.characterName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
         friendly.xPosition = tile.xPosition;
         friendly.zPosition = tile.zPosition;
