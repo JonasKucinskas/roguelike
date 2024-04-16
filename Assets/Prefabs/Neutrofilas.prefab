@@ -382,7 +382,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d38eba361880ca147911c1af09b64189, type: 3}
-      insertIndex: 0
+      insertIndex: 1
       addedObject: {fileID: 708176019284376048}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
@@ -394,6 +394,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4324748052170057985}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8314537811761521312}
   m_SourcePrefab: {fileID: 100100000, guid: d38eba361880ca147911c1af09b64189, type: 3}
 --- !u!4 &4932657263646667979 stripped
 Transform:
@@ -446,7 +449,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.4268489, y: 2.0775018, z: 1}
-  m_Center: {x: -0.017407656, y: 1.0335, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &4324748052170057985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,5 +468,59 @@ MonoBehaviour:
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  highlightMaterial: {fileID: 2100000, guid: 78f8cd9069a72cb10a79a472bc8f946d, type: 2}
   HpText: {fileID: 4505832288623749646}
   neutrAnimator: {fileID: 5912894489969214330}
+--- !u!137 &8314537811761521312
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710424728265076337}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 0}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 0}
+  m_AABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_DirtyAABB: 0
