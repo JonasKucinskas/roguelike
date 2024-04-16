@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour
@@ -10,12 +12,14 @@ public abstract class Character : MonoBehaviour
 	public int xPosition;
     public int zPosition;    
     public bool isFriendly;
-
     protected AudioManager audioManager;
-
+    private List<List<Material>> originalMaterials;
+    
     private void Awake()
-    {
+    {       
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
+        
     }
 
     public abstract bool CanMove(TileScript tile);
@@ -121,5 +125,76 @@ public abstract class Character : MonoBehaviour
         }
         return isDead;
 
+    }
+    Material CreateBrightenedMaterial(Material originalMaterial, float brightnessIncrease)
+    {
+        Material newMaterial = new Material(originalMaterial);
+
+        Color originalColor = newMaterial.color;
+
+        Color newColor = originalColor * (1 + brightnessIncrease);
+
+        newMaterial.color = newColor;
+
+        return newMaterial;
+    }
+
+    void OnMouseEnter()
+    {
+
+        if (!isFriendly)
+        {
+            return;
+        }
+
+        originalMaterials = new List<List<Material>>();
+        
+        //prefabs have many body parts with many materials, 
+        //do i need to take each body parts, and collect each material
+        //in order to reset it to default later.
+
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            Transform child = gameObject.transform.GetChild(i);
+            SkinnedMeshRenderer renderer = child.GetComponentInChildren<SkinnedMeshRenderer>();
+            
+            if (!renderer)
+            {
+                continue;
+            }
+
+            originalMaterials.Add(renderer.materials.ToList());
+
+
+            List<Material> newMaterials = new List<Material>();
+            foreach (Material originalMaterial in renderer.materials)
+            {
+                // Create a new material with increased brightness
+                Material newMaterial = CreateBrightenedMaterial(originalMaterial, 3);
+                newMaterials.Add(newMaterial);
+            }
+            renderer.materials = newMaterials.ToArray();
+        }
+    }
+
+    void OnMouseExit()
+    {
+        if (!isFriendly)
+        {
+            return;
+        }
+        int originalMaterialsIndex = 0;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            Transform child = gameObject.transform.GetChild(i);
+            SkinnedMeshRenderer renderer = child.GetComponentInChildren<SkinnedMeshRenderer>();
+            if (!renderer)
+            {
+                continue;
+            }
+            
+            renderer.materials = originalMaterials[originalMaterialsIndex].ToArray();
+            originalMaterialsIndex++;
+        }
     }
 }
