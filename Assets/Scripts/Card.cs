@@ -5,6 +5,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 	public bool IsDragging = false;
 	private bool isPlaced = false; 
+	private bool CollidersOn = true;
 	public Vector3 originalPosition; 
 	public Vector3 originalScale;
 	public Quaternion originalRotation;
@@ -12,6 +13,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public GameObject CardModel;
 	public GameObject Particle;
     private TurnManager turnManager;
+	private BoardScript boardManager;
 	public delegate void CardMovedFromHandEventHandler(Card card);
     public event CardMovedFromHandEventHandler OnCardMovedFromHand;
 	public delegate void CardMovedToHandEventHandler(Card card);
@@ -20,6 +22,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	void Awake()
 	{
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+		boardManager=GameObject.Find("Board").GetComponent<BoardScript>();
 	}
 
 	void Update()
@@ -27,11 +30,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (IsDragging)
 		{
 			Drag();
-
+			
+			if(CollidersOn)
+			{
+				ChangeEnemyCollider(false);
+				CollidersOn=false;
+			}
 			
 			// Improved detection of mouse release, even outside the window
 			if (!Input.GetMouseButton(0))
 			{
+
 				IsDragging = false;
 				ResetCardToOriginalState(); // Reset card to original state when mouse is released
 			}
@@ -40,6 +49,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	private void ResetCardToOriginalState()
 	{
+		ChangeEnemyCollider(true);
+		CollidersOn=true;
+
 		// Reset transformations
 		transform.position = originalPosition;
 		transform.localScale = originalScale;
@@ -77,17 +89,20 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         tile.SetFriendlyPresence(true);
 		turnManager.SubtractPlayerMove();
 		
+		ChangeEnemyCollider(true);
+		CollidersOn=true;
+
 		Debug.Log("Card placed on cube.");
 		Destroy(gameObject);//this card object won't be on a tile anymore
 	}
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //Checks if clicked on UI (PauseMenu)
-		if (EventSystem.current.IsPointerOverGameObject())
-		{
-			//return;
-		}
+        // Checks if clicked on UI (PauseMenu)
+		// if (EventSystem.current.IsPointerOverGameObject())
+		// {
+		// 	return;
+		// }
 		if (!isPlaced)
 		{
 			IsDragging = true;
@@ -117,4 +132,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			ResetCardToOriginalState();
 		}
     }
+
+	private void ChangeEnemyCollider(bool ChangeTo)
+	{
+		foreach(Enemy e in boardManager.enemies)
+		{
+			e.GetComponent<BoxCollider>().enabled = ChangeTo;
+		}
+	}
 }
