@@ -4818,8 +4818,7 @@ MonoBehaviour:
   topButton: {fileID: 227105627}
   middleButton: {fileID: 1114402446}
   bottomButton: {fileID: 781083800}
-  boardScript: {fileID: 1433215423}
-  playerHealth: {fileID: 2040803630}
+  cardManager: {fileID: 1971650928}
 --- !u!1001 &1353519219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7662,6 +7661,7 @@ MonoBehaviour:
   - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
   canvas: {fileID: 605084863}
   isDragging: 0
+  ExtraCardDrawBonusChosen: 0
 --- !u!4 &1983123564 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 266f03476f36b2945b733736a459bf7a, type: 3}
@@ -7900,6 +7900,7 @@ MonoBehaviour:
   currentHealth: 0
   startPosition: {x: -5, y: 5, z: 6}
   spacing: 0.1
+  absoluteMaxHearts: 10
 --- !u!1001 &2048362041
 PrefabInstance:
   m_ObjectHideFlags: 0

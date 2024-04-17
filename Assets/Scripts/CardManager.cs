@@ -11,7 +11,8 @@ public class CardManager : MonoBehaviour
     public GameObject canvas;
     int draggedCardIndex;
     private TurnManager turnManager;
-    public bool isDragging = false;
+    private bool isDragging = false;
+    public bool ExtraCardDrawBonusChosen = false;
 
     void Start()
     {
@@ -42,6 +43,34 @@ public class CardManager : MonoBehaviour
         DrawCards(drawnCards);
     }
     
+    private void InitiateCardDraw(Deck deck, bool isExtraDraw)
+    {
+		if (deck)
+		{
+			Debug.Log("Attempting to draw. Cards left: " + deck.cards.Count);
+			GameObject card = deck.Pop();
+			Debug.Log("Card drawn: " + (card != null ? card.name : "None") + ". Cards left now: " + deck.cards.Count);
+
+			if (!card)
+			{
+				return;
+			}
+
+			InstantiateCardInHand(drawnCards, card);
+			DrawCards(drawnCards);
+			if (!isExtraDraw) turnManager.SubtractPlayerMove();
+		}
+	}
+
+    private bool RollTheDiceForExtraCardDraw()
+    {
+		System.Random random = new System.Random();
+		int randomNumber = random.Next(1, 11);
+
+        if(randomNumber > 0) return true; //for now the chance is set to 100%
+        else return false;
+	}
+
     private void DrawCardCheck()
     {
         if (!Input.GetMouseButtonDown(0))
@@ -59,24 +88,13 @@ public class CardManager : MonoBehaviour
             return;
         }
 
-        GameObject clickedObject = hit.collider.gameObject;
+		GameObject clickedObject = hit.collider.gameObject;
 
-        Deck deck = clickedObject.GetComponent<Deck>();
+		Deck deck = clickedObject.GetComponent<Deck>();
 
-        if (deck)
-        {
-            GameObject card = deck.Pop();
-
-            if (!card)
-            {
-                return;
-            }
-
-            InstantiateCardInHand(drawnCards, card);
-            DrawCards(drawnCards);
-            turnManager.SubtractPlayerMove();
-        }
-    }
+        InitiateCardDraw(deck, false);
+        if(deck.cards.Count > 0 && RollTheDiceForExtraCardDraw()) InitiateCardDraw(deck, true);
+	}
 
     private void InstantiateCardInHand(List<GameObject> cardObjects, GameObject card)
     {

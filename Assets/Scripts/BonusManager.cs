@@ -21,13 +21,18 @@ public class BonusManager : MonoBehaviour
 	public Button topButton;
 	public Button middleButton;
 	public Button bottomButton;
-	public BoardScript boardScript;
-	public PlayerHealth playerHealth;
+	private BoardScript boardScript;
+	private PlayerHealth playerHealth;
+	private CardManager cardManager;
 
 	private List<Bonus> selectedBonuses; // Stores the bonuses selected for display
 
 	void Start()
 	{
+		cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
+		playerHealth = GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
+
 		InitializeBonuses();
 		AssignBonusTextToButtons();
 		// You can also load bonuses from a file or database here
@@ -43,11 +48,11 @@ public class BonusManager : MonoBehaviour
 		availableBonuses = new List<Bonus>
 		{
 			new Bonus { bonusName = "Bonus 1", bonusDescription = "Neutrophil deals +2 damage" },
-			new Bonus { bonusName = "Bonus 2", bonusDescription = "Dendritic cell deals +2 damage" },
+			//new Bonus { bonusName = "Bonus 2", bonusDescription = "Dendritic cell deals +2 damage" },
 			new Bonus { bonusName = "Bonus 3", bonusDescription = "Player gains +1 health" },
 			new Bonus { bonusName = "Bonus 4", bonusDescription = "There is a small chance to draw 2 cards instead of 1" },
-			new Bonus { bonusName = "Bonus 5", bonusDescription = "Neutrophil has a small chance not to damage itself and orher friendly characters with the special attack" },
-			new Bonus { bonusName = "Bonus 6", bonusDescription = "Dendritic cell's special attack takes 1 less turn to get ready" },
+			//new Bonus { bonusName = "Bonus 5", bonusDescription = "Neutrophil has a small chance not to damage itself and orher friendly characters with the special attack" },
+			//new Bonus { bonusName = "Bonus 6", bonusDescription = "Dendritic cell's special attack takes 1 less turn to get ready" },
 			// Add as many bonuses as you have
         };
 	}
@@ -105,6 +110,7 @@ public class BonusManager : MonoBehaviour
 				break;
 			case "Bonus 4":
 				// Apply effects specific to Bonus 4
+				cardManager.ExtraCardDrawBonusChosen = true;
 				break;
 			case "Bonus 5":
 				// Apply effects specific to Bonus 5
