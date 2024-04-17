@@ -40,19 +40,19 @@ public class Enemy : Character
         return true;
     }
 
-    public bool TakeDamage(int damage)
-    {
-        //Debug.Log("Prieso hp pries ataka = " + hp);
-        hp = hp - damage;
-        //Debug.Log("Prieso hp po atakos = " + hp);
+    // public bool TakeDamage(int damage)
+    // {
+    //     //Debug.Log("Prieso hp pries ataka = " + hp);
+    //     hp = hp - damage;
+    //     //Debug.Log("Prieso hp po atakos = " + hp);
 
-        if (hp <= 0)
-        {
-            Destroy(gameObject);
-            return true;
-        }
-        return false;
-    }
+    //     if (hp <= 0)
+    //     {
+    //         Destroy(gameObject);
+    //         return true;
+    //     }
+    //     return false;
+    // }
     public override void NormalAttackSound()
     {
         if (audioManager != null)

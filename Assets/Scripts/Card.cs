@@ -27,13 +27,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	void Update()
 	{
+		if(!boardManager.AllowPlayerInput)
+		{
+			return;
+		}
+
 		if (IsDragging)
 		{
 			Drag();
 			
 			if(CollidersOn)
 			{
-				ChangeEnemyCollider(false);
+				ChangeCharacterColliders(false);
 				CollidersOn=false;
 			}
 			
@@ -49,7 +54,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	private void ResetCardToOriginalState()
 	{
-		ChangeEnemyCollider(true);
+		ChangeCharacterColliders(true);
 		CollidersOn=true;
 
 		// Reset transformations
@@ -86,10 +91,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         friendly.characterName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
         friendly.xPosition = tile.xPosition;
         friendly.zPosition = tile.zPosition;
+		boardManager.Frendlies.Add(friendly);
         tile.SetFriendlyPresence(true);
 		turnManager.SubtractPlayerMove();
 		
-		ChangeEnemyCollider(true);
+		ChangeCharacterColliders(true);
 		CollidersOn=true;
 
 		Debug.Log("Card placed on cube.");
@@ -98,11 +104,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Checks if clicked on UI (PauseMenu)
-		// if (EventSystem.current.IsPointerOverGameObject())
-		// {
-		// 	return;
-		// }
+		if(!boardManager.AllowPlayerInput)
+		{
+			return;
+		}
+
 		if (!isPlaced)
 		{
 			IsDragging = true;
@@ -112,6 +118,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+		if(!boardManager.AllowPlayerInput)
+		{
+			return;
+		}
+
         if (IsDragging)
 		{
 			IsDragging = false;
@@ -133,9 +144,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
     }
 
-	private void ChangeEnemyCollider(bool ChangeTo)
+	private void ChangeCharacterColliders(bool ChangeTo)
 	{
 		foreach(Enemy e in boardManager.enemies)
+		{
+			e.GetComponent<BoxCollider>().enabled = ChangeTo;
+		}
+
+		foreach(Character e in boardManager.Frendlies)
 		{
 			e.GetComponent<BoxCollider>().enabled = ChangeTo;
 		}

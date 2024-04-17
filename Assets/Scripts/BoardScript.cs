@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -16,21 +17,25 @@ public class BoardScript : MonoBehaviour
 	public int X;
 	public int Z;
 	private GameObject[,] tiles;
-	public List<Enemy> enemies;
+	public List<Character> enemies;
+	public List<Character> Frendlies;
 	GameObject lastHighlightedTile = null;
 	private Character characterToMove;
 	private TurnManager turnManager;
+	private Deck deck;
 	private bool levelStarted = true; //made so that the game isnt won after completing a single level
 
-	private int EnemyTurnCount = 1;
-
+	private int EnemyTurnCount = 2;
 	private bool StartedEnemyTurn = false;
+
+	public bool AllowPlayerInput=true;
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-		enemies = new List<Enemy>();
+		deck = GameObject.Find("Deck").GetComponent<Deck>();
+		enemies = new List<Character>();
 		MakeBoard(X, Z);
 		InitializeEnemies();
 	}
@@ -242,6 +247,7 @@ public class BoardScript : MonoBehaviour
 		{
 			return;
 		}
+		AllowPlayerInput=false;
 		StartedEnemyTurn = true;
 		StartCoroutine(EnemyMovement());
 	}
@@ -283,6 +289,8 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator EnemyMovement()
 	{
+		StartCoroutine(MoveEnemyTurnTextAcrossScreen());
+		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount; w++)
 		{
 			bool EnemyMoved = false;
@@ -344,6 +352,7 @@ public class BoardScript : MonoBehaviour
 		}
 
 		turnManager.EndEnemyTurn();
+		AllowPlayerInput=true;
 		StartedEnemyTurn = false;
 	}
 
@@ -351,7 +360,8 @@ public class BoardScript : MonoBehaviour
 	{
 		turnManager.NewLevelPlayerTurnReset();
 		TileScript.ClearAllTiles();
-		enemies = new List<Enemy>();
+		enemies = new List<Character>();
+		Frendlies = new List<Character>();
 		levelStarted = true;
 		InitializeEnemies();
 		
@@ -367,11 +377,21 @@ public class BoardScript : MonoBehaviour
 				levelStarted = false;
 			}
 		}
+		// THIS IS THE LOSE CONDITION
+		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
+		{
+			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
+		}
 	}
 
-	public void RemoveEnemy(Enemy enem)
+	public void RemoveEnemy(Character enem)
 	{
 		enemies.Remove(enem);
+	}
+
+	public void RemoveFriendly(Character Char)
+	{
+		Frendlies.Remove(Char);
 	}
 
 	public void FinishAtack()
@@ -391,6 +411,42 @@ public class BoardScript : MonoBehaviour
 		}
 
 		characterToMove = null;
-		Debug.Log("Attack done");
+		//Debug.Log("Attack done");
+	}
+	private IEnumerator MoveEnemyTurnTextAcrossScreen()
+	{
+		GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
+		RectTransform ObjTransform=TextObject.GetComponent<RectTransform>();
+
+		Vector3 StartingPosition = ObjTransform.position;
+		Vector3 MiddlePosition = new Vector3(554,ObjTransform.position.y,ObjTransform.position.z);
+		Vector3 FinalPosition = new Vector3(1430,ObjTransform.position.y,ObjTransform.position.z);
+
+		TextObject.SetActive(true);
+
+		float timeToMove = 0.5f;
+		float elapsedTime = 0;
+
+		while (elapsedTime < timeToMove)
+		{
+			float t = elapsedTime / timeToMove;
+			float smoothStepT = t * t * (3f - 2f * t);
+			ObjTransform.position =Vector3.Lerp(StartingPosition,MiddlePosition,smoothStepT);
+			elapsedTime += Time.deltaTime; // Update elapsed time
+			yield return null; // Wait until next frame		
+		}
+		elapsedTime = 0;
+		yield return new WaitForSeconds(1f);
+		
+		while (elapsedTime < timeToMove)
+		{
+			float t = elapsedTime / timeToMove;
+			float smoothStepT = t * t * (3f - 2f * t);
+			ObjTransform.position =Vector3.Lerp(MiddlePosition,FinalPosition,smoothStepT);
+			elapsedTime += Time.deltaTime; // Update elapsed time
+			yield return null; // Wait until next frame		
+		}
+		ObjTransform.position=StartingPosition;
+		TextObject.SetActive(false);
 	}
 }

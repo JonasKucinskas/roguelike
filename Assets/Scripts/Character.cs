@@ -13,13 +13,13 @@ public abstract class Character : MonoBehaviour
     public int zPosition;    
     public bool isFriendly;
     protected AudioManager audioManager;
+    public BoardScript BoardManager;
     private List<List<Material>> originalMaterials;
     
     private void Awake()
     {       
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-
-        
+        BoardManager = GameObject.Find("Board").GetComponent<BoardScript>();
     }
 
     public abstract bool CanMove(TileScript tile);
@@ -85,14 +85,17 @@ public abstract class Character : MonoBehaviour
         xPosition = tile.xPosition;
         zPosition = tile.zPosition;
 
-        int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
-        MovesLeft--;
-        PlayerPrefs.SetInt("MovesLeft",MovesLeft);
+        if(isFriendly)
+        {
+            int MovesLeft=PlayerPrefs.GetInt("MovesLeft");
+            MovesLeft--;
+            PlayerPrefs.SetInt("MovesLeft",MovesLeft);            
+        }
+
     }
     
     public bool Attack(TileScript tile)
 	{
-        NormalAttackSound();
 
         Enemy e = tile.GetComponentInChildren<Enemy>();
         if (!e)
@@ -107,18 +110,19 @@ public abstract class Character : MonoBehaviour
     }
     public abstract void NormalAttackSound();
     public abstract void IdleSound();
-    private bool Attack(Enemy enemy)
+    private bool Attack(Character character)
 	{
         NormalAttackSound();
-
+        bool isDead=false;
         hp--;
-        bool isDead=enemy.TakeDamage(damage);
+        character.TakeDamage(damage);
         int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft", MovesLeft);
         
         if(hp<=0)
         {
+            isDead=true;
             Destroy(this.gameObject);
             this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
             this.GetComponentInParent<TileScript>().SetEnemyPresence(false);
@@ -126,6 +130,21 @@ public abstract class Character : MonoBehaviour
         return isDead;
 
     }
+
+    public void TakeDamage(int damage)
+    {
+        hp = hp - damage;
+
+        if(hp<=0)
+        {
+            BoardManager.enemies.Remove(this);
+            BoardManager.Frendlies.Remove(this);
+            Destroy(gameObject);
+            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
+            this.GetComponentInParent<TileScript>().SetEnemyPresence(false);
+        }
+    }
+
     Material CreateBrightenedMaterial(Material originalMaterial, float brightnessIncrease)
     {
         Material newMaterial = new Material(originalMaterial);

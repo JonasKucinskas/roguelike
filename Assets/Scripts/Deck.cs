@@ -5,9 +5,11 @@ using UnityEngine;
 public class Deck : MonoBehaviour
 {
     public List<GameObject> cards = new List<GameObject>();
+    private BoardScript boardManager;
 
     void Start()
     {
+        boardManager=GameObject.Find("Board").GetComponent<BoardScript>();
         UpdateHeight();
     }
 
@@ -21,7 +23,7 @@ public class Deck : MonoBehaviour
 
         if (cards.Count == 0)
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
             return;
         }
 
@@ -31,6 +33,11 @@ public class Deck : MonoBehaviour
 
     public GameObject Pop()
     {
+        if(!boardManager.AllowPlayerInput)
+		{
+			return null;
+		}
+
         if (cards.Count == 0)
         {
             return null;

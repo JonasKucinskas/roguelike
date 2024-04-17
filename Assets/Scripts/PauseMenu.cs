@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,13 @@ public class PauseMenu : MonoBehaviour
     public GameObject VictoryMenuUI;
     public GameObject DefeatMenuUI;
 	public GameObject BonusSelectUI;
+    public GameObject OpponentsTurnText;
+    private BoardScript boardManager;
 
+    void Start()
+    {
+        boardManager=GameObject.Find("Board").GetComponent<BoardScript>();
+    }
 	// Update is called once per frame
 	void Update()
     {
@@ -29,12 +36,16 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        boardManager.AllowPlayerInput=true;
+
         PauseMenuUI.SetActive(false);
         Time.timeScale=1f;
         IsPaused=false;
     }
     void Pause()
     {
+        boardManager.AllowPlayerInput=false;
+
         PauseMenuUI.SetActive(true);
         Time.timeScale=0f;
         IsPaused=true;

@@ -20,6 +20,7 @@ public class NeutrophilCell : Character
         damage = 10;
         isFriendly = true;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        BoardManager=GameObject.Find("Board").GetComponent<BoardScript>();
     }
 
     public override bool CanMove(TileScript tile)
@@ -51,7 +52,7 @@ public class NeutrophilCell : Character
         GameObject tileObject = GameObject.Find(tileName);
         var tile = tileObject.GetComponent<TileScript>();
 
-        if (Input.GetKey(KeyCode.Space ) && turnManager.isPlayersTurn() && tile.IsSelected)
+        if (Input.GetKey(KeyCode.Space ) && turnManager.isPlayersTurn() && tile.IsSelected && BoardManager.AllowPlayerInput)
         {
             ActivatePower();
             isClicked = true;
@@ -69,8 +70,6 @@ public class NeutrophilCell : Character
             else
                 Debug.Log("AudioManager is null");
 
-            GameObject boardObject = GameObject.Find("Board");
-            BoardScript board = boardObject.GetComponent<BoardScript>();
             turnManager.SubtractPlayerMove();
             neutrAnimator.Play("simpleAttack");
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
@@ -96,36 +95,26 @@ public class NeutrophilCell : Character
                             {
                                 var characterObject = tileObject.transform.GetChild(0);
                                 Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
-                                Enemy enemy = characterObject.GetComponent<Enemy>();
-                                bool isDead = enemy.TakeDamage(5);
+                                Character enemy = characterObject.GetComponent<Character>();
+                                enemy.TakeDamage(5);
 
-                                if (isDead == true)
-                                {
-                                    tile.SetEnemyPresence(false);
-                                    board.RemoveEnemy(enemy);
-                                }
-
-                                board.FinishAtack();
+                                BoardManager.FinishAtack();
                             }
                             if (tile.IsFriendlyOnTile() == true)
                             {
                                 var characterObject = tileObject.transform.GetChild(0);
                                 Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
-                                NeutrophilCell friendly = characterObject.GetComponent<NeutrophilCell>();
-                                bool isDead = friendly.TakeDamage(5);
+                                Character friendly = characterObject.GetComponent<Character>();
+                                friendly.TakeDamage(5);
 
-                                if (isDead == true)
-                                {
-                                    tile.SetFriendlyPresence(false);
-                                }
-                                board.FinishAtack();
+                                BoardManager.FinishAtack();
                             }
-                            board.FinishAtack();
+                            BoardManager.FinishAtack();
                         }
                         else
                         {
                             Debug.Log("Nera tokio langelio");
-                            board.FinishAtack();
+                            BoardManager.FinishAtack();
                         }
                     }
                 }
@@ -135,18 +124,18 @@ public class NeutrophilCell : Character
         }
     }
 
-    public bool TakeDamage(int damage)
-    {
-        hp = hp - damage;
+    // public bool TakeDamage(int damage)
+    // {
+    //     hp = hp - damage;
 
-        if (hp <= 0)
-        {
-            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
-            Destroy(gameObject);
-            return true;
-        }
-        return false;
-    }
+    //     if (hp <= 0)
+    //     {
+    //         this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
+    //         Destroy(gameObject);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public override void NormalAttackSound()
     {

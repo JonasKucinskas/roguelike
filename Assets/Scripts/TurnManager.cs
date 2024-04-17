@@ -20,7 +20,7 @@ public class TurnManager : MonoBehaviour
         movesLeft = PlayerPrefs.GetInt("MovesLeft");
         if(movesLeft == 0)
         {
-            Debug.Log("ENEMY'S TURN");
+            //Debug.Log("ENEMY'S TURN");
             isPlayersMove = false;
         }
     }

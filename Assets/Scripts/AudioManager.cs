@@ -25,7 +25,7 @@ public class AudioManager : MonoBehaviour
     public IEnumerator PlaySound(AudioClip clip, float delay)
     {
         yield return new WaitForSeconds(delay);
-        Debug.Log("Sound is playing");
+        //Debug.Log("Sound is playing");
         soundEffect.PlayOneShot(clip); //does not cancel clips that are already being played 
     }
 }
