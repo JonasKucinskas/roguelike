@@ -11,7 +11,7 @@ public class CardManager : MonoBehaviour
     public GameObject canvas;
     int draggedCardIndex;
     private TurnManager turnManager;
-    private bool isDragging = false;
+    public bool isDragging = false;
     public bool ExtraCardDrawBonusChosen = false;
 
     void Start()
@@ -93,7 +93,7 @@ public class CardManager : MonoBehaviour
 		Deck deck = clickedObject.GetComponent<Deck>();
 
         InitiateCardDraw(deck, false);
-        if(deck.cards.Count > 0 && RollTheDiceForExtraCardDraw()) InitiateCardDraw(deck, true);
+        if(deck.cards.Count > 0 && RollTheDiceForExtraCardDraw() && ExtraCardDrawBonusChosen) InitiateCardDraw(deck, true);
 	}
 
     private void InstantiateCardInHand(List<GameObject> cardObjects, GameObject card)
