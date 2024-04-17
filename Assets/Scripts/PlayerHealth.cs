@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI; // Import this namespace to work with UI elements
 
 public class PlayerHealth : MonoBehaviour
 {
 	public Sprite heartSprite; // Assign your heart sprite in the inspector
-	public int numberOfLives = 2; // Number of lives
+	public int numberOfLivesAtTheStart = 2; // Number of lives
 	public int currentHealth; // To track the current health of the player
 
 	// Starting position and spacing for the hearts
@@ -15,8 +16,8 @@ public class PlayerHealth : MonoBehaviour
 
 	void Start()
 	{
-		currentHealth = numberOfLives; // Initialize current health
-		hearts = new GameObject[numberOfLives]; // Initialize the hearts array
+		currentHealth = numberOfLivesAtTheStart; // Initialize current health
+		hearts = new GameObject[numberOfLivesAtTheStart]; // Initialize the hearts array
 		SpawnHearts();
 	}
 
@@ -24,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		startPosition = transform.localPosition;
 
-		for (int i = 0; i < numberOfLives; i++)
+		for (int i = 0; i < numberOfLivesAtTheStart; i++)
 		{
 			// Create a new GameObject with an Image component
 			GameObject heartGO = new GameObject($"Heart_{i + 1}", typeof(Image));
@@ -61,7 +62,7 @@ public class PlayerHealth : MonoBehaviour
 
 	private void DeactivateLastHeart()
 	{
-		if (currentHealth < numberOfLives && currentHealth >= 0)
+		if (currentHealth < numberOfLivesAtTheStart && currentHealth >= 0)
 		{
 			// Deactivate the heart GameObject at the currentHealth index
 			hearts[currentHealth].SetActive(false);
@@ -82,6 +83,44 @@ public class PlayerHealth : MonoBehaviour
 		{
 			TakeDamage(1);
 			Debug.Log("gyvebes " + currentHealth);
+		}
+	}
+
+	public int absoluteMaxHearts = 10; // Define an absolute maximum number of hearts to avoid infinite expansion
+
+	public void AddLife()
+	{
+		if (currentHealth < numberOfLivesAtTheStart)
+		{
+			// Reactivate the next deactivated heart
+			currentHealth++;
+			hearts[currentHealth - 1].SetActive(true);
+		}
+		else if (numberOfLivesAtTheStart < absoluteMaxHearts) // Check against an absolute maximum
+		{
+			// Increase the total number of lives
+			numberOfLivesAtTheStart++;
+			currentHealth++;
+
+			// Create and initialize a new heart GameObject
+			GameObject newHeart = new GameObject($"Heart_{numberOfLivesAtTheStart}", typeof(Image));
+			newHeart.transform.SetParent(transform, false);
+			Image heartImage = newHeart.GetComponent<Image>();
+			heartImage.sprite = heartSprite;
+			RectTransform heartRect = heartImage.rectTransform;
+			heartRect.anchoredPosition = new Vector2(0, -(spacing * (numberOfLivesAtTheStart - 1)));
+			heartRect.sizeDelta = new Vector2(0.1f, 0.1f); // Adjust the size as needed
+
+			// Expand the hearts array and add the new heart GameObject
+			if (hearts.Length < numberOfLivesAtTheStart)
+			{
+				Array.Resize(ref hearts, numberOfLivesAtTheStart);
+			}
+			hearts[numberOfLivesAtTheStart - 1] = newHeart;
+		}
+		else
+		{
+			Debug.Log("Maximum number of hearts reached.");
 		}
 	}
 
