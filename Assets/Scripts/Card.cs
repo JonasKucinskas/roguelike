@@ -14,6 +14,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public GameObject Particle;
     private TurnManager turnManager;
 	private BoardScript boardManager;
+	private CardManager cardManager;
 	public delegate void CardMovedFromHandEventHandler(Card card);
     public event CardMovedFromHandEventHandler OnCardMovedFromHand;
 	public delegate void CardMovedToHandEventHandler(Card card);
@@ -22,7 +23,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	void Awake()
 	{
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-		boardManager=GameObject.Find("Board").GetComponent<BoardScript>();
+		boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
+		cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+
 	}
 
 	void Update()
@@ -155,5 +158,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			e.GetComponent<BoxCollider>().enabled = ChangeTo;
 		}
+	}
+
+	void OnDestroy()
+	{
+		cardManager.isDragging = false;
 	}
 }
