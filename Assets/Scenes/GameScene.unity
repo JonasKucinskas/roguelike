@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181726, g: 0.35577103, b: 0.2556257, a: 1}
+  m_IndirectSpecularColor: {r: 0.47181702, g: 0.355771, b: 0.2556258, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3778,7 +3778,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 19.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7660,6 +7660,7 @@ MonoBehaviour:
   - {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
   - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
   canvas: {fileID: 605084863}
+  isDragging: 0
 --- !u!4 &1983123564 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 266f03476f36b2945b733736a459bf7a, type: 3}
@@ -8191,7 +8192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531558905696914330, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.2319999
+      value: -0.73
       objectReference: {fileID: 0}
     - target: {fileID: 1531558905696914330, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: m_LocalPosition.z

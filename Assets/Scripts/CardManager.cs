@@ -11,15 +11,13 @@ public class CardManager : MonoBehaviour
     public GameObject canvas;
     int draggedCardIndex;
     private TurnManager turnManager;
-    private bool isDragging = false;
+    public bool isDragging = false;
 
     void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         DrawCards(initialCards, true);
     }
-
-
 
     void Update()
     {

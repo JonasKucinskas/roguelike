@@ -262,12 +262,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5189030302714823036}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1 &6545077867320496814
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,15 +324,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6bf664c2cfdf1244e946b1eddb8066ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.0272102
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6bf664c2cfdf1244e946b1eddb8066ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.2080684
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6bf664c2cfdf1244e946b1eddb8066ce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.559208
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6bf664c2cfdf1244e946b1eddb8066ce, type: 3}
       propertyPath: m_LocalRotation.w
@@ -428,8 +428,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 2.3, z: 1}
+  m_Center: {x: 0, y: 1.5, z: -0.3}
 --- !u!114 &4635418562238864285
 MonoBehaviour:
   m_ObjectHideFlags: 0
