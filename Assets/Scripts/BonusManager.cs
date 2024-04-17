@@ -22,6 +22,7 @@ public class BonusManager : MonoBehaviour
 	public Button middleButton;
 	public Button bottomButton;
 	public BoardScript boardScript;
+	public PlayerHealth playerHealth;
 
 	private List<Bonus> selectedBonuses; // Stores the bonuses selected for display
 
@@ -89,6 +90,34 @@ public class BonusManager : MonoBehaviour
 		Bonus selectedBonus = selectedBonuses[bonusIndex];
 
 		Debug.Log("Applying bonus: " + selectedBonus.bonusName);
+
+		switch (selectedBonus.bonusName)
+		{
+			case "Bonus 1":
+				// Apply effects specific to Bonus 1
+				break;
+			case "Bonus 2":
+				// Apply effects specific to Bonus 2
+				break;
+			case "Bonus 3":
+				// Only apply the AddLife method when Bonus 3 is selected
+				playerHealth.AddLife();
+				break;
+			case "Bonus 4":
+				// Apply effects specific to Bonus 4
+				break;
+			case "Bonus 5":
+				// Apply effects specific to Bonus 5
+				break;
+			case "Bonus 6":
+				// Apply effects specific to Bonus 6
+				break;
+			default:
+				Debug.Log("Bonus not recognized.");
+				break;
+		}
+
+		AssignBonusTextToButtons();
 
 		boardScript.StartNewLevel();
 	}
