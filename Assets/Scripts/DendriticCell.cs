@@ -11,6 +11,12 @@ public class DendriticCell : Character
     {
         hp = 10;
         damage = 5;
+    public static int TimesExtraDamageAdded = 0;
+    private int DamageAdded = 2;
+    private void Start()
+    {
+        hp = 10;
+        damage = 10 + TimesExtraDamageAdded * DamageAdded;
         isFriendly = true;
     }
 
@@ -26,7 +32,13 @@ public class DendriticCell : Character
         timeCounter += Time.deltaTime;
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
     }
-    public override void NormalAttackSound()
+
+	public static void AddExtraDamage()
+	{
+        TimesExtraDamageAdded++;
+	}
+
+	public override void NormalAttackSound()
     {
         if (audioManager != null)
         {
