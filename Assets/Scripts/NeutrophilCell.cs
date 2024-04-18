@@ -11,6 +11,7 @@ public class NeutrophilCell : Character
     private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;
 	private int DamageAdded = 2;
+    public static bool SpecialAttackIgnoresFriendlies = false;
 	[SerializeField] Animator neutrAnimator;
 
     private float timeCounter = 0.0f;
@@ -68,8 +69,20 @@ public class NeutrophilCell : Character
 		TimesExtraDamageAdded++;
 	}
 
+	private bool RollTheDice()
+	{
+		System.Random random = new System.Random();
+		int randomNumber = random.Next(1, 11);
+
+		if (randomNumber > 0) return true; //for now the chance is set to 100%
+		else return false;
+	}
+
 	public void ActivatePower()
     {
+        bool diceRollResult = false;
+		if (SpecialAttackIgnoresFriendlies) diceRollResult = RollTheDice();
+
         if (isClicked == false)
         {
             if (audioManager != null)
@@ -109,10 +122,13 @@ public class NeutrophilCell : Character
                             }
                             if (tile.IsFriendlyOnTile() == true)
                             {
-                                var characterObject = tileObject.transform.GetChild(0);
-                                Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
-                                Character friendly = characterObject.GetComponent<Character>();
-                                friendly.TakeDamage(5);
+								if (!SpecialAttackIgnoresFriendlies || !diceRollResult)
+                                {
+									var characterObject = tileObject.transform.GetChild(0);
+									Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
+									Character friendly = characterObject.GetComponent<Character>();
+									friendly.TakeDamage(5);
+								}
 
                                 BoardManager.FinishAtack();
                             }
@@ -126,8 +142,8 @@ public class NeutrophilCell : Character
                     }
                 }
             }
-            //DEAL DAMAGE TO SELF
-            this.TakeDamage(4);
+			//DEAL DAMAGE TO SELF
+			if (!SpecialAttackIgnoresFriendlies || !diceRollResult) this.TakeDamage(4);
         }
     }
 
