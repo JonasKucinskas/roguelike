@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181702, g: 0.355771, b: 0.2556258, a: 1}
+  m_IndirectSpecularColor: {r: 0.47181726, g: 0.35577103, b: 0.2556257, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3438,7 +3438,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -935, y: -0.0000019073}
+  m_AnchoredPosition: {x: -935, y: 120}
   m_SizeDelta: {x: 702.4242, y: 132.76862}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &962434944
@@ -3728,8 +3728,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 305.8, y: 204.29999}
-  m_SizeDelta: {x: -752, y: -486}
+  m_AnchoredPosition: {x: 376.54407, y: 274.3003}
+  m_SizeDelta: {x: -769.3549, y: -569.8186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1020525567
 MonoBehaviour:
@@ -3753,8 +3753,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Moves left:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3778,7 +3778,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.65
+  m_fontSize: 48.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3786,7 +3786,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -3814,7 +3814,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -64.414215, w: 0}
+  m_margin: {x: 6.0684814, y: 0, z: -2.867096, w: 0.000030517578}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4818,7 +4818,6 @@ MonoBehaviour:
   topButton: {fileID: 227105627}
   middleButton: {fileID: 1114402446}
   bottomButton: {fileID: 781083800}
-  cardManager: {fileID: 1971650928}
 --- !u!1001 &1353519219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5229,6 +5228,7 @@ MonoBehaviour:
   Z: 4
   enemies: []
   Frendlies: []
+  GameLost: 0
   AllowPlayerInput: 1
 --- !u!4 &1433215424
 Transform:
@@ -7705,6 +7705,8 @@ MonoBehaviour:
   neutrophilIdle2: {fileID: 8300000, guid: 232f15abe54074a4b928be032899045e, type: 3}
   neutrophilAttack: {fileID: 8300000, guid: a871eb94b30d01444be0e900e9d40069, type: 3}
   neutrophilSpecialAttack: {fileID: 8300000, guid: 29e6687bcbc6aec43aca9808a42e4adf, type: 3}
+  CardJump: {fileID: 8300000, guid: bba6e6810a785b347833eb9898752385, type: 3}
+  CardPickup: {fileID: 8300000, guid: 4be76e8d781eb104283c1b1edf1b8095, type: 3}
 --- !u!4 &2022377050
 Transform:
   m_ObjectHideFlags: 0
@@ -8190,7 +8192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531558905696914330, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.2708176
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1531558905696914330, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8573,8 +8575,8 @@ SceneRoots:
   - {fileID: 1433215424}
   - {fileID: 1948149985}
   - {fileID: 1233758184}
+  - {fileID: 2022377050}
   - {fileID: 798501620}
   - {fileID: 1743160988}
   - {fileID: 494987584}
   - {fileID: 929915271}
-  - {fileID: 2022377050}

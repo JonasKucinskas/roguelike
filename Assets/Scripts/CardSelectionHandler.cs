@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
+    private AudioManager audioManager;
     [SerializeField] private float _verticalMoveAmmount = 30f;
     [SerializeField] private float _moveTime = 0.1f;
     [Range(0f, 2f), SerializeField] private float _scaleAmmount = 1.1f;
@@ -19,6 +20,7 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         card = gameObject.GetComponent<Card>();
         _startScale = transform.localScale;
         cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     private IEnumerator MoveCard(bool startingAnimation)
@@ -89,6 +91,7 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnSelect(BaseEventData eventData)
     {
+        StartCoroutine(audioManager.PlaySound(audioManager.CardJump,0f));
         StartCoroutine(MoveCard(true));
     }
 

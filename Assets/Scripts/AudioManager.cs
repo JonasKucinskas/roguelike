@@ -22,6 +22,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip neutrophilAttack;
     public AudioClip neutrophilSpecialAttack;
 
+    [Header("Card sound effects")]
+    public AudioClip CardJump;
+    public AudioClip CardPickup;
     public IEnumerator PlaySound(AudioClip clip, float delay)
     {
         yield return new WaitForSeconds(delay);

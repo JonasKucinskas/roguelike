@@ -8,7 +8,7 @@ public class DendriticCell : Character
     private void Start()
     {
         hp = 10;
-        damage = 10;
+        damage = 5;
         isFriendly = true;
     }
 

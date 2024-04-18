@@ -262,12 +262,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 3672037275992918328}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 3672037275992918328}
+  m_maskType: 0
 --- !u!1 &6378616181522320572
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,13 +462,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef2c571a630e4f4abc3d3388cf3f8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: Neutrophil
   hp: 0
   damage: 0
   xPosition: 0
   zPosition: 0
   isFriendly: 0
-  highlightMaterial: {fileID: 2100000, guid: 78f8cd9069a72cb10a79a472bc8f946d, type: 2}
+  BoardManager: {fileID: 0}
   HpText: {fileID: 4505832288623749646}
   neutrAnimator: {fileID: 5912894489969214330}
 --- !u!137 &8314537811761521312

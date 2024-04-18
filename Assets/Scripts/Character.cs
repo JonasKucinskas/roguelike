@@ -94,28 +94,14 @@ public abstract class Character : MonoBehaviour
 
     }
     
-    public bool Attack(TileScript tile)
-	{
-
-        Enemy e = tile.GetComponentInChildren<Enemy>();
-        if (!e)
-        {
-            Debug.Log("no enemy in attack tile");
-            throw new Exception("no enemy in attack tile");
-        }
-        bool b=Attack(e);
-        Debug.Log(b);
-        tile.SetEnemyPresence(!b);
-        return b;
-    }
     public abstract void NormalAttackSound();
     public abstract void IdleSound();
-    private bool Attack(Character character)
+    public bool Attack(Character character,int DAMAGE)
 	{
         NormalAttackSound();
         bool isDead=false;
         hp--;
-        character.TakeDamage(damage);
+        character.TakeDamage(DAMAGE);
         int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft", MovesLeft);
@@ -124,8 +110,7 @@ public abstract class Character : MonoBehaviour
         {
             isDead=true;
             Destroy(this.gameObject);
-            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
-            this.GetComponentInParent<TileScript>().SetEnemyPresence(false);
+            this.GetComponentInParent<TileScript>().ClearCharacterPresence();
         }
         return isDead;
 
@@ -139,9 +124,8 @@ public abstract class Character : MonoBehaviour
         {
             BoardManager.enemies.Remove(this);
             BoardManager.Frendlies.Remove(this);
+            this.GetComponentInParent<TileScript>().ClearCharacterPresence();
             Destroy(gameObject);
-            this.GetComponentInParent<TileScript>().SetFriendlyPresence(false);
-            this.GetComponentInParent<TileScript>().SetEnemyPresence(false);
         }
     }
 

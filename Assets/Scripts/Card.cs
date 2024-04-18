@@ -25,7 +25,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
 		cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
-
 	}
 
 	void Update()

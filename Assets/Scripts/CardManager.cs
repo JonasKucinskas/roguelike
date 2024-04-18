@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
@@ -13,10 +14,12 @@ public class CardManager : MonoBehaviour
     private TurnManager turnManager;
     public bool isDragging = false;
     public bool ExtraCardDrawBonusChosen = false;
+    private Deck deck;
 
     void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        deck = GameObject.Find("Deck").GetComponent<Deck>();
         DrawCards(initialCards, true);
     }
 
@@ -88,9 +91,7 @@ public class CardManager : MonoBehaviour
             return;
         }
 
-		GameObject clickedObject = hit.collider.gameObject;
-
-		Deck deck = clickedObject.GetComponent<Deck>();
+        if(hit.collider==deck.gameObject.GetComponent<Collider>())
 
         InitiateCardDraw(deck, false);
         if(deck.cards.Count > 0 && RollTheDiceForExtraCardDraw() && ExtraCardDrawBonusChosen) InitiateCardDraw(deck, true);

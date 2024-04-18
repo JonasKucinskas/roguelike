@@ -84,6 +84,13 @@ public class TileScript : MonoBehaviour
         IsEnemyPresent = isPresent;
     }
 
+	public void ClearCharacterPresence()
+	{
+		Debug.Log("Clearing presence");
+		isFriendlyPresent=false;
+		IsEnemyPresent=false;
+	}
+
     public int GetXPosition()
     {
         return xPosition;

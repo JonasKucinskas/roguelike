@@ -262,12 +262,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 5189030302714823036}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 5189030302714823036}
+  m_maskType: 0
 --- !u!1 &6545077867320496814
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,12 +442,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 585b1572abfc344cc8dff282c7c82f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: Dentritic
   hp: 0
   damage: 0
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  BoardManager: {fileID: 0}
   HpText: {fileID: 4131004983379600449}
 --- !u!4 &2017086351318368299 stripped
 Transform:

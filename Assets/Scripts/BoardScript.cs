@@ -27,7 +27,7 @@ public class BoardScript : MonoBehaviour
 
 	private int EnemyTurnCount = 2;
 	private bool StartedEnemyTurn = false;
-
+	public bool GameLost = false;
 	public bool AllowPlayerInput=true;
 
 	// Start is called before the first frame update
@@ -174,11 +174,8 @@ public class BoardScript : MonoBehaviour
 			{
 				if (characterToMove.CanMove(tile))
 				{
-					Enemy e = tile.GetComponentInChildren<Enemy>();
-					if (lastHighlightedTile.GetComponentInChildren<Character>().Attack(tile))
-					{
-						RemoveEnemy(e);
-					}
+					Character e = tile.GetComponentInChildren<Character>();
+					lastHighlightedTile.GetComponentInChildren<Character>().Attack(e,characterToMove.damage);
 					TileScript.ResetTileHighlights();
 
 					if (lastHighlightedTile != null)
@@ -200,7 +197,7 @@ public class BoardScript : MonoBehaviour
 				{
 					lastHighlightedTile = null;
 				}
-
+				characterToMove.GetComponentInParent<TileScript>().IsSelected=false;
 				characterToMove = null;
 				tile.IsSelected = false;//
 				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//
@@ -289,7 +286,7 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator EnemyMovement()
 	{
-		StartCoroutine(MoveEnemyTurnTextAcrossScreen());
+		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Opponents turn"));
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount; w++)
 		{
@@ -352,6 +349,7 @@ public class BoardScript : MonoBehaviour
 		}
 
 		turnManager.EndEnemyTurn();
+		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Players turn"));
 		AllowPlayerInput=true;
 		StartedEnemyTurn = false;
 	}
@@ -381,6 +379,7 @@ public class BoardScript : MonoBehaviour
 		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
 		{
 			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
+			GameLost=true;
 		}
 	}
 
@@ -413,11 +412,16 @@ public class BoardScript : MonoBehaviour
 		characterToMove = null;
 		//Debug.Log("Attack done");
 	}
-	private IEnumerator MoveEnemyTurnTextAcrossScreen()
+	private IEnumerator MoveEnemyTurnTextAcrossScreen(string text)
 	{
-		GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
-		RectTransform ObjTransform=TextObject.GetComponent<RectTransform>();
+		if(GameLost)
+		{
+			yield break;
+		}
 
+		GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
+		TextObject.GetComponent<TextMeshProUGUI>().text=text;
+		RectTransform ObjTransform=TextObject.GetComponent<RectTransform>();
 		Vector3 StartingPosition = ObjTransform.position;
 		Vector3 MiddlePosition = new Vector3(554,ObjTransform.position.y,ObjTransform.position.z);
 		Vector3 FinalPosition = new Vector3(1430,ObjTransform.position.y,ObjTransform.position.z);

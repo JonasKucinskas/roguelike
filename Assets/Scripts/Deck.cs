@@ -6,10 +6,13 @@ public class Deck : MonoBehaviour
 {
     public List<GameObject> cards = new List<GameObject>();
     private BoardScript boardManager;
+    private AudioManager audioManager;
 
     void Start()
     {
+
         boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         UpdateHeight();
     }
 
@@ -21,14 +24,12 @@ public class Deck : MonoBehaviour
     {
         float totalHeight = cards.Count * 0.1f; 
 
-        if (cards.Count == 0)
-        {
-            //gameObject.SetActive(false);
-            return;
-        }
         //transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
         transform.localScale = new Vector3(transform.localScale.x, totalHeight, transform.localScale.z);
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - 0.1f, transform.localPosition.z);
+        if(cards.Count<=0)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+        }
 
     }
 
@@ -43,7 +44,7 @@ public class Deck : MonoBehaviour
         {
             return null;
         }
-
+        StartCoroutine(audioManager.PlaySound(audioManager.CardPickup, 0.0f));
         GameObject lastElement = cards[cards.Count - 1];
         cards.RemoveAt(cards.Count - 1);
         UpdateHeight();
