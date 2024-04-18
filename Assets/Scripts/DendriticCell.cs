@@ -7,16 +7,13 @@ public class DendriticCell : Character
     public GameObject HpText;
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
-    private void Start()
-    {
-        hp = 10;
-        damage = 5;
     public static int TimesExtraDamageAdded = 0;
     private int DamageAdded = 2;
+
     private void Start()
     {
         hp = 10;
-        damage = 10 + TimesExtraDamageAdded * DamageAdded;
+        damage = 5 + TimesExtraDamageAdded * DamageAdded;
         isFriendly = true;
     }
 
