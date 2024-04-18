@@ -5,6 +5,8 @@ using UnityEngine;
 public class DendriticCell : Character
 {
     public GameObject HpText;
+    private float timeCounter = 0.0f;
+    private float randomTime = 0.0f;
     private void Start()
     {
         hp = 10;
@@ -14,13 +16,22 @@ public class DendriticCell : Character
 
     void Update()
     {
+        if (timeCounter > randomTime)
+        {
+            randomTime = 2.542f;
+            timeCounter = 0.0f;
+            IdleSound();
+        }
+
+        timeCounter += Time.deltaTime;
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
     }
     public override void NormalAttackSound()
     {
         if (audioManager != null)
-        { }
-            //audioManager.PlaySound(audioManager.neutrophilAttack);
+        {
+            StartCoroutine(audioManager.PlaySound(audioManager.dendriticAttack, 0f));
+        }
         else
             Debug.Log("AudioManager is null");
     }
@@ -28,8 +39,9 @@ public class DendriticCell : Character
     public override void IdleSound()
     {
         if (audioManager != null)
-        { }
-            //audioManager.PlaySound(audioManager.neutrophilAttack);
+        { 
+            StartCoroutine(audioManager.PlaySound(audioManager.dendriticIdle1, 0f));
+        }
         else
             Debug.Log("AudioManager is null");
     }

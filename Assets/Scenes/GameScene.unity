@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181726, g: 0.35577103, b: 0.2556257, a: 1}
+  m_IndirectSpecularColor: {r: 0.47181696, g: 0.355771, b: 0.25562602, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3778,7 +3778,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.75
+  m_fontSize: 12
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7705,6 +7705,10 @@ MonoBehaviour:
   neutrophilIdle2: {fileID: 8300000, guid: 232f15abe54074a4b928be032899045e, type: 3}
   neutrophilAttack: {fileID: 8300000, guid: a871eb94b30d01444be0e900e9d40069, type: 3}
   neutrophilSpecialAttack: {fileID: 8300000, guid: 29e6687bcbc6aec43aca9808a42e4adf, type: 3}
+  dendriticIdle1: {fileID: 8300000, guid: bb820564018d0404fb650bb25a34c8ee, type: 3}
+  dendriticIdle2: {fileID: 8300000, guid: bb820564018d0404fb650bb25a34c8ee, type: 3}
+  dendriticAttack: {fileID: 8300000, guid: 679c893827826b84a94b9071efdf18aa, type: 3}
+  dendriticSpecialAttack: {fileID: 8300000, guid: 679c893827826b84a94b9071efdf18aa, type: 3}
   CardJump: {fileID: 8300000, guid: bba6e6810a785b347833eb9898752385, type: 3}
   CardPickup: {fileID: 8300000, guid: 4be76e8d781eb104283c1b1edf1b8095, type: 3}
 --- !u!4 &2022377050

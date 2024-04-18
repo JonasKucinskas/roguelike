@@ -22,6 +22,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip neutrophilAttack;
     public AudioClip neutrophilSpecialAttack;
 
+    [Header("Dendritic sound effects")]
+    public AudioClip dendriticIdle1;
+    public AudioClip dendriticIdle2;
+    public AudioClip dendriticAttack;
+    public AudioClip dendriticSpecialAttack;
+
     [Header("Card sound effects")]
     public AudioClip CardJump;
     public AudioClip CardPickup;
