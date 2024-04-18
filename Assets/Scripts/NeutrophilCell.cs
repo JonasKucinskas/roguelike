@@ -9,7 +9,9 @@ public class NeutrophilCell : Character
     public GameObject HpText;
     private bool isClicked = false;
     private TurnManager turnManager;
-    [SerializeField] Animator neutrAnimator;
+	public static int TimesExtraDamageAdded = 0;
+	private int DamageAdded = 2;
+	[SerializeField] Animator neutrAnimator;
 
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
@@ -17,7 +19,7 @@ public class NeutrophilCell : Character
     private void Start()
     {
         hp = 10;
-        damage = 10;
+        damage = 10 + TimesExtraDamageAdded * DamageAdded;
         isFriendly = true;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BoardManager=GameObject.Find("Board").GetComponent<BoardScript>();
@@ -61,7 +63,12 @@ public class NeutrophilCell : Character
             isClicked = false;
     }
 
-    public void ActivatePower()
+	public static void AddExtraDamage()
+	{
+		TimesExtraDamageAdded++;
+	}
+
+	public void ActivatePower()
     {
         if (isClicked == false)
         {

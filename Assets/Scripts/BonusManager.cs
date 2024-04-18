@@ -47,7 +47,7 @@ public class BonusManager : MonoBehaviour
 		// Initialize your bonuses here
 		availableBonuses = new List<Bonus>
 		{
-			//new Bonus { bonusName = "Bonus 1", bonusDescription = "Neutrophil deals +2 damage" },
+			new Bonus { bonusName = "Bonus 1", bonusDescription = "Neutrophil deals +2 damage" },
 			new Bonus { bonusName = "Bonus 2", bonusDescription = "Dendritic cell deals +2 damage" },
 			new Bonus { bonusName = "Bonus 3", bonusDescription = "Player gains +1 health" },
 			new Bonus { bonusName = "Bonus 4", bonusDescription = "There is a small chance to draw 2 cards instead of 1" },
@@ -100,6 +100,7 @@ public class BonusManager : MonoBehaviour
 		{
 			case "Bonus 1":
 				// Apply effects specific to Bonus 1
+				NeutrophilCell.AddExtraDamage();
 				break;
 			case "Bonus 2":
 				// Apply effects specific to Bonus 2
