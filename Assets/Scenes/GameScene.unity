@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181696, g: 0.355771, b: 0.25562602, a: 1}
+  m_IndirectSpecularColor: {r: 0.47181726, g: 0.35577103, b: 0.2556257, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3778,7 +3778,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
+  m_fontSize: 48.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5222,6 +5222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 184930, guid: 0741d850465c16446b34e269a41ee5fa, type: 3}
   enemyPrefab: {fileID: 5166766820037242501, guid: f7f7d3d637019b64eac3936d048258bb, type: 3}
+  EnemySpawnParticle: {fileID: 6978135781993428193, guid: c8b0e38927f82414c9a299344dbf5cdd, type: 3}
   Gap: 0.5
   Size: 1
   X: 4

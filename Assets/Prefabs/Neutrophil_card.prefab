@@ -128,11 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsDragging: 0
-  originalPosition: {x: 0, y: 0, z: 0}
-  originalScale: {x: 0, y: 0, z: 0}
-  originalRotation: {x: 0, y: 0, z: 0, w: 0}
+  originalPosition: {x: -60, y: -270, z: -0.1}
+  originalScale: {x: 0.7, y: 0.7, z: 1}
+  originalRotation: {x: 0, y: 0, z: 0.1305262, w: 0.9914449}
   CardModel: {fileID: 5710424728265076337, guid: ff119378c95baaa41811974b637ff90c, type: 3}
-  Particle: {fileID: 137528217491939346, guid: c658fb12851689f4fa01ea010e41f702, type: 3}
+  Particle: {fileID: 6978135781993428193, guid: 23f329610696039469a00d34cb719485, type: 3}
 --- !u!114 &2651001013840226504
 MonoBehaviour:
   m_ObjectHideFlags: 0

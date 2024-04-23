@@ -11,6 +11,7 @@ public class BoardScript : MonoBehaviour
 {
 	public GameObject TilePrefab;
 	public GameObject enemyPrefab;
+	public GameObject EnemySpawnParticle;
 
 	public float Gap;
 	public float Size;
@@ -29,6 +30,10 @@ public class BoardScript : MonoBehaviour
 	private bool StartedEnemyTurn = false;
 	public bool GameLost = false;
 	public bool AllowPlayerInput=true;
+
+	//this is so that while enemies are being spawned do not try to get win condition
+	//since otherwise it insta-wins
+	private bool EnemiesBeingSpawned=true;
 
 	// Start is called before the first frame update
 	void Start()
@@ -90,7 +95,7 @@ public class BoardScript : MonoBehaviour
 					continue;
 				}
 
-				SpawnEnemy(i, j);
+				StartCoroutine(SpawnEnemy(i, j));
 			}
 		}
 	}
@@ -249,7 +254,7 @@ public class BoardScript : MonoBehaviour
 		StartCoroutine(EnemyMovement());
 	}
 
-	void SpawnEnemy(int i, int j)
+	IEnumerator SpawnEnemy(int i, int j)
 	{
 		//this should not be here:
 		float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
@@ -257,8 +262,11 @@ public class BoardScript : MonoBehaviour
 
 		// Spawn enemy on top of the tile.
 		Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
-
-		GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
+		Vector3 ParticleCoordinates=new Vector3(coordinates.x-0.25f, coordinates.y+8f,coordinates.z);
+		//Spawn the particles on spawn
+		Instantiate(EnemySpawnParticle,ParticleCoordinates, Quaternion.Euler(90f,0f, 0f));
+        yield return new WaitForSeconds(1f);
+        GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
 
 		// Set tile as parent.
 		GameObject parentTile = tiles[i, j];
@@ -282,6 +290,7 @@ public class BoardScript : MonoBehaviour
 		{
 			Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
 		}
+		EnemiesBeingSpawned=false;
 	}
 
 	IEnumerator EnemyMovement()
@@ -340,7 +349,7 @@ public class BoardScript : MonoBehaviour
 
 					if (!isObstacleInTheWay)
 					{
-						SpawnEnemy(X / 2, i);
+						StartCoroutine(SpawnEnemy(X / 2, i));
 						yield return new WaitForSeconds(1f);
 						break;
 					}
@@ -356,6 +365,7 @@ public class BoardScript : MonoBehaviour
 
 	public void StartNewLevel()
 	{
+		EnemiesBeingSpawned=true;
 		turnManager.NewLevelPlayerTurnReset();
 		TileScript.ClearAllTiles();
 		enemies = new List<Character>();
@@ -367,7 +377,7 @@ public class BoardScript : MonoBehaviour
 
 	void CheckWinConditions()
 	{
-		if (enemies.Count == 0)
+		if (enemies.Count == 0&&!EnemiesBeingSpawned)
 		{
 			if (FindFirstObjectByType<PlayerHealth>().currentHealth != 0)
 			{
@@ -375,7 +385,7 @@ public class BoardScript : MonoBehaviour
 				levelStarted = false;
 			}
 		}
-		// THIS IS THE LOSE CONDITION
+		//THIS IS THE LOSE CONDITION
 		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
 		{
 			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);

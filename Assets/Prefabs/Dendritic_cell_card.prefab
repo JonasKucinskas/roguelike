@@ -132,7 +132,7 @@ MonoBehaviour:
   originalScale: {x: 0.7, y: 0.7, z: 1}
   originalRotation: {x: 0, y: 0, z: -0.1305262, w: 0.9914449}
   CardModel: {fileID: 1204134513738685073, guid: 0add75450aef7d44c9c20c14936dcfa4, type: 3}
-  Particle: {fileID: 137528217491939346, guid: c658fb12851689f4fa01ea010e41f702, type: 3}
+  Particle: {fileID: 6978135781993428193, guid: 23f329610696039469a00d34cb719485, type: 3}
 --- !u!114 &8238122273980863839
 MonoBehaviour:
   m_ObjectHideFlags: 0
