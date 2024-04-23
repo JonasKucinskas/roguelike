@@ -1,23 +1,21 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.TextCore.Text;
 using Random = UnityEngine.Random;
 
 public class BoardScript : MonoBehaviour
 {
 	public GameObject TilePrefab;
 	public GameObject enemyPrefab;
+
+
 	public GameObject EnemySpawnParticle;
 
-	public float Gap;
-	public float Size;
-	public int X;
-	public int Z;
-	private GameObject[,] tiles;
+	private int X;
+	private int Z;
+	public GameObject[,] tiles;
 	public List<Character> enemies;
 	public List<Character> Frendlies;
 	GameObject lastHighlightedTile = null;
@@ -25,11 +23,10 @@ public class BoardScript : MonoBehaviour
 	private TurnManager turnManager;
 	private Deck deck;
 	private bool levelStarted = true; //made so that the game isnt won after completing a single level
-
 	private int EnemyTurnCount = 2;
 	private bool StartedEnemyTurn = false;
 	public bool GameLost = false;
-	public bool AllowPlayerInput=true;
+	public bool AllowPlayerInput = true;
 
 	//this is so that while enemies are being spawned do not try to get win condition
 	//since otherwise it insta-wins
@@ -41,7 +38,7 @@ public class BoardScript : MonoBehaviour
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		deck = GameObject.Find("Deck").GetComponent<Deck>();
 		enemies = new List<Character>();
-		MakeBoard(X, Z);
+		MakeBoard();
 		InitializeEnemies();
 	}
 
@@ -55,18 +52,37 @@ public class BoardScript : MonoBehaviour
 	}
 
 	//Creates board
-	void MakeBoard(int x, int z)
+	void MakeBoard()
 	{
-		tiles = new GameObject[x, z]; // Initialize the array with the board dimensions
+		System.Random random = new System.Random();
+		X = random.Next(3, 6);
+		Z = random.Next(4, 8);
+		tiles = new GameObject[X, Z]; 
 
-		float midx = ((x - 1) * Size + (x - 1) * Gap) / 2;
-		float midz = ((z - 1) * Size + (z - 1) * Gap) / 2;
-		for (int i = 0; i < x; i++)
+		GameObject enviroment = transform.parent.gameObject;
+
+		Renderer tileRenderer = TilePrefab.GetComponentInChildren<Renderer>();
+		Vector3 tilePrefabSize = tileRenderer.bounds.size;
+
+		Renderer boardRenderer = gameObject.GetComponentInChildren<Renderer>();
+		Vector3 boardSize = boardRenderer.bounds.size;
+
+		float boardX = X * tilePrefabSize.x;
+		float boardZ = Z * tilePrefabSize.z;
+
+		//scale scene's board to the board that we need to fit all the tiles.
+		Vector3 boardScale = new Vector3(boardX / boardSize.x, 1f, boardZ / boardSize.z);
+		enviroment.transform.localScale = boardScale;
+
+		Vector3 startPos = new Vector3(-boardX / 2f + tilePrefabSize.z / 2f, -0.3f, -boardZ / 2f + tilePrefabSize.z / 3.5f);
+
+		for (int i = 0; i < X; i++)
 		{
-			for (int j = 0; j < z; j++)
+			for (int j = 0; j < Z; j++)
 			{
-				Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, 0, j * Size + j * Gap - midz);
-				GameObject tileGameObject = Instantiate(TilePrefab, coordinates, Quaternion.identity);
+				Vector3 tilePosition = startPos + new Vector3(i * tilePrefabSize.x, 0, j * tilePrefabSize.z);
+
+				GameObject tileGameObject = Instantiate(TilePrefab, tilePosition, Quaternion.identity);
 				tileGameObject.transform.parent = transform;
 				tileGameObject.name = "Tile_" + i.ToString() + "_" + j.ToString();
 
@@ -78,6 +94,7 @@ public class BoardScript : MonoBehaviour
 			}
 		}
 	}
+
 
 	void InitializeEnemies()
 	{
@@ -168,18 +185,19 @@ public class BoardScript : MonoBehaviour
 			TileScript tile = clickedObject.GetComponent<TileScript>();
 			if (!tile)
 			{
-				tile = clickedObject.transform.parent.GetComponent<TileScript>();
+				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
 			}
 
 			if (!tile)
 			{
 				return;
 			}
+
 			if (tile.IsEnemyOnTile())
 			{
 				if (characterToMove.CanMove(tile))
 				{
-					Character e = tile.GetComponentInChildren<Character>();
+					Character e = tile.transform.parent.GetComponentInChildren<Character>();
 					lastHighlightedTile.GetComponentInChildren<Character>().Attack(e,characterToMove.damage);
 					TileScript.ResetTileHighlights();
 
@@ -256,17 +274,15 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator SpawnEnemy(int i, int j)
 	{
-		//this should not be here:
-		float midx = ((X - 1) * Size + (X - 1) * Gap) / 2;
-		float midz = ((Z - 1) * Size + (Z - 1) * Gap) / 2;
-
 		// Spawn enemy on top of the tile.
-		Vector3 coordinates = new Vector3(i * Size + i * Gap - midx, TilePrefab.transform.position.y + TilePrefab.transform.localScale.y, j * Size + j * Gap - midz);
+		GameObject tile = tiles[i ,j];
+		Vector3 coordinates = new Vector3(tile.transform.position.x, 0.25f, tile.transform.position.z);
+		
 		Vector3 ParticleCoordinates=new Vector3(coordinates.x-0.25f, coordinates.y+8f,coordinates.z);
 		//Spawn the particles on spawn
 		Instantiate(EnemySpawnParticle,ParticleCoordinates, Quaternion.Euler(90f,0f, 0f));
         yield return new WaitForSeconds(1f);
-        GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f));
+		GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f), tile.transform);
 
 		// Set tile as parent.
 		GameObject parentTile = tiles[i, j];
@@ -280,15 +296,15 @@ public class BoardScript : MonoBehaviour
 
 		enemies.Add(enemy);
 
-		TileScript tileScript = parentTile.GetComponentInChildren<TileScript>();
+		TileScript tileScript = tile.GetComponentInChildren<TileScript>();
 		if (tileScript != null)
 		{
 			tileScript.SetEnemyPresence(true);
-			Debug.Log($"Marking enemy presence on: {parentTile.name}"); // Confirm marking is intended.
+			Debug.Log($"Marking enemy presence on: {tile.name}");
 		}
 		else
 		{
-			Debug.LogError($"TileScript component not found on {parentTile.name} or its children. Make sure it's attached.");
+			Debug.LogError($"TileScript component not found on {tile.name} or its children. Make sure it's attached.");
 		}
 		EnemiesBeingSpawned=false;
 	}
@@ -309,11 +325,12 @@ public class BoardScript : MonoBehaviour
 
 				for (int i = 0; i < enemy.xPosition; i++)
 				{
-					TileScript tileinfront = tiles[i, enemy.zPosition].GetComponent<TileScript>();
+					TileScript tileinfront = tiles[i, enemy.zPosition].GetComponentInChildren<TileScript>();
 
 					if (tileinfront.IsOccupied())
 					{
 						isObstacleInTheWay = true;
+						break;
 					}
 				}
 
@@ -321,7 +338,7 @@ public class BoardScript : MonoBehaviour
 
 				if (!isObstacleInTheWay && isEnemyOnTheEdge)
 				{
-					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponent<TileScript>();
+					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
 					Debug.Log(enemy.xPosition + "X " + enemy.zPosition + "Y" + " Is moving");
 					enemy.Move(tile);
 					EnemyMoved = true;
@@ -338,7 +355,7 @@ public class BoardScript : MonoBehaviour
 					bool isObstacleInTheWay = false;
 					for (int j = 0; j < X; j++)
 					{
-						TileScript tile = tiles[j, i].GetComponent<TileScript>();
+						TileScript tile = tiles[j, i].GetComponentInChildren<TileScript>();
 
 						if (tile.IsOccupied())
 						{
@@ -359,7 +376,7 @@ public class BoardScript : MonoBehaviour
 
 		turnManager.EndEnemyTurn();
 		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Players turn"));
-		AllowPlayerInput=true;
+		AllowPlayerInput = true;
 		StartedEnemyTurn = false;
 	}
 
@@ -445,7 +462,7 @@ public class BoardScript : MonoBehaviour
 		{
 			float t = elapsedTime / timeToMove;
 			float smoothStepT = t * t * (3f - 2f * t);
-			ObjTransform.position =Vector3.Lerp(StartingPosition,MiddlePosition,smoothStepT);
+			ObjTransform.position = Vector3.Lerp(StartingPosition,MiddlePosition,smoothStepT);
 			elapsedTime += Time.deltaTime; // Update elapsed time
 			yield return null; // Wait until next frame		
 		}
@@ -456,7 +473,7 @@ public class BoardScript : MonoBehaviour
 		{
 			float t = elapsedTime / timeToMove;
 			float smoothStepT = t * t * (3f - 2f * t);
-			ObjTransform.position =Vector3.Lerp(MiddlePosition,FinalPosition,smoothStepT);
+			ObjTransform.position = Vector3.Lerp(MiddlePosition,FinalPosition,smoothStepT);
 			elapsedTime += Time.deltaTime; // Update elapsed time
 			yield return null; // Wait until next frame		
 		}

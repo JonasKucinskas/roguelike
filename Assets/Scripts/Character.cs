@@ -49,7 +49,7 @@ public abstract class Character : MonoBehaviour
 			elapsedTime += Time.deltaTime; // Update elapsed time
 			yield return null; // Wait until next frame
 		}
-
+		gameObject.transform.SetParent(targetTile.gameObject.transform, true);
 		// Ensure the character is exactly at the target position
 		transform.position = endPosition;
 	}
@@ -62,7 +62,7 @@ public abstract class Character : MonoBehaviour
             return;
         }
         
-        TileScript originalTile = gameObject.transform.parent.GetComponent<TileScript>();
+        TileScript originalTile = gameObject.transform.parent.GetComponentInChildren<TileScript>();
         
         if (isFriendly)
         {
@@ -80,7 +80,6 @@ public abstract class Character : MonoBehaviour
 
 		StartCoroutine(MoveToTile(tile));
 
-		gameObject.transform.SetParent(tile.gameObject.transform, false);
 
         xPosition = tile.xPosition;
         zPosition = tile.zPosition;
@@ -91,7 +90,6 @@ public abstract class Character : MonoBehaviour
             MovesLeft--;
             PlayerPrefs.SetInt("MovesLeft",MovesLeft);            
         }
-
     }
     
     public abstract void NormalAttackSound();
@@ -124,7 +122,7 @@ public abstract class Character : MonoBehaviour
         {
             BoardManager.enemies.Remove(this);
             BoardManager.Frendlies.Remove(this);
-            this.GetComponentInParent<TileScript>().ClearCharacterPresence();
+            this.transform.parent.GetComponentInChildren<TileScript>().ClearCharacterPresence();
             Destroy(gameObject);
         }
     }
@@ -132,11 +130,8 @@ public abstract class Character : MonoBehaviour
     Material CreateBrightenedMaterial(Material originalMaterial, float brightnessIncrease)
     {
         Material newMaterial = new Material(originalMaterial);
-
         Color originalColor = newMaterial.color;
-
         Color newColor = originalColor * (1 + brightnessIncrease);
-
         newMaterial.color = newColor;
 
         return newMaterial;
@@ -153,7 +148,7 @@ public abstract class Character : MonoBehaviour
         originalMaterials = new List<List<Material>>();
         
         //prefabs have many body parts with many materials, 
-        //do i need to take each body parts, and collect each material
+        //do i need to take each body part, and collect each material
         //in order to reset it to default later.
 
         for (int i = 0; i < gameObject.transform.childCount; i++)
