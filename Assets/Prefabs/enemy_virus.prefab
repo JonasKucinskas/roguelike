@@ -125,7 +125,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2305583781347345057}
@@ -150,6 +150,7 @@ MonoBehaviour:
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  BoardManager: {fileID: 0}
   HpText: {fileID: 8547143608883073259}
 --- !u!65 &659779121772976257
 BoxCollider:
@@ -383,12 +384,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6311818670850160947}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1001 &7574330228488953625
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -397,6 +398,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1359233573582126092}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0

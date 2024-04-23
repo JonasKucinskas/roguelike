@@ -23,7 +23,7 @@ public class NeutrophilCell : Character
         damage = 10 + TimesExtraDamageAdded * DamageAdded;
         isFriendly = true;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        BoardManager=GameObject.Find("Board").GetComponent<BoardScript>();
+        BoardManager = GameObject.Find("Board").GetComponent<BoardScript>();
     }
 
     public override bool CanMove(TileScript tile)
@@ -53,7 +53,7 @@ public class NeutrophilCell : Character
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
         string tileName = "Tile_" + xPosition + "_" + zPosition;
         GameObject tileObject = GameObject.Find(tileName);
-        var tile = tileObject.GetComponent<TileScript>();
+        var tile = tileObject.GetComponentInChildren<TileScript>();
 
         if (Input.GetKey(KeyCode.Space ) && turnManager.isPlayersTurn() && tile.IsSelected && BoardManager.AllowPlayerInput)
         {
@@ -98,7 +98,6 @@ public class NeutrophilCell : Character
                 for (int z = zPosition - 1; z <= zPosition + 1; z++)
                 {
                     string tileName = "Tile_" + x + "_" + z;
-                    //Debug.Log("Ie�komas langelis: " + tileName);
 
                     if (x == xPosition && z == zPosition) //veikejo langelis
                     {
@@ -109,13 +108,12 @@ public class NeutrophilCell : Character
 
                         if (tileObject != null)
                         {
-                            var tile = tileObject.GetComponent<TileScript>();
+                            var tile = tileObject.GetComponentInChildren<TileScript>();
 
-                            if (tile.IsEnemyOnTile() == true)
+                            if (tile.IsEnemyOnTile())
                             {
-                                var characterObject = tileObject.transform.GetChild(0);
                                 Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
-                                Character enemy = characterObject.GetComponent<Character>();
+                                Character enemy = tileObject.GetComponentInChildren<Character>();
                                 enemy.TakeDamage(5);
 
                                 BoardManager.FinishAtack();
