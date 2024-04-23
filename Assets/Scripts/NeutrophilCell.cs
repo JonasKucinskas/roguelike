@@ -122,9 +122,8 @@ public class NeutrophilCell : Character
                             {
 								if (!SpecialAttackIgnoresFriendlies || !diceRollResult)
                                 {
-									var characterObject = tileObject.transform.GetChild(0);
 									Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
-									Character friendly = characterObject.GetComponent<Character>();
+									Character friendly = tileObject.GetComponentInChildren<Character>();
 									friendly.TakeDamage(5);
 								}
 
