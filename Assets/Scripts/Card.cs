@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -76,7 +77,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
 	}
 
-	private void PlaceCardOnCube(TileScript tile)
+	private IEnumerator PlaceCardOnCube(TileScript tile)
 	{
 		Transform tileTransform = tile.gameObject.transform;
 
@@ -84,9 +85,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		isPlaced = true;
 
 		Vector3 modelPosition = new Vector3(tileTransform.position.x, tileTransform.position.y + 0.6f, tileTransform.position.z);
-		
+		Vector3 ParticlePosition= new Vector3(modelPosition.x,modelPosition.y+8f, modelPosition.z);
 		// Instantiate particle effect and character model
-        Instantiate(Particle, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
+        Instantiate(Particle, ParticlePosition, Quaternion.Euler(90f, 0f, 0f), tileTransform);
+		yield return new WaitForSeconds(1f);
         GameObject character = Instantiate(CardModel, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
         
         Character friendly = character.GetComponent<Character>();
@@ -137,7 +139,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 				TileScript tile = hit.collider.GetComponent<TileScript>();
 				if (tile && !tile.IsOccupied())
 				{
-					PlaceCardOnCube(tile);
+					StartCoroutine(PlaceCardOnCube(tile));
 					transform.position = originalPosition;
 					return;
 				}
