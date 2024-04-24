@@ -7,6 +7,8 @@ public class Enemy : Character
 {
     public GameObject HpText;
 
+    public GameObject DamageTakenParticles;
+
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
 
@@ -17,7 +19,14 @@ public class Enemy : Character
 	}
     private void Update()
     {
-        HpText.GetComponentInChildren<TextMeshPro>().text = hp.ToString();
+        if(hp>=0)
+        {
+            HpText.GetComponentInChildren<TextMeshPro>().text = hp.ToString();            
+        }
+        else
+        {
+            HpText.GetComponentInChildren<TextMeshPro>().text = "0";
+        }
 
         if (timeCounter > randomTime)
         {
@@ -72,5 +81,10 @@ public class Enemy : Character
         }
         else
             Debug.Log("AudioManager is null");
+    }
+
+    public void SpawnDamageTakenParticles()
+    {
+        Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
 }

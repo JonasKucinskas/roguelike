@@ -31,11 +31,6 @@ public class TileScript : MonoBehaviour
 
 	void OnMouseEnter()
     {
-        //Checks if clicked on UI (PauseMenu)
-        if(EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
 		if (EventSystem.current.IsPointerOverGameObject() || isStateHighlighted)
 		{
 			return;

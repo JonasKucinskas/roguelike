@@ -3,8 +3,9 @@ using TMPro;
 using UnityEngine;
 
 public class DendriticCell : Character
-{
+{ 
     public GameObject HpText;
+    public GameObject DamageTakenParticles;
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
     public static int TimesExtraDamageAdded = 0;
@@ -69,5 +70,10 @@ public class DendriticCell : Character
         if ((tile.zPosition == zPosition + 2 && tile.xPosition == xPosition) || (tile.zPosition == zPosition - 2 && tile.xPosition == xPosition)
             || (tile.xPosition == xPosition + 2 && tile.zPosition == zPosition) || (tile.xPosition == xPosition - 2 && tile.zPosition == zPosition)) return true;
         return false;
+    }
+
+    public void SpawnDamageTakenParticles()
+    {
+        Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
 }

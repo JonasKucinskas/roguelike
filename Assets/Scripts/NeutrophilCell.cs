@@ -7,6 +7,9 @@ using TMPro;
 public class NeutrophilCell : Character
 {
     public GameObject HpText;
+
+    public GameObject DamageTakenParticles;
+
     private bool isClicked = false;
     private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;
@@ -176,5 +179,10 @@ public class NeutrophilCell : Character
         }
         else
             Debug.Log("AudioManager is null");
+    }
+
+    public void SpawnDamageTakenParticles()
+    {
+        Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
 }

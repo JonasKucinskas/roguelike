@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour
@@ -100,15 +101,18 @@ public abstract class Character : MonoBehaviour
         bool isDead=false;
         hp--;
         character.TakeDamage(DAMAGE);
-        int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
-        MovesLeft--;
-        PlayerPrefs.SetInt("MovesLeft", MovesLeft);
+        if(isFriendly==true)
+        {
+            int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
+            MovesLeft--;
+            PlayerPrefs.SetInt("MovesLeft", MovesLeft);            
+        }
         
         if(hp<=0)
         {
             isDead=true;
             Destroy(this.gameObject);
-            this.GetComponentInParent<TileScript>().ClearCharacterPresence();
+            GetComponentInParent<TileScript>().ClearCharacterPresence();
         }
         return isDead;
 
@@ -117,15 +121,88 @@ public abstract class Character : MonoBehaviour
     public void TakeDamage(int damage)
     {
         hp = hp - damage;
+        
+        PaintCharacterSomeColor(this,Color.red);
+        gameObject.TryGetComponent<Enemy>(out Enemy Enemycomponent);
+        gameObject.TryGetComponent<DendriticCell>(out DendriticCell DendriticCellcomponent);
+        gameObject.TryGetComponent<NeutrophilCell>(out NeutrophilCell NeutrophilCellcomponent);
+
+        if(Enemycomponent!=null)
+        {
+            Enemycomponent.SpawnDamageTakenParticles();
+        }
+        else if(DendriticCellcomponent!=null)
+        {
+            DendriticCellcomponent.SpawnDamageTakenParticles();
+        }
+        else if(NeutrophilCellcomponent!=null)
+        {
+            NeutrophilCellcomponent.SpawnDamageTakenParticles();
+        }
 
         if(hp<=0)
         {
             BoardManager.enemies.Remove(this);
             BoardManager.Frendlies.Remove(this);
             this.transform.parent.GetComponentInChildren<TileScript>().ClearCharacterPresence();
-            Destroy(gameObject);
+            StartCoroutine(WaitBeforeDestroying());
         }
     }
+
+    public IEnumerator WaitBeforeDestroying()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(gameObject);
+    }
+
+    //Find the first child with the specified tag.
+    public Transform GetChildWithTag(Transform transform,string tag)
+    {
+        if (transform.childCount == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).CompareTag(tag))
+            {
+                return transform.GetChild(i);
+            }
+        }
+        return null;
+    }
+
+    //Takes the character and paints it whole the specified color
+    public void PaintCharacterSomeColor(Character character, Color color)
+    {
+
+        Transform model=GetChildWithTag(character.transform,"CharacterModel");
+        if(model==null)
+        {
+            model=character.transform;
+        } 
+        for(int i=0; i<model.childCount;i++)
+        {
+            if(model.GetChild(i).TryGetComponent<SkinnedMeshRenderer>(out var rend))
+            {
+                foreach(Material material in rend.materials)
+                {
+                    StartCoroutine(ChangeMaterialColor(material,color));
+                }
+            }
+        }
+    }
+
+    //Colors the material some specified color for a short time and turns it back;
+    public IEnumerator ChangeMaterialColor(Material material, Color color)
+    {
+        Color OldColor = material.color;
+
+        material.color=color;
+        yield return new WaitForSeconds(0.2f);
+        material.color=OldColor;
+    }
+
 
     Material CreateBrightenedMaterial(Material originalMaterial, float brightnessIncrease)
     {

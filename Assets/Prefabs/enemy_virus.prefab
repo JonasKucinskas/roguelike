@@ -152,6 +152,7 @@ MonoBehaviour:
   isFriendly: 0
   BoardManager: {fileID: 0}
   HpText: {fileID: 8547143608883073259}
+  DamageTakenParticles: {fileID: 4531279948210875721, guid: fe3513bf4f3dbae448cd26dd26f82d83, type: 3}
 --- !u!65 &659779121772976257
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -384,12 +385,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 6311818670850160947}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 6311818670850160947}
+  m_maskType: 0
 --- !u!1001 &7574330228488953625
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -453,6 +454,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
       propertyPath: m_Name
       value: virus_model
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f60f03b6d7f723945bca6ef69b5f4c33, type: 3}
+      propertyPath: m_TagString
+      value: CharacterModel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
