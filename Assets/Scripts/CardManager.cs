@@ -7,6 +7,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public GameObject MovesLeftText;
+    public GameObject TemperatureText;
     public List<GameObject> initialCards = new List<GameObject>();
     private List<GameObject> drawnCards = new List<GameObject>();
     public GameObject canvas;
@@ -26,6 +27,7 @@ public class CardManager : MonoBehaviour
     void Update()
     {
         MovesLeftText.GetComponent<TextMeshProUGUI>().text="Moves left: "+ PlayerPrefs.GetInt("MovesLeft").ToString();
+        TemperatureText.GetComponent<TextMeshProUGUI>().text="Temperature: "+ PlayerPrefs.GetFloat("Temperature").ToString();
         DrawCardCheck();
     }
 

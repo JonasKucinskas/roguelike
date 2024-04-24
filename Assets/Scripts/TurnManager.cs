@@ -6,12 +6,16 @@ public class TurnManager : MonoBehaviour
 {
     private bool isPlayersMove = true;
     private const int initialPlayerMoves = 3;
-
+    private const float initialPlayerTemperature = 35.5f;
+    private const float maxPlayerTemperature = 45f;
+    public PlayerHealth ph;
+    public float temperatureLowerBy;
     int movesLeft;
     // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
+        PlayerPrefs.SetFloat("Temperature", initialPlayerTemperature);
     }
 
     // Update is called once per frame
@@ -34,6 +38,7 @@ public class TurnManager : MonoBehaviour
     {
         isPlayersMove = true;
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
+        LowerTemperature(temperatureLowerBy);
     }
 
     public void SubtractPlayerMove()
@@ -47,4 +52,25 @@ public class TurnManager : MonoBehaviour
         if (!isPlayersMove) EndEnemyTurn();
         else PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
 	}
+
+    //temperature
+
+    private void ChangeTemperature(float temperature)
+	{
+        float t = PlayerPrefs.GetFloat("Temperature");
+        t += temperature;
+        PlayerPrefs.SetFloat("Temperature", t);
+
+        if (t < initialPlayerTemperature) t = initialPlayerTemperature;
+        else if (t > maxPlayerTemperature) ph.TakeDamage(ph.currentHealth);
+	}
+    public void AddTemperature(float temperature)
+	{
+        ChangeTemperature(temperature);
+	}
+    public void LowerTemperature(float temperature)
+    {
+        ChangeTemperature(-temperature);
+    }
+
 }

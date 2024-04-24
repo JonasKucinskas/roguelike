@@ -80,6 +80,11 @@ public class NeutrophilCell : Character
 
 	public void ActivatePower()
     {
+        //kelia temperatura
+        turnManager.AddTemperature(0.5f);
+
+        //
+
         bool diceRollResult = false;
 		if (SpecialAttackIgnoresFriendlies) diceRollResult = RollTheDice();
 
