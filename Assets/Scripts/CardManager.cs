@@ -222,4 +222,10 @@ public class CardManager : MonoBehaviour
     {
         return isDragging;
     }
+
+    //draws a card. used when a new board is prepared
+    public void DrawACard()
+    {
+        InitiateCardDraw(deck, false);
+    }
 }

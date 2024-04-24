@@ -389,6 +389,9 @@ public class BoardScript : MonoBehaviour
 		Frendlies = new List<Character>();
 		levelStarted = true;
 		InitializeEnemies();
+		//give player a card
+		CardManager cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+		cardManager.DrawACard();
 		
 	}
 
