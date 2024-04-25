@@ -8,7 +8,7 @@ public class CardManager : MonoBehaviour
 {
     public GameObject MovesLeftText;
     public List<GameObject> initialCards = new List<GameObject>();
-    private List<GameObject> drawnCards = new List<GameObject>();
+    public List<GameObject> drawnCards = new List<GameObject>();
     public GameObject canvas;
     int draggedCardIndex;
     private TurnManager turnManager;
@@ -136,8 +136,8 @@ public class CardManager : MonoBehaviour
     {
         float gap = -100f;
         
-        //if initial cards list is empty, this will break, but its fine for now
-        float cardWidth = initialCards[0].GetComponent<RectTransform>().sizeDelta.x;
+        //!!!!!!Reiksme yra hardcodinta, jeigu korta keisis, perziureti sita
+        float cardWidth = 220f;
         float totalWidth = (totalCards - 1) * (cardWidth + gap);
 
         int midpoint = totalCards / 2;
