@@ -53,6 +53,14 @@ public abstract class Character : MonoBehaviour
 		gameObject.transform.SetParent(targetTile.gameObject.transform, true);
 		// Ensure the character is exactly at the target position
 		transform.position = endPosition;
+
+        //if enemy moved to last tile, despawn it
+	    if (targetTile.xPosition == 0)
+	    {
+	    	targetTile.ClearCharacterPresence();
+	    	Destroy(gameObject);
+	    }
+
 	}
 
 	public void Move(TileScript tile)

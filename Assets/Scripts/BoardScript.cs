@@ -334,17 +334,19 @@ public class BoardScript : MonoBehaviour
 					}
 				}
 
-				bool isEnemyOnTheEdge = enemy.xPosition - 1 >= 0;
+				bool isOnEdge = enemy.xPosition - 1 < 0;
 
-				if (!isObstacleInTheWay && isEnemyOnTheEdge)
+				if (!isObstacleInTheWay && !isOnEdge)
 				{
 					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
 					Debug.Log(enemy.xPosition + "X " + enemy.zPosition + "Y" + " Is moving");
 					enemy.Move(tile);
 					EnemyMoved = true;
+
 					yield return new WaitForSeconds(1f);
 					break;
 				}
+				
 			}
 
 			if (!EnemyMoved)
