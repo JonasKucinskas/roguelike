@@ -36,7 +36,7 @@ public class Tutorial : MonoBehaviour
         ///Parodomas pirmasis tekstas
 		yield return new WaitForSeconds(3f);
 		textMesh.text = "You can pull cards from the deck to gain more cards. \n\nThis uses up one move in your turn.";
-
+        tutorialText.SetActive(true);
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
         yield return new WaitForSeconds(6f);
         StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
