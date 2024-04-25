@@ -311,7 +311,7 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator EnemyMovement()
 	{
-		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Opponents turn"));
+		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount; w++)
 		{
@@ -375,7 +375,10 @@ public class BoardScript : MonoBehaviour
 		}
 
 		turnManager.EndEnemyTurn();
-		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Players turn"));
+		if(!GameLost)
+		{
+			StartCoroutine(MoveTextAcrossScreen("Players turn"));			
+		}
 		AllowPlayerInput = true;
 		StartedEnemyTurn = false;
 	}
@@ -398,15 +401,33 @@ public class BoardScript : MonoBehaviour
 		{
 			if (FindFirstObjectByType<PlayerHealth>().currentHealth != 0)
 			{
-				if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
-				levelStarted = false;
+				StartCoroutine(ShowWinScreenAfterDelay());
 			}
 		}
 		//THIS IS THE LOSE CONDITION
 		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
 		{
-			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
+			StartCoroutine(ShowLoseScreenAfterDelay());
+		}
+	}
+
+
+	public IEnumerator ShowWinScreenAfterDelay()
+	{
+		StartCoroutine(MoveTextAcrossScreen("You won!"));
+		yield return new WaitForSeconds(3f);
+		if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+		levelStarted = false;
+	}
+
+	public IEnumerator ShowLoseScreenAfterDelay()
+	{
+		if(!GameLost)
+		{
+			StartCoroutine(MoveTextAcrossScreen("You lost!"));
 			GameLost=true;
+			yield return new WaitForSeconds(5f);
+			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);			
 		}
 	}
 
@@ -439,7 +460,7 @@ public class BoardScript : MonoBehaviour
 		characterToMove = null;
 		//Debug.Log("Attack done");
 	}
-	private IEnumerator MoveEnemyTurnTextAcrossScreen(string text)
+	private IEnumerator MoveTextAcrossScreen(string text)
 	{
 		if(GameLost)
 		{
