@@ -15,11 +15,13 @@ public class CardManager : MonoBehaviour
     public bool isDragging = false;
     public bool ExtraCardDrawBonusChosen = false;
     private Deck deck;
+    private Deck originalDeck;
 
     void Start()
     {
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         deck = GameObject.Find("Deck").GetComponent<Deck>();
+        originalDeck = GameObject.Find("Deck").GetComponent<Deck>();
         DrawCards(initialCards, true);
     }
 
@@ -227,5 +229,10 @@ public class CardManager : MonoBehaviour
     public void DrawACard()
     {
         InitiateCardDraw(deck, false);
+    }
+
+    public void ResetTheDeck()
+    {
+        deck.SwitchToOriginalCards();
     }
 }

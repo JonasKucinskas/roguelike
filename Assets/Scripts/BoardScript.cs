@@ -391,8 +391,8 @@ public class BoardScript : MonoBehaviour
 		InitializeEnemies();
 		//give player a card
 		CardManager cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+		cardManager.ResetTheDeck();
 		cardManager.DrawACard();
-		
 	}
 
 	void CheckWinConditions()
