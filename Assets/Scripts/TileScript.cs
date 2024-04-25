@@ -209,4 +209,16 @@ public class TileScript : MonoBehaviour
             tile.RemoveHighlight();
         }
     }
+	//if info window had been hiden but a caharcter on the board is is selected - show info window
+	public static void ShowInfoWindowIfSthIsSelected()
+    {
+		foreach(TileScript tile in AllTiles)
+        {
+			if(tile.IsSelected)
+            {
+				Character character = tile.transform.parent.GetComponentInChildren<Character>();
+				character.ShowCharacterInfoWindow();
+			}
+        }
+    }
 }

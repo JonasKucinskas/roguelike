@@ -87,4 +87,8 @@ public class Enemy : Character
     {
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
+
+    //show enemy's information window
+    public override void ShowCharacterInfoWindow(){}
+    public override void HideCharacterInfoWindow(){}
 }

@@ -76,4 +76,17 @@ public class DendriticCell : Character
     {
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
+
+    //displays dendritic cell's information window
+    public override void ShowCharacterInfoWindow()
+    {
+        GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
+        characterInfoWindow.SetActive(true);
+    }
+
+    public override void HideCharacterInfoWindow()
+    {
+        GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
+        characterInfoWindow.SetActive(false);
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -172,6 +173,9 @@ public class BoardScript : MonoBehaviour
 
 				tileUnderCharacter.Highlight();
 				lastHighlightedTile = tileUnderCharacter.gameObject;
+
+				//when the character is clicked on it's info is shown
+				character.ShowCharacterInfoWindow();
 			}
 
 			Debug.Log("Moving friendly");
@@ -200,6 +204,7 @@ public class BoardScript : MonoBehaviour
 					Character e = tile.transform.parent.GetComponentInChildren<Character>();
 					lastHighlightedTile.GetComponentInChildren<Character>().Attack(e,characterToMove.damage);
 					TileScript.ResetTileHighlights();
+					Character.HideAllInfoWindows();
 
 					if (lastHighlightedTile != null)
 					{
@@ -215,11 +220,13 @@ public class BoardScript : MonoBehaviour
 			{
 				characterToMove.Move(tile);
 				TileScript.ResetTileHighlights();
+				Character.HideAllInfoWindows();
 
 				if (lastHighlightedTile != null)
 				{
 					lastHighlightedTile = null;
 				}
+
 				characterToMove.GetComponentInParent<TileScript>().IsSelected=false;
 				characterToMove = null;
 				tile.IsSelected = false;//
@@ -250,6 +257,7 @@ public class BoardScript : MonoBehaviour
 			{
 				tileScript.RemoveHighlight();
 				TileScript.ResetTileHighlights();
+				Character.HideAllInfoWindows();
 				tileScript.IsSelected = false;//
 				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
 			}
@@ -430,6 +438,7 @@ public class BoardScript : MonoBehaviour
 			{
 				tileScript.RemoveHighlight();
 				TileScript.ResetTileHighlights();
+				Character.HideAllInfoWindows();
 				tileScript.IsSelected = false;//
 				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
 			}

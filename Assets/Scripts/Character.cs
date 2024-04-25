@@ -76,6 +76,8 @@ public abstract class Character : MonoBehaviour
             tile.SetEnemyPresence(true);
         }
 
+        HideCharacterInfoWindow();
+
         originalTile.IsSelected = false;//
         Debug.Log("Is Tile_" + originalTile.xPosition + "_" + originalTile.zPosition + " selected? " + originalTile.IsSelected);//
 
@@ -97,6 +99,7 @@ public abstract class Character : MonoBehaviour
     public abstract void IdleSound();
     public bool Attack(Character character,int DAMAGE)
 	{
+        HideCharacterInfoWindow();
         NormalAttackSound();
         bool isDead=false;
         hp--;
@@ -115,7 +118,6 @@ public abstract class Character : MonoBehaviour
             GetComponentInParent<TileScript>().ClearCharacterPresence();
         }
         return isDead;
-
     }
 
     public void TakeDamage(int damage)
@@ -271,5 +273,15 @@ public abstract class Character : MonoBehaviour
             renderer.materials = originalMaterials[originalMaterialsIndex].ToArray();
             originalMaterialsIndex++;
         }
+    }
+
+    //displays clicked character's information window
+    abstract public void ShowCharacterInfoWindow();
+    abstract public void HideCharacterInfoWindow();
+    //hides all info windows
+    public static void HideAllInfoWindows()
+    {
+        GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject.SetActive(false);
+        GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject.SetActive(false);
     }
 }

@@ -185,4 +185,17 @@ public class NeutrophilCell : Character
     {
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
+
+    //displays neutrophil's information window
+    public override void ShowCharacterInfoWindow()
+    {
+        GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
+        characterInfoWindow.SetActive(true);
+    }
+
+    public override void HideCharacterInfoWindow()
+    {
+        GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
+        characterInfoWindow.SetActive(false);
+    }
 }

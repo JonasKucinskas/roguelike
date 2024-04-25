@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
@@ -15,12 +16,17 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     private Card card;
     private CardManager cardManager;
     private Vector2 initialCursorPosition;
+
+    GameObject cardInfoWindow;
+    String cardName;//name of a card that the mouse is hovering on
     private void Start()
     {
         card = gameObject.GetComponent<Card>();
         _startScale = transform.localScale;
         cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        cardName = GetComponentInChildren<Image>().sprite.name;
+        cardInfoWindow = null;
     }
 
     private IEnumerator MoveCard(bool startingAnimation)
@@ -72,6 +78,24 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             eventData.selectedObject = gameObject;
         }
+        switch (cardName)
+        {
+            case "Neutrophil":
+                Character.HideAllInfoWindows();
+                cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
+                cardInfoWindow.SetActive(true);
+                // code block
+                break;
+            case "Dendritic cell":
+                Character.HideAllInfoWindows();
+                cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
+                cardInfoWindow.SetActive(true);
+                // code block
+                break;
+            default:
+                // code block
+                break;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -84,9 +108,15 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         //player is dragging some other card.
         if (cardManager.IsDragging() && !card.IsDragging)
         {
+            cardInfoWindow.SetActive(false);
             return;
         }
         eventData.selectedObject = null;
+        if (cardInfoWindow != null)
+        {
+            cardInfoWindow.SetActive(false);//card info window hidden
+            TileScript.ShowInfoWindowIfSthIsSelected();//if a character is selected continue showing it's info window
+        }
     }
 
     public void OnSelect(BaseEventData eventData)
