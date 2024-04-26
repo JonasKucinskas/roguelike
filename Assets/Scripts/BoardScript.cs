@@ -109,21 +109,30 @@ public class BoardScript : MonoBehaviour
 
 	void InitializeEnemies()
 	{
-		System.Random random = new System.Random();
-
-		for (int i = X / 2; i < X; i++)
+		if(isTutorialLevel) //constant enemy spawns for tutorial
 		{
-			for (int j = 0; j < Z; j++)
+			StartCoroutine(SpawnEnemy(2, 1));
+			StartCoroutine(SpawnEnemy(3, 0));
+			StartCoroutine(SpawnEnemy(3, 2));
+		}
+		else
+		{
+			System.Random random = new System.Random();
+
+			for (int i = X / 2; i < X; i++)
 			{
-				int randomNumber = random.Next(100);
-
-				// 50% chance to spawn an enemy.
-				if (randomNumber > ChanceToSpawnEnemies)
+				for (int j = 0; j < Z; j++)
 				{
-					continue;
-				}
+					int randomNumber = random.Next(100);
 
-				StartCoroutine(SpawnEnemy(i, j));
+					// 50% chance to spawn an enemy.
+					if (randomNumber > ChanceToSpawnEnemies)
+					{
+						continue;
+					}
+
+					StartCoroutine(SpawnEnemy(i, j));
+				}
 			}
 		}
 	}
