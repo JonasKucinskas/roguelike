@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -27,7 +28,7 @@ public class BoardScript : MonoBehaviour
 	private bool StartedEnemyTurn = false;
 	public bool GameLost = false;
 	public bool AllowPlayerInput = true;
-
+	public int ChanceToSpawnEnemies;
 	//this is so that while enemies are being spawned do not try to get win condition
 	//since otherwise it insta-wins
 	private bool EnemiesBeingSpawned=true;
@@ -107,7 +108,7 @@ public class BoardScript : MonoBehaviour
 				int randomNumber = random.Next(100);
 
 				// 50% chance to spawn an enemy.
-				if (randomNumber > 50)
+				if (randomNumber > ChanceToSpawnEnemies)
 				{
 					continue;
 				}
@@ -311,7 +312,7 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator EnemyMovement()
 	{
-		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Opponents turn"));
+		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount; w++)
 		{
@@ -375,7 +376,10 @@ public class BoardScript : MonoBehaviour
 		}
 
 		turnManager.EndEnemyTurn();
-		StartCoroutine(MoveEnemyTurnTextAcrossScreen("Players turn"));
+		if(!GameLost)
+		{
+			StartCoroutine(MoveTextAcrossScreen("Players turn"));			
+		}
 		AllowPlayerInput = true;
 		StartedEnemyTurn = false;
 	}
@@ -399,17 +403,56 @@ public class BoardScript : MonoBehaviour
 	{
 		if (enemies.Count == 0&&!EnemiesBeingSpawned)
 		{
-			if (FindFirstObjectByType<PlayerHealth>().currentHealth != 0)
+			PlayerHealth playerHealth =FindFirstObjectByType<PlayerHealth>();
+			if (playerHealth!=null&&playerHealth.currentHealth!=0)
 			{
-				if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
-				levelStarted = false;
+				StartCoroutine(ShowWinScreenAfterDelay());
 			}
 		}
 		//THIS IS THE LOSE CONDITION
 		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
 		{
-			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
+			StartCoroutine(ShowLoseScreenAfterDelay());
+		}
+	}
+
+
+	public IEnumerator ShowWinScreenAfterDelay()
+	{
+		GameObject CardsUI= GameObject.Find("CardsUI");
+		for(int i=0;i<CardsUI.transform.childCount;i++)
+		{
+			GameObject Child = CardsUI.transform.GetChild(i).gameObject;
+			if(Child.name=="Cards")
+			{
+				SetActiveAllChildren(Child,false);
+			}
+			else
+			{
+				Child.SetActive(false);
+			}
+		}
+		StartCoroutine(MoveTextAcrossScreen("You won!"));
+		yield return new WaitForSeconds(3f);
+		if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+		levelStarted = false;
+	}
+
+	public void SetActiveAllChildren(GameObject gameObject, bool State)
+	{
+		for (int i=0;i<gameObject.transform.childCount;i++)
+		{
+			gameObject.transform.GetChild(i).gameObject.SetActive(State);
+		}
+	}
+	public IEnumerator ShowLoseScreenAfterDelay()
+	{
+		if(!GameLost)
+		{
+			StartCoroutine(MoveTextAcrossScreen("You lost!"));
 			GameLost=true;
+			yield return new WaitForSeconds(5f);
+			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);			
 		}
 	}
 
@@ -442,7 +485,7 @@ public class BoardScript : MonoBehaviour
 		characterToMove = null;
 		//Debug.Log("Attack done");
 	}
-	private IEnumerator MoveEnemyTurnTextAcrossScreen(string text)
+	private IEnumerator MoveTextAcrossScreen(string text)
 	{
 		if(GameLost)
 		{
