@@ -1309,6 +1309,7 @@ MonoBehaviour:
   Frendlies: []
   GameLost: 0
   AllowPlayerInput: 1
+  ChanceToSpawnEnemies: 50
 --- !u!4 &326548954 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4552083978586642606, guid: 355b7f6942603ce4585b44ec832155c8, type: 3}
