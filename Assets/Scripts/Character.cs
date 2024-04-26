@@ -55,9 +55,10 @@ public abstract class Character : MonoBehaviour
 		transform.position = endPosition;
 
         //if enemy moved to last tile, despawn it
-	    if (targetTile.xPosition == 0)
+	    if (targetTile.xPosition == 0 && !this.isFriendly)
 	    {
 	    	targetTile.ClearCharacterPresence();
+            BoardManager.RemoveEnemy(this);
 	    	Destroy(gameObject);
 	    }
 
@@ -72,7 +73,7 @@ public abstract class Character : MonoBehaviour
         }
         
         TileScript originalTile = gameObject.transform.parent.GetComponentInChildren<TileScript>();
-        
+
         if (isFriendly)
         {
             originalTile.SetFriendlyPresence(false);

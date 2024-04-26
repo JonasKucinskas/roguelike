@@ -55,7 +55,7 @@ public class BoardScript : MonoBehaviour
 	void MakeBoard()
 	{
 		System.Random random = new System.Random();
-		X = random.Next(3, 6);
+		X = random.Next(4, 6);
 		Z = random.Next(4, 8);
 		tiles = new GameObject[X, Z]; 
 
@@ -334,9 +334,9 @@ public class BoardScript : MonoBehaviour
 					}
 				}
 
-				bool isOnEdge = enemy.xPosition - 1 < 0;
+				bool isOnEdge = enemy.xPosition - 1 >= 0;
 
-				if (!isObstacleInTheWay && !isOnEdge)
+				if (!isObstacleInTheWay && isOnEdge)
 				{
 					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
 					Debug.Log(enemy.xPosition + "X " + enemy.zPosition + "Y" + " Is moving");
