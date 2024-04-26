@@ -14,8 +14,11 @@ public class PlayerHealth : MonoBehaviour
 
 	private GameObject[] hearts; // Array to hold the heart GameObjects
 
+	private BoardScript boardScript;
+
 	void Start()
 	{
+		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 		currentHealth = numberOfLivesAtTheStart; // Initialize current health
 		hearts = new GameObject[numberOfLivesAtTheStart]; // Initialize the hearts array
 		SpawnHearts();
@@ -82,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
 		if (TileScript.IsEnemyInLastRow())
 		{
 			TakeDamage(1);
-			Debug.Log("gyvebes " + currentHealth);
+			Debug.Log("gyvybes: " + currentHealth);
 		}
 	}
 
@@ -126,6 +129,9 @@ public class PlayerHealth : MonoBehaviour
 
 	private void CheckIfPlayerIsDead()
 	{
-		if(currentHealth == 0) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);
-	}
+		if(currentHealth==0)
+		{
+        	StartCoroutine(boardScript.ShowLoseScreenAfterDelay());			
+		}
+    }
 }

@@ -13,6 +13,8 @@ public abstract class Character : MonoBehaviour
 	public int xPosition;
     public int zPosition;    
     public bool isFriendly;
+    public bool hasMoved = false; //for tutorial usage
+    public bool hasAttacked = false; //for tutorial usage
     protected AudioManager audioManager;
     public BoardScript BoardManager;
     private List<List<Material>> originalMaterials;
@@ -53,6 +55,15 @@ public abstract class Character : MonoBehaviour
 		gameObject.transform.SetParent(targetTile.gameObject.transform, true);
 		// Ensure the character is exactly at the target position
 		transform.position = endPosition;
+
+        //if enemy moved to last tile, despawn it
+	    if (targetTile.xPosition == 0 && !this.isFriendly)
+	    {
+	    	targetTile.ClearCharacterPresence();
+            BoardManager.RemoveEnemy(this);
+	    	Destroy(gameObject);
+	    }
+
 	}
 
 	public void Move(TileScript tile)
@@ -64,7 +75,7 @@ public abstract class Character : MonoBehaviour
         }
         
         TileScript originalTile = gameObject.transform.parent.GetComponentInChildren<TileScript>();
-        
+
         if (isFriendly)
         {
             originalTile.SetFriendlyPresence(false);
@@ -82,7 +93,7 @@ public abstract class Character : MonoBehaviour
         Debug.Log("Is Tile_" + originalTile.xPosition + "_" + originalTile.zPosition + " selected? " + originalTile.IsSelected);//
 
 		StartCoroutine(MoveToTile(tile));
-
+        hasMoved = true; //for tutorial
 
         xPosition = tile.xPosition;
         zPosition = tile.zPosition;
@@ -117,6 +128,8 @@ public abstract class Character : MonoBehaviour
             Destroy(this.gameObject);
             GetComponentInParent<TileScript>().ClearCharacterPresence();
         }
+
+        hasAttacked = true;
         return isDead;
     }
 

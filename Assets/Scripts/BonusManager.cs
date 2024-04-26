@@ -121,7 +121,19 @@ public class BonusManager : MonoBehaviour
 		}
 
 		AssignBonusTextToButtons();
-
+		GameObject CardsUI= GameObject.Find("CardsUI");
+		for(int i=0;i<CardsUI.transform.childCount;i++)
+		{
+			GameObject Child = CardsUI.transform.GetChild(i).gameObject;
+			if(Child.name=="Cards")
+			{
+				boardScript.SetActiveAllChildren(Child,true);
+			}
+			else
+			{
+				Child.SetActive(true);
+			}
+		}
 		boardScript.StartNewLevel();
 	}
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    public List<GameObject> originalCards = new List<GameObject>();
     public List<GameObject> cards = new List<GameObject>();
     private BoardScript boardManager;
     private AudioManager audioManager;
@@ -13,6 +14,10 @@ public class Deck : MonoBehaviour
 
         boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        foreach(GameObject card in cards)
+        {
+            originalCards.Add(card);
+        }
         UpdateHeight();
     }
 
@@ -49,5 +54,14 @@ public class Deck : MonoBehaviour
         cards.RemoveAt(cards.Count - 1);
         UpdateHeight();
         return lastElement;
+    }
+
+    public void SwitchToOriginalCards()
+    {
+        cards.Clear();
+        foreach (GameObject card in originalCards)
+        {
+            cards.Add(card);
+        }
     }
 }
