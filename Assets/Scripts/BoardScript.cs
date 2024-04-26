@@ -29,6 +29,7 @@ public class BoardScript : MonoBehaviour
 	private bool StartedEnemyTurn = false;
 	public bool GameLost = false;
 	public bool AllowPlayerInput = true;
+	public bool isTutorialLevel; //for a constant tutorial level
 	public int ChanceToSpawnEnemies;
 	//this is so that while enemies are being spawned do not try to get win condition
 	//since otherwise it insta-wins
@@ -57,8 +58,16 @@ public class BoardScript : MonoBehaviour
 	void MakeBoard()
 	{
 		System.Random random = new System.Random();
-		X = random.Next(4, 6);
-		Z = random.Next(4, 8);
+		if(!isTutorialLevel) 
+		{
+			X = random.Next(4, 6);
+			Z = random.Next(4, 8);
+		}
+		else //constant tutorial level
+		{
+			X = 4;
+			Z = 3;
+		}
 		tiles = new GameObject[X, Z]; 
 
 		GameObject enviroment = transform.parent.gameObject;
