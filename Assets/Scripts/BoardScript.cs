@@ -355,7 +355,7 @@ public class BoardScript : MonoBehaviour
 	{
 		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
 		yield return new WaitForSeconds(3f);
-		for (int w = 0; w < 1; w++)
+		for (int w = 0; w < EnemyTurnCount; w++)
 		{
 			bool EnemyMoved = false;
 			Character enemy = GetRandomClosestEnemy(0);
@@ -379,7 +379,6 @@ public class BoardScript : MonoBehaviour
 			if (!tileinfront.IsOccupied())
 			{
 				enemy.Move(tileinfront);
-				EnemyMoved = true;
 				yield return new WaitForSeconds(1f);
 				continue;
 				//next move.
@@ -427,7 +426,6 @@ public class BoardScript : MonoBehaviour
 				Character weakest = tiles[enemy.xPosition - 1, minHealthCharacterIndex].GetComponentInChildren<Character>();
 				enemy.Attack(weakest);
 			}
-			break;
 
 			/*
 			if (!EnemyMoved)
