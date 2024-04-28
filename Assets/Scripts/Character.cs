@@ -15,11 +15,12 @@ public abstract class Character : MonoBehaviour
     protected AudioManager audioManager;
     public BoardScript BoardManager;
     private List<List<Material>> originalMaterials;
-    
+    public TurnManager turnManager;
     private void Awake()
     {       
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         BoardManager = GameObject.Find("Board").GetComponent<BoardScript>();
+        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
     }
 
     public abstract bool CanMove(TileScript tile);
@@ -99,7 +100,9 @@ public abstract class Character : MonoBehaviour
         NormalAttackSound();
         bool isDead=false;
         hp--;
+        if (turnManager.effectActive[0]) DAMAGE+=10;
         character.TakeDamage(DAMAGE);
+        Debug.Log(DAMAGE);
         int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
         MovesLeft--;
         PlayerPrefs.SetInt("MovesLeft", MovesLeft);

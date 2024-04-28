@@ -11,11 +11,14 @@ public class TurnManager : MonoBehaviour
     public PlayerHealth ph;
     public float temperatureLowerBy;
     int movesLeft;
+
+    private BoardScript bs;
     // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
         PlayerPrefs.SetFloat("Temperature", initialPlayerTemperature);
+        effectActive = new bool[3] { false, false, false };
     }
 
     // Update is called once per frame
@@ -39,6 +42,14 @@ public class TurnManager : MonoBehaviour
         isPlayersMove = true;
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
         LowerTemperature(temperatureLowerBy);
+		if (effectActive[2])
+		{
+			if (!bs)
+			{
+                bs = GameObject.Find("Board").GetComponent<BoardScript>();
+            }
+            bs.dmgAll(2);
+        }
     }
 
     public void SubtractPlayerMove()
@@ -58,11 +69,41 @@ public class TurnManager : MonoBehaviour
     private void ChangeTemperature(float temperature)
 	{
         float t = PlayerPrefs.GetFloat("Temperature");
+        float tt = t;
         t += temperature;
-        PlayerPrefs.SetFloat("Temperature", t);
 
         if (t < initialPlayerTemperature) t = initialPlayerTemperature;
         else if (t > maxPlayerTemperature) ph.TakeDamage(ph.currentHealth);
+        setEffect(tt, t);
+        PlayerPrefs.SetFloat("Temperature", t);
+
+    }
+    public bool[] effectActive;
+    private void setEffect(float oldT, float newT)
+	{
+        float[] temperatureSteps = new float[] { 37f, 39f, 41f };
+        //if((oldT<37 && newT<37)||(oldT>41 && newT > 41)) { }
+        if (oldT < newT)//kyla
+		{
+            for(int i=0; i<3; i++)
+			{
+                if(oldT<temperatureSteps[i] && newT > temperatureSteps[i])
+				{
+                    Debug.Log("Aktyvuojamas " + i.ToString() + " efektas");
+                    effectActive[i] = true;
+				}
+			}
+		}
+		else//leidziasi
+		{
+            for (int i = 0; i < 3; i++)
+            {
+                if (oldT > temperatureSteps[i] && newT < temperatureSteps[i])
+                {
+                    effectActive[i] = false;
+                }
+            }
+        }
 	}
     public void AddTemperature(float temperature)
 	{
