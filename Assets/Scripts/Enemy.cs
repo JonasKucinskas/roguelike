@@ -14,7 +14,7 @@ public class Enemy : Character
 
     private void Start()
     {
-        damage = 100;
+        damage = 7;
         isFriendly = false;    
 	}
     private void Update()
