@@ -14,7 +14,7 @@ public class Enemy : Character
 
     private void Start()
     {
-        damage = 10;
+        damage = 100;
         isFriendly = false;    
 	}
     private void Update()
@@ -39,14 +39,15 @@ public class Enemy : Character
     }
     public override bool CanMove(TileScript tile)
     {
-        int xMaxMovement = 2;
+        bool zCoordsByOne = Math.Abs(tile.zPosition - zPosition) >= -1 && Math.Abs(tile.zPosition - zPosition) <= 1;
+        bool xCoordsByOne = Math.Abs(tile.xPosition - xPosition) == 1;
 
-		if (Math.Abs(tile.zPosition - zPosition) > 0 || Math.Abs(tile.xPosition - xPosition) > xMaxMovement)
+		if (zCoordsByOne && xCoordsByOne)
         {
-            //move only in x axis by one tile.
-            return false;
+            //move forward only in x axis by one tile, and in z axis by one in each direction
+            return true;
         }
-        return true;
+        return false;
     }
 
     // public bool TakeDamage(int damage)

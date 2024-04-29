@@ -11,10 +11,7 @@ public class BoardScript : MonoBehaviour
 {
 	public GameObject TilePrefab;
 	public GameObject enemyPrefab;
-
-
 	public GameObject EnemySpawnParticle;
-
 	private int X;
 	private int Z;
 	public GameObject[,] tiles;
@@ -220,8 +217,8 @@ public class BoardScript : MonoBehaviour
 			{
 				if (characterToMove.CanMove(tile))
 				{
-					Character e = tile.transform.parent.GetComponentInChildren<Character>();
-					lastHighlightedTile.GetComponentInChildren<Character>().Attack(e,characterToMove.damage);
+					Character character = tile.transform.parent.GetComponentInChildren<Character>();
+					lastHighlightedTile.GetComponentInChildren<Character>().Attack(character);
 					TileScript.ResetTileHighlights();
 					Character.HideAllInfoWindows();
 
@@ -336,6 +333,24 @@ public class BoardScript : MonoBehaviour
 		EnemiesBeingSpawned=false;
 	}
 
+	/// <summary>
+	/// takes closes row possible and gets random enemy from it.
+	/// </summary>
+	/// <param name="xCoord">starting row</param>
+	/// <returns></returns>
+	private Character GetRandomClosestEnemy(int xCoord)
+	{
+		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition == xCoord);
+
+		if (filteredList.Count > 0)
+		{
+			System.Random rand = new System.Random();
+			int randomIndex = rand.Next(0, filteredList.Count);
+			return filteredList[randomIndex];
+		}
+		else return GetRandomClosestEnemy(xCoord + 1);
+	}
+
 	IEnumerator EnemyMovement()
 	{
 		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
@@ -343,39 +358,76 @@ public class BoardScript : MonoBehaviour
 		for (int w = 0; w < EnemyTurnCount; w++)
 		{
 			bool EnemyMoved = false;
-			foreach (Enemy enemy in enemies)
+			Character enemy = GetRandomClosestEnemy(0);
+			
+			/*	
+				enemy checks tiles like this :
+				ZZZ
+				 X
+				
+				X - enemy position
+				Z - checked tiles
+				
+				enemy goes forward. If there is an obsticle in a way, 
+				it checks tiles next to it, if one of them is free, it moves there.
+				if all of them are blocked, it attacks weakest friendly character.
+			*/
+			
+			//index out of bounds should not happen since enemies despawn on the last tile.
+			TileScript tileinfront = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
+			
+			if (!tileinfront.IsOccupied())
 			{
-				//enemy goes forward, if there are no friendly characters in the way,
-				//if there is friendly character in the way, it looks for a free path towards the end of the board
-				// and spawns enemy on that path.
-				bool isObstacleInTheWay = false;
+				enemy.Move(tileinfront);
+				yield return new WaitForSeconds(1f);
+				continue;
+				//next move.
+			}
 
-				for (int i = 0; i < enemy.xPosition; i++)
+			/*
+				this loop moves through Z tiles
+				ZZZ
+				 X
+			*/
+
+			int minHealth = int.MaxValue;
+			int minHealthCharacterIndex = 0;
+
+			for (int j = enemy.zPosition - 1; j <= enemy.zPosition + 1; j++)
+			{
+				if (j < 0 || j > Z)
 				{
-					TileScript tileinfront = tiles[i, enemy.zPosition].GetComponentInChildren<TileScript>();
-
-					if (tileinfront.IsOccupied())
-					{
-						isObstacleInTheWay = true;
-						break;
-					}
+					continue;
 				}
 
-				bool isOnEdge = enemy.xPosition - 1 >= 0;
-
-				if (!isObstacleInTheWay && isOnEdge)
+				TileScript tile = tiles[enemy.xPosition - 1, j].GetComponentInChildren<TileScript>();
+				if (!tile.IsOccupied())
 				{
-					TileScript tile = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
-					Debug.Log(enemy.xPosition + "X " + enemy.zPosition + "Y" + " Is moving");
+					//free tile found, move there.
 					enemy.Move(tile);
 					EnemyMoved = true;
-
 					yield return new WaitForSeconds(1f);
 					break;
 				}
-				
+				else 
+				{
+					Character character = tile.GetComponentInChildren<Character>();
+					if (character.hp < minHealth)
+					{
+						minHealthCharacterIndex = j;
+						minHealth = character.hp;
+					}
+				}
 			}
 
+			//no free tiles, attack weakest friendly character.
+			if (!EnemyMoved)
+			{
+				Character weakest = tiles[enemy.xPosition - 1, minHealthCharacterIndex].GetComponentInChildren<Character>();
+				enemy.Attack(weakest);
+			}
+
+			/*
 			if (!EnemyMoved)
 			{
 				//all current enemies are blocked, look for a free path and if found, spawn enemy there.
@@ -401,6 +453,7 @@ public class BoardScript : MonoBehaviour
 					}
 				}
 			}
+			*/
 		}
 
 		turnManager.EndEnemyTurn();

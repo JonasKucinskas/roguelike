@@ -108,29 +108,26 @@ public abstract class Character : MonoBehaviour
     
     public abstract void NormalAttackSound();
     public abstract void IdleSound();
-    public bool Attack(Character character,int DAMAGE)
+    public void Attack(Character character)
 	{
         HideCharacterInfoWindow();
         NormalAttackSound();
-        bool isDead=false;
-        hp--;
-        character.TakeDamage(DAMAGE);
-        if(isFriendly==true)
+        character.TakeDamage(damage);
+        
+        if(isFriendly)
         {
             int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
             MovesLeft--;
             PlayerPrefs.SetInt("MovesLeft", MovesLeft);            
         }
         
-        if(hp<=0)
+        if(hp <= 0)
         {
-            isDead=true;
             Destroy(this.gameObject);
             GetComponentInParent<TileScript>().ClearCharacterPresence();
         }
 
         hasAttacked = true;
-        return isDead;
     }
 
     public void TakeDamage(int damage)
