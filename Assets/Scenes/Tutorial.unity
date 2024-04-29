@@ -8285,7 +8285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heartSprite: {fileID: 21300000, guid: 0a2104073aa281149bc6c77b8d682c4b, type: 3}
-  numberOfLivesAtTheStart: 20
+  numberOfLivesAtTheStart: 8
   currentHealth: 0
   startPosition: {x: -5, y: 5, z: 6}
   spacing: 0.1
