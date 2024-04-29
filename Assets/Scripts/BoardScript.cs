@@ -108,9 +108,9 @@ public class BoardScript : MonoBehaviour
 	{
 		if(isTutorialLevel) //constant enemy spawns for tutorial
 		{
-			StartCoroutine(SpawnEnemy(2, 1));
-			StartCoroutine(SpawnEnemy(3, 0));
-			StartCoroutine(SpawnEnemy(3, 2));
+			StartCoroutine(SpawnEnemy(2, 0));
+			StartCoroutine(SpawnEnemy(2, 2));
+			StartCoroutine(SpawnEnemy(3, 1));
 		}
 		else
 		{
