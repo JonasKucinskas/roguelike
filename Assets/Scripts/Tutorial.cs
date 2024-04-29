@@ -42,7 +42,7 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
         yield return new WaitForSeconds(1f);
 
-        ///Parodomas antrasis tekstas ir laukiama paspaudimo ant deck
+		///Parodomas antrasis tekstas ir laukiama paspaudimo ant deck
 		yield return new WaitForSeconds(1f);
 		textMesh.text = "The deck will allways be on the left side of the board.\n\nTry picking up a new card.";
 
@@ -64,8 +64,18 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(MoveGameObjectSmooth(endPosGo, 1000f, deckObject)); 
         yield return new WaitForSeconds(1f);
 
-        ///Parodomas treciasis tekstas
-        yield return new WaitForSeconds(1f);
+		///Parodomas treciasis tekstas
+		
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f)); //hides tiles so the player only has one move
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 2, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 1, -1.0f, 0.5f, 0.5f));
+
+		yield return new WaitForSeconds(1f);
 		textMesh.text = "You can drag cards from your hand onto one of the tiles on the board, spawning a new ally.";
 
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
@@ -85,6 +95,7 @@ public class Tutorial : MonoBehaviour
 
 
 		///Parodomas judejimo paaiskinimas
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f));
 		yield return new WaitForSeconds(1f);
 		textMesh.text = "You can select a friedly character. \n\nThen click an empty surrounding tile to move.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
@@ -108,7 +119,46 @@ public class Tutorial : MonoBehaviour
 		}
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+
+		
 	}
+
+	IEnumerator MoveAndScaleTileByCoordinatesSmooth(int x, int y, float verticalShift, float scaleTarget, float speed)
+	{
+		// Construct the tile name based on provided coordinates
+		string tileName = $"Tile_{x}_{y}";
+		GameObject tile = GameObject.Find(tileName).GetComponentInChildren<TileScript>().gameObject;
+
+		if (tile == null)
+		{
+			Debug.LogError("Tile not found: " + tileName);
+			yield break;
+		}
+
+		Vector3 startPosition = tile.transform.position;
+		Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + verticalShift, startPosition.z);
+		Vector3 startScale = tile.transform.localScale;
+		Vector3 endScale = startScale * scaleTarget;
+
+		float distanceToTarget = Vector3.Distance(tile.transform.position, endPosition);
+		float scaleDistance = Vector3.Distance(startScale, endScale);
+
+		// Continue the loop as long as the distance to target and scale distance are greater than a small value to avoid precision issues.
+		while (distanceToTarget > 0.001f || scaleDistance > 0.001f)
+		{
+			tile.transform.position = Vector3.Lerp(tile.transform.position, endPosition, speed * Time.deltaTime / distanceToTarget);
+			tile.transform.localScale = Vector3.Lerp(tile.transform.localScale, endScale, speed * Time.deltaTime / scaleDistance);
+
+			distanceToTarget = Vector3.Distance(tile.transform.position, endPosition);
+			scaleDistance = Vector3.Distance(tile.transform.localScale, endScale);
+			yield return null;
+		}
+
+		tile.transform.position = endPosition; // Ensure the position is exactly at the target
+		tile.transform.localScale = endScale; // Ensure the scale is exactly at the target
+	}
+
+
 
 	IEnumerator MoveGameObjectSmooth(Vector3 target, float speed, GameObject go)
     {
