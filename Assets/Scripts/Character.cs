@@ -92,6 +92,7 @@ public abstract class Character : MonoBehaviour
         originalTile.IsSelected = false;//
         Debug.Log("Is Tile_" + originalTile.xPosition + "_" + originalTile.zPosition + " selected? " + originalTile.IsSelected);//
 
+        TileScript.ResetTileHighlights();
 		StartCoroutine(MoveToTile(tile));
         hasMoved = true; //for tutorial
 
@@ -107,10 +108,13 @@ public abstract class Character : MonoBehaviour
     }
     
     public abstract void NormalAttackSound();
+    public abstract void SpecialAttack();
+
     public abstract void IdleSound();
     public void Attack(Character character)
 	{
         HideCharacterInfoWindow();
+        TileScript.ResetTileHighlights();
         NormalAttackSound();
         character.TakeDamage(damage);
         
@@ -157,13 +161,13 @@ public abstract class Character : MonoBehaviour
             BoardManager.enemies.Remove(this);
             BoardManager.Frendlies.Remove(this);
             this.transform.parent.GetComponentInChildren<TileScript>().ClearCharacterPresence();
-            StartCoroutine(WaitBeforeDestroying());
+            StartCoroutine(WaitBeforeDestroying(0.5f));
         }
     }
 
-    public IEnumerator WaitBeforeDestroying()
+    public IEnumerator WaitBeforeDestroying(float time)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(time);
         Destroy(gameObject);
     }
 
@@ -293,5 +297,10 @@ public abstract class Character : MonoBehaviour
     {
         GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject.SetActive(false);
         GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject.SetActive(false);
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log("Destroygin");
     }
 }

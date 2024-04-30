@@ -1,6 +1,8 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class DendriticCell : Character
 { 
@@ -88,5 +90,36 @@ public class DendriticCell : Character
     {
         GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
         characterInfoWindow.SetActive(false);
+    }
+
+    public override void SpecialAttack()
+    {
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (!Physics.Raycast(ray, out hit))
+		{
+			//no raycast
+			return;
+		}
+
+        Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+
+        //hovering on enemy or tile with enemy?
+        if (!enemy)
+        {
+            enemy = hit.collider.gameObject.GetComponentInChildren<Enemy>();
+            
+            if (!enemy)
+            {
+                Debug.Log("Enemy not selected");
+                return;
+            }
+        }
+        TileScript tile = enemy.transform.parent.GetComponentInChildren<TileScript>();
+        tile.ClearCharacterPresence();
+        BoardManager.RemoveEnemy(enemy);
+        StartCoroutine(enemy.WaitBeforeDestroying(1.5f));
+        Move(tile);
     }
 }
