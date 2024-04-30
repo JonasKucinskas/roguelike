@@ -14,7 +14,8 @@ public class NeutrophilCell : Character
     private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;
 	private int DamageAdded = 2;
-    public static bool SpecialAttackIgnoresFriendlies = false;
+	private BoardScript boardScript; // for tutorial usage
+	public static bool SpecialAttackIgnoresFriendlies = false;
 	[SerializeField] Animator neutrAnimator;
 
     private float timeCounter = 0.0f;
@@ -23,8 +24,13 @@ public class NeutrophilCell : Character
     private void Start()
     {
         hp = 10;
-        damage = 10 + TimesExtraDamageAdded * DamageAdded;
-        isFriendly = true;
+
+		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
+
+		if (boardScript.isTutorialLevel) damage = 100; //extra damage in the tutorial
+        else damage = 10 + TimesExtraDamageAdded * DamageAdded;
+
+		isFriendly = true;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BoardManager = GameObject.Find("Board").GetComponent<BoardScript>();
     }

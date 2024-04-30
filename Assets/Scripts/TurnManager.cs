@@ -5,7 +5,7 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     private bool isPlayersMove = true;
-    private const int initialPlayerMoves = 3;
+    public int initialPlayerMoves;
 
     int movesLeft;
     // Start is called before the first frame update
