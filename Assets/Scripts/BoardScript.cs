@@ -366,7 +366,7 @@ public class BoardScript : MonoBehaviour
 	{
 		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
 		yield return new WaitForSeconds(3f);
-		for (int w = 0; w < 1; w++)
+		for (int w = 0; w < EnemyTurnCount; w++)
 		{
 			bool EnemyMoved = false;
 			Character enemy = GetRandomClosestEnemy(0);
