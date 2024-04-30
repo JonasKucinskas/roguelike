@@ -7,9 +7,7 @@ using TMPro;
 public class NeutrophilCell : Character
 {
     public GameObject HpText;
-
     public GameObject DamageTakenParticles;
-
     private bool isClicked = false;
     private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;

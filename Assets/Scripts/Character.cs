@@ -298,9 +298,4 @@ public abstract class Character : MonoBehaviour
         GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject.SetActive(false);
         GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject.SetActive(false);
     }
-
-    void OnDestroy()
-    {
-        Debug.Log("Destroygin");
-    }
 }

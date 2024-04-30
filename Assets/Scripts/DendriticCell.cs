@@ -2,22 +2,28 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 public class DendriticCell : Character
 { 
     public GameObject HpText;
     public GameObject DamageTakenParticles;
+
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
     public static int TimesExtraDamageAdded = 0;
     private int DamageAdded = 2;
-
+    private bool tCellInitiated;
+    private int turnsTillTCell;
+    private int currentTurnCount;
     private void Start()
     {
         hp = 10;
         damage = 5 + TimesExtraDamageAdded * DamageAdded;
         isFriendly = true;
+        turnsTillTCell = 3;
+        tCellInitiated = false;
     }
 
     void Update()
@@ -31,6 +37,21 @@ public class DendriticCell : Character
 
         timeCounter += Time.deltaTime;
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
+
+        CheckIfTCell();
+    }
+
+    public void CheckIfTCell()
+    {
+        if (tCellInitiated)
+        {
+            if (currentTurnCount + turnsTillTCell == TurnManager.totalMovesMade)
+            {
+                Debug.Log("T CELL MADE");
+                gameObject.AddComponent<TCell>();
+                Destroy(this);
+            }
+        }
     }
 
 	public static void AddExtraDamage()
@@ -60,6 +81,11 @@ public class DendriticCell : Character
 
     public override bool CanMove(TileScript tile)
     {
+        if (tCellInitiated)
+        {
+            return false;
+        }
+
         int zMaxMovement = 1;
         int xMaxMovement = 1;
 
@@ -68,6 +94,7 @@ public class DendriticCell : Character
             //move only by x tiles in both directions.
             return true;
         }
+
         //zodziu patikrina ar tiesiai eina 2 atstumu (buves if tikrina 1 atstumu visom kryptim)
         if ((tile.zPosition == zPosition + 2 && tile.xPosition == xPosition) || (tile.zPosition == zPosition - 2 && tile.xPosition == xPosition)
             || (tile.xPosition == xPosition + 2 && tile.zPosition == zPosition) || (tile.xPosition == xPosition - 2 && tile.zPosition == zPosition)) return true;
@@ -116,10 +143,11 @@ public class DendriticCell : Character
                 return;
             }
         }
+        currentTurnCount = TurnManager.totalMovesMade;
         TileScript tile = enemy.transform.parent.GetComponentInChildren<TileScript>();
-        tile.ClearCharacterPresence();
-        BoardManager.RemoveEnemy(enemy);
-        StartCoroutine(enemy.WaitBeforeDestroying(1.5f));
+        enemy.TakeDamage(int.MaxValue);
         Move(tile);
+        tCellInitiated = true;
+        
     }
 }

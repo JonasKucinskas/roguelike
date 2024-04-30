@@ -6,7 +6,7 @@ public class TurnManager : MonoBehaviour
 {
     private bool isPlayersMove = true;
     public int initialPlayerMoves;
-
+    public static int totalMovesMade = 0;
     int movesLeft;
     // Start is called before the first frame update
     void Start()
@@ -33,12 +33,14 @@ public class TurnManager : MonoBehaviour
     public void EndEnemyTurn()
     {
         isPlayersMove = true;
+        totalMovesMade++;
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
     }
 
     public void SubtractPlayerMove()
     {
         movesLeft--;
+        totalMovesMade++;
         PlayerPrefs.SetInt("MovesLeft", movesLeft);
     }
 
@@ -46,5 +48,6 @@ public class TurnManager : MonoBehaviour
     {
         if (!isPlayersMove) EndEnemyTurn();
         else PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
+        totalMovesMade = 0;
 	}
 }

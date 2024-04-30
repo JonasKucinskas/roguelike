@@ -57,6 +57,7 @@ public class BoardScript : MonoBehaviour
 		if (Input.GetKey(KeyCode.Space) && turnManager.isPlayersTurn() && AllowPlayerInput && selectedCharacter)
 		{
 			selectedCharacter.SpecialAttack();
+			selectedCharacter = null;
 		}
 	}
 
@@ -411,6 +412,7 @@ public class BoardScript : MonoBehaviour
 				}
 
 				TileScript tile = tiles[enemy.xPosition - 1, j].GetComponentInChildren<TileScript>();
+
 				if (!tile.IsOccupied())
 				{
 					//free tile found, move there.
