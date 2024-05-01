@@ -18,7 +18,7 @@ public class BoardScript : MonoBehaviour
 	public List<Character> enemies;
 	public List<Character> Frendlies;
 	GameObject lastHighlightedTile = null;
-	private Character characterToMove;
+	private Character selectedCharacter;
 	private TurnManager turnManager;
 	private Deck deck;
 	private bool levelStarted = true; //made so that the game isnt won after completing a single level
@@ -46,12 +46,21 @@ public class BoardScript : MonoBehaviour
 	void Update()
 	{
 		HandleFriendlyMovement();
+		HandleFriendlyAttack();
 		CheckForCancelMovement();
 		HandleEnemyMovement();
 		CheckWinConditions();
 	}
 
-	//Creates board
+	private void HandleFriendlyAttack()
+	{
+		if (Input.GetKey(KeyCode.Space) && turnManager.isPlayersTurn() && AllowPlayerInput && selectedCharacter)
+		{
+			selectedCharacter.SpecialAttack();
+			selectedCharacter = null;
+		}
+	}
+
 	void MakeBoard()
 	{
 		System.Random random = new System.Random();
@@ -78,7 +87,7 @@ public class BoardScript : MonoBehaviour
 		float boardX = X * tilePrefabSize.x;
 		float boardZ = Z * tilePrefabSize.z;
 
-		//scale scene's board to the board that we need to fit all the tiles.
+		//scale scene's board gameobject to the required size board so that we could fit all the tiles.
 		Vector3 boardScale = new Vector3(boardX / boardSize.x, 1f, boardZ / boardSize.z);
 		enviroment.transform.localScale = boardScale;
 
@@ -165,7 +174,7 @@ public class BoardScript : MonoBehaviour
 		Debug.Log("Clicked on: " + clickedObject.name);
 
 
-		if (!characterToMove)
+		if (!selectedCharacter)
 		{
 			Character character = clickedObject.GetComponent<Character>();
 			if (!character)
@@ -195,47 +204,35 @@ public class BoardScript : MonoBehaviour
 			}
 
 			Debug.Log("Moving friendly");
-			characterToMove = character;
+			selectedCharacter = character;
 
 			tileUnderCharacter.IsSelected = true;//
 			Debug.Log("Is Tile_" + tileUnderCharacter.xPosition + "_" + tileUnderCharacter.zPosition + " selected? " + tileUnderCharacter.IsSelected);//
+		
+			
 		}
 		else
 		{
 			TileScript tile = clickedObject.GetComponent<TileScript>();
 			if (!tile)
 			{
-				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
-			}
+ 				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
 
-			if (!tile)
-			{
-				return;
-			}
-
-			if (tile.IsEnemyOnTile())
-			{
-				if (characterToMove.CanMove(tile))
+				if (!tile)
 				{
-					Character character = tile.transform.parent.GetComponentInChildren<Character>();
-					lastHighlightedTile.GetComponentInChildren<Character>().Attack(character);
-					TileScript.ResetTileHighlights();
-					Character.HideAllInfoWindows();
-
-					if (lastHighlightedTile != null)
-					{
-						lastHighlightedTile = null;
-					}
-
-					characterToMove = null;
-					tile.IsSelected = false;//
-					Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
+					return;
 				}
 			}
-			else
+
+			
+
+			if (tile.IsEnemyOnTile() && selectedCharacter.CanMove(tile))
 			{
-				characterToMove.Move(tile);
-				TileScript.ResetTileHighlights();
+				Character enemy = tile.transform.parent.GetComponentInChildren<Character>();
+				Character friendly = lastHighlightedTile.GetComponentInChildren<Character>();
+
+				friendly.Attack(enemy);
+				
 				Character.HideAllInfoWindows();
 
 				if (lastHighlightedTile != null)
@@ -243,8 +240,22 @@ public class BoardScript : MonoBehaviour
 					lastHighlightedTile = null;
 				}
 
-				characterToMove.GetComponentInParent<TileScript>().IsSelected=false;
-				characterToMove = null;
+				selectedCharacter = null;
+				tile.IsSelected = false;//
+				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
+			}
+			else
+			{
+				selectedCharacter.Move(tile);
+				Character.HideAllInfoWindows();
+
+				if (lastHighlightedTile != null)
+				{
+					lastHighlightedTile = null;
+				}
+
+				selectedCharacter.GetComponentInParent<TileScript>().IsSelected=false;
+				selectedCharacter = null;
 				tile.IsSelected = false;//
 				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//
 			}
@@ -256,7 +267,7 @@ public class BoardScript : MonoBehaviour
 	void CheckForCancelMovement()
 	{
 
-		if (!characterToMove)
+		if (!selectedCharacter)
 		{
 			return;
 		}
@@ -281,7 +292,7 @@ public class BoardScript : MonoBehaviour
 		}
 
 		Debug.Log("Movement canceled");
-		characterToMove = null; // Clear the reference to the character to move
+		selectedCharacter = null; // Clear the reference to the character to move
 	}
 
 	void HandleEnemyMovement()
@@ -401,6 +412,7 @@ public class BoardScript : MonoBehaviour
 				}
 
 				TileScript tile = tiles[enemy.xPosition - 1, j].GetComponentInChildren<TileScript>();
+
 				if (!tile.IsOccupied())
 				{
 					//free tile found, move there.
@@ -564,7 +576,7 @@ public class BoardScript : MonoBehaviour
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
 
-		characterToMove = null;
+		selectedCharacter = null;
 		//Debug.Log("Attack done");
 	}
 	private IEnumerator MoveTextAcrossScreen(string text)

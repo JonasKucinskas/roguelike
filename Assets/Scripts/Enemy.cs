@@ -1,4 +1,3 @@
-//Basic enemy type for now.
 using System;
 using TMPro;
 using UnityEngine;
@@ -14,7 +13,7 @@ public class Enemy : Character
 
     private void Start()
     {
-        damage = 100;
+        damage = 7;
         isFriendly = false;    
 	}
     private void Update()
@@ -92,4 +91,9 @@ public class Enemy : Character
     //show enemy's information window
     public override void ShowCharacterInfoWindow(){}
     public override void HideCharacterInfoWindow(){}
+
+    public override void SpecialAttack()
+    {
+        throw new NotImplementedException();
+    }
 }

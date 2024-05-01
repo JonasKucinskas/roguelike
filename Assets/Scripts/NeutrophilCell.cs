@@ -7,9 +7,7 @@ using TMPro;
 public class NeutrophilCell : Character
 {
     public GameObject HpText;
-
     public GameObject DamageTakenParticles;
-
     private bool isClicked = false;
     private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;
@@ -60,17 +58,6 @@ public class NeutrophilCell : Character
         timeCounter += Time.deltaTime;
 
         HpText.GetComponentInChildren<TextMeshPro>().text=hp.ToString();
-        string tileName = "Tile_" + xPosition + "_" + zPosition;
-        GameObject tileObject = GameObject.Find(tileName);
-        var tile = tileObject.GetComponentInChildren<TileScript>();
-
-        if (Input.GetKey(KeyCode.Space ) && turnManager.isPlayersTurn() && tile.IsSelected && BoardManager.AllowPlayerInput)
-        {
-            ActivatePower();
-            isClicked = true;
-        }
-        else
-            isClicked = false;
     }
 
 	public static void AddExtraDamage()
@@ -87,7 +74,7 @@ public class NeutrophilCell : Character
 		else return false;
 	}
 
-	public void ActivatePower()
+	public override void SpecialAttack()
     {
         bool diceRollResult = false;
 		if (SpecialAttackIgnoresFriendlies) diceRollResult = RollTheDice();
@@ -100,6 +87,7 @@ public class NeutrophilCell : Character
                 Debug.Log("AudioManager is null");
 
             turnManager.SubtractPlayerMove();
+
             neutrAnimator.Play("simpleAttack");
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
             for (int x = xPosition - 1; x <= xPosition + 1; x++)
@@ -110,41 +98,37 @@ public class NeutrophilCell : Character
 
                     if (x == xPosition && z == zPosition) //veikejo langelis
                     {
+                        continue;
+                    }
+                    
+                    GameObject tileObject = GameObject.Find(tileName); //ieskomas gretimas langelis
+                    
+                    if (tileObject != null)
+                    {
+                        var tile = tileObject.GetComponentInChildren<TileScript>();
+                        if (tile.IsEnemyOnTile())
+                        {
+                            Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
+                            Character enemy = tileObject.GetComponentInChildren<Character>();
+                            enemy.TakeDamage(5);
+                            BoardManager.FinishAtack();
+                        }
+                        if (tile.IsFriendlyOnTile() == true)
+                        {
+							if (!SpecialAttackIgnoresFriendlies || !diceRollResult)
+                            {
+								Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
+								Character friendly = tileObject.GetComponentInChildren<Character>();
+								friendly.TakeDamage(5);
+							}
+                            BoardManager.FinishAtack();
+                        }
+                        BoardManager.FinishAtack();
                     }
                     else
                     {
-                        GameObject tileObject = GameObject.Find(tileName); //ieskomas gretimas langelis
-
-                        if (tileObject != null)
-                        {
-                            var tile = tileObject.GetComponentInChildren<TileScript>();
-
-                            if (tile.IsEnemyOnTile())
-                            {
-                                Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
-                                Character enemy = tileObject.GetComponentInChildren<Character>();
-                                enemy.TakeDamage(5);
-
-                                BoardManager.FinishAtack();
-                            }
-                            if (tile.IsFriendlyOnTile() == true)
-                            {
-								if (!SpecialAttackIgnoresFriendlies || !diceRollResult)
-                                {
-									Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
-									Character friendly = tileObject.GetComponentInChildren<Character>();
-									friendly.TakeDamage(5);
-								}
-
-                                BoardManager.FinishAtack();
-                            }
-                            BoardManager.FinishAtack();
-                        }
-                        else
-                        {
-                            Debug.Log("Nera tokio langelio");
-                            BoardManager.FinishAtack();
-                        }
+                        Debug.Log("Nera tokio langelio");
+                        BoardManager.FinishAtack();
                     }
                 }
             }
