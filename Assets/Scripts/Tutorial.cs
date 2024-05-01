@@ -144,9 +144,23 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(2f);
 
 		//Parodoma laimejimo salyga
-		textMesh.text = "Your goal is to defeat all viruses. \n\nContinue playing and exterminate them";
+		textMesh.text = "Your goal is to defeat all viruses. \n\nContinue playing and exterminate them.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
-		yield return new WaitForSeconds(6f);
+		yield return new WaitForSeconds(5f);
+		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+
+		//Parodomas roguelike mechanikos paaiskinimas
+		textMesh.text = "After beating a level, you get to choose a reward. \n\nThese rewards do not carry over to the next run.";
+
+		/*BoardScript boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
+		while (boardScript.enemies.Count != 0)
+		{
+			Debug.Log("enemies" + boardScript.enemies.Count);
+			yield return null;
+		}*/
+		yield return new WaitForSeconds(1f);
+		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
+		yield return new WaitForSeconds(5f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 	}
 
