@@ -11,7 +11,6 @@ public class NeutrophilCell : Character
     public GameObject DamageTakenParticles;
 
     private bool isClicked = false;
-    private TurnManager turnManager;
 	public static int TimesExtraDamageAdded = 0;
 	private int DamageAdded = 2;
     public static bool SpecialAttackIgnoresFriendlies = false;
@@ -83,6 +82,11 @@ public class NeutrophilCell : Character
 
 	public void ActivatePower()
     {
+        //kelia temperatura
+        turnManager.AddTemperature(2f);//laikinai pakeista is 0.5 i 2
+
+        //
+
         bool diceRollResult = false;
 		if (SpecialAttackIgnoresFriendlies) diceRollResult = RollTheDice();
 
