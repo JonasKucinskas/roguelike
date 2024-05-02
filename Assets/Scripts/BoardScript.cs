@@ -365,8 +365,17 @@ public class BoardScript : MonoBehaviour
 	IEnumerator EnemyMovement()
 	{
 		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
+		int temp = 0;
+		if (turnManager.effectActive[1])
+		{
+			temp = 1;
+		}
+		else
+		{
+			temp = 0;
+		}
 		yield return new WaitForSeconds(3f);
-		for (int w = 0; w < EnemyTurnCount; w++)
+		for (int w = 0; w < EnemyTurnCount-temp; w++)
 		{
 			bool EnemyMoved = false;
 			Character enemy = GetRandomClosestEnemy(0);
@@ -619,5 +628,16 @@ public class BoardScript : MonoBehaviour
 		}
 		ObjTransform.position=StartingPosition;
 		TextObject.SetActive(false);
+	}
+	public void dmgAll(int damage)
+	{
+		foreach(Enemy en in enemies)
+		{
+			en.TakeDamage(damage);
+		}
+		foreach (Character ch in Frendlies)
+		{
+			ch.TakeDamage(damage);
+		}
 	}
 }
