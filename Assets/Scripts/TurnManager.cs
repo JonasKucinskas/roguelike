@@ -73,7 +73,13 @@ public class TurnManager : MonoBehaviour
         t += temperature;
 
         if (t < initialPlayerTemperature) t = initialPlayerTemperature;
-        else if (t > maxPlayerTemperature) ph.TakeDamage(ph.currentHealth);
+        else if (t > maxPlayerTemperature) {
+			if (!ph)
+			{
+                ph=GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
+            }
+            ph.TakeDamage(ph.currentHealth); 
+        }
         setEffect(tt, t);
         PlayerPrefs.SetFloat("Temperature", t);
 

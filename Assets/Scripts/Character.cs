@@ -114,7 +114,6 @@ public abstract class Character : MonoBehaviour
         HideCharacterInfoWindow();
         NormalAttackSound();
         //character.TakeDamage(damage);
-        bool isDead=false;
         hp--;
         int DAMAGE = damage;
         if (turnManager.effectActive[0]) DAMAGE+=10;
