@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.47181726, g: 0.35577103, b: 0.2556257, a: 1}
+  m_IndirectSpecularColor: {r: 0.47181696, g: 0.355771, b: 0.25562602, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3424,6 +3424,7 @@ MonoBehaviour:
   Frendlies: []
   GameLost: 0
   AllowPlayerInput: 1
+  isTutorialLevel: 0
   ChanceToSpawnEnemies: 30
 --- !u!1001 &996719234
 PrefabInstance:
@@ -3665,7 +3666,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 46.8
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4363,7 +4364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 376.54407, y: 256}
+  m_AnchoredPosition: {x: 376.54407, y: 203}
   m_SizeDelta: {x: -769.3549, y: -569.8186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1189503156
@@ -4413,10 +4414,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 36
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 12
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -4449,7 +4450,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 6.0684814, y: 0, z: -2.867096, w: 0.000030517578}
+  m_margin: {x: 230.64793, y: 11.419312, z: -2.867096, w: 0.000030517578}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -7620,6 +7621,7 @@ MonoBehaviour:
   initialCards:
   - {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
   - {fileID: 2153013454170726138, guid: 38d667650c63274429530e256df2e3e5, type: 3}
+  drawnCards: []
   canvas: {fileID: 605084863}
   isDragging: 0
   ExtraCardDrawBonusChosen: 0
