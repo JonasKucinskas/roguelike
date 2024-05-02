@@ -113,15 +113,16 @@ public abstract class Character : MonoBehaviour
 	{
         HideCharacterInfoWindow();
         NormalAttackSound();
-        character.TakeDamage(damage);
+        //character.TakeDamage(damage);
         bool isDead=false;
         hp--;
+        int DAMAGE = damage;
         if (turnManager.effectActive[0]) DAMAGE+=10;
         character.TakeDamage(DAMAGE);
-        Debug.Log(DAMAGE);
-        int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
-        MovesLeft--;
-        PlayerPrefs.SetInt("MovesLeft", MovesLeft);
+        //Debug.Log(DAMAGE);
+        //int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
+        //MovesLeft--;
+        //PlayerPrefs.SetInt("MovesLeft", MovesLeft);
         
         if(isFriendly)
         {
