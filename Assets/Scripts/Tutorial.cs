@@ -38,7 +38,7 @@ public class Tutorial : MonoBehaviour
         ///===========Pirma tutorial dalis===============
         ///Parodomas pirmasis tekstas
 		yield return new WaitForSeconds(3f);
-		textMesh.text = "You can pull cards from the deck to gain more cards. \n\nThis uses up one move in your turn.";
+		textMesh.text = "You can pull cards from the deck to gain more cards. \n\nThis uses up one(1) move in your turn.";
         tutorialText.SetActive(true);
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
         yield return new WaitForSeconds(6f);
@@ -47,9 +47,10 @@ public class Tutorial : MonoBehaviour
 
 		///Parodomas antrasis tekstas ir laukiama paspaudimo ant deck
 		yield return new WaitForSeconds(1f);
-		textMesh.text = "The deck will allways be on the left side of the board.\n\nTry picking up a new card.";
+		textMesh.text = "The deck will always be on the left side of the board.\n\nTry picking up a new card.";
 
-        StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));        StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
+        StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
+        StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
 
         Deck deckScript = deckObject.GetComponent<Deck>();
         if(deckScript != null)
@@ -79,7 +80,7 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f));
 
 		yield return new WaitForSeconds(1f);
-		textMesh.text = "You can drag cards from your hand onto one of the tiles on the board, spawning a new ally.";
+		textMesh.text = "You can drag cards from your hand onto the tiles on the board, which spawns your loyal ally.";
 
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 
@@ -100,7 +101,7 @@ public class Tutorial : MonoBehaviour
 		///Parodomas judejimo paaiskinimas
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f));
 		yield return new WaitForSeconds(1f);
-		textMesh.text = "You can select a friedly character. \n\nThen click an empty surrounding tile to move.";
+		textMesh.text = "You can select a friendly character. \n\nThen click an empty surrounding tile to move.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 
 		Character character = GameObject.Find("Neutrofilas(Clone)").GetComponent<Character>();
@@ -113,7 +114,7 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(3f);
 
 		///Parodomas atakavimo paaiskinimas
-		textMesh.text = "Select a friedly character again. \n\nAttack an enemy by clicking on its tile.";
+		textMesh.text = "Select a friendly character again. \n\nAttack an enemy by clicking on it.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 
 		while (!character.hasAttacked)
@@ -137,20 +138,20 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		//Parodomas priesu tikslas
-		textMesh.text = "The goal of the enemies is to reach the end of the board. \n\nWhen they do so you lose health.";
+		textMesh.text = "The enemies goal is to reach your end of the board. \n\nAfter reaching the end, you lose one (1) health point";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(7f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(2f);
 
 		//Parodoma laimejimo salyga
-		textMesh.text = "Your goal is to defeat all viruses. \n\nContinue playing and exterminate them.";
+		textMesh.text = "Your goal is to defeat all viruses. \n\nKeep going and exterminate them.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(5f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 
 		//Parodomas roguelike mechanikos paaiskinimas
-		textMesh.text = "After beating a level, you get to choose a reward. \n\nThese rewards do not carry over to the next run.";
+		textMesh.text = "After beating a level, you get to choose a reward. \n\nThese rewards are for the current run only.";
 
 		/*BoardScript boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 		while (boardScript.enemies.Count != 0)
