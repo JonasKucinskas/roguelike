@@ -13,15 +13,17 @@ public class PauseMenu : MonoBehaviour
 	public GameObject BonusSelectUI;
     public GameObject OpponentsTurnText;
     private BoardScript boardManager;
+    private KeyCode pause = KeyCode.Escape;
 
     void Start()
     {
         boardManager=GameObject.Find("Board").GetComponent<BoardScript>();
+        LoadKeybinds();
     }
 	// Update is called once per frame
 	void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(pause))
         {
             if(IsPaused)
             {
@@ -30,6 +32,23 @@ public class PauseMenu : MonoBehaviour
             else
             {
                 Pause();
+            }
+        }
+    }
+    void LoadKeybinds()
+    {
+        string[] keys = { "Pause" };
+
+        foreach (string key in keys)
+        {
+            if (PlayerPrefs.HasKey(key))
+            {
+                switch (key)
+                {
+                    case "Pause":
+                        pause = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(key));
+                        break;
+                }
             }
         }
     }

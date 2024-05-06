@@ -31,6 +31,7 @@ public class BoardScript : MonoBehaviour
 	//this is so that while enemies are being spawned do not try to get win condition
 	//since otherwise it insta-wins
 	private bool EnemiesBeingSpawned=true;
+	private KeyCode specialAttack = KeyCode.Space;
 
 	// Start is called before the first frame update
 	void Start()
@@ -40,6 +41,24 @@ public class BoardScript : MonoBehaviour
 		enemies = new List<Character>();
 		MakeBoard();
 		InitializeEnemies();
+		LoadKeybinds();
+	}
+	void LoadKeybinds()
+	{
+		string[] keys = { "SpecialAttack" };
+
+		foreach (string key in keys)
+		{
+			if (PlayerPrefs.HasKey(key))
+			{
+				switch (key)
+				{
+					case "SpecialAttack":
+						specialAttack = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(key));
+						break;
+				}
+			}
+		}
 	}
 
 	// Update is called once per frame
@@ -54,7 +73,7 @@ public class BoardScript : MonoBehaviour
 
 	private void HandleFriendlyAttack()
 	{
-		if (Input.GetKey(KeyCode.Space) && turnManager.isPlayersTurn() && AllowPlayerInput && selectedCharacter)
+		if (Input.GetKey(specialAttack) && turnManager.isPlayersTurn() && AllowPlayerInput && selectedCharacter)
 		{
 			selectedCharacter.SpecialAttack();
 			selectedCharacter = null;
