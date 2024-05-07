@@ -144,7 +144,7 @@ public class BoardScript : MonoBehaviour
 		{
 			System.Random random = new System.Random();
 
-			for (int i = X / 2; i < X; i++)
+			for (int i = GetMaxPlaceableX(); i < X; i++)
 			{
 				for (int j = 0; j < Z; j++)
 				{
@@ -658,5 +658,10 @@ public class BoardScript : MonoBehaviour
 		{
 			ch.TakeDamage(damage);
 		}
+	}
+
+	public int GetMaxPlaceableX()
+	{
+		return X / 2;
 	}
 }

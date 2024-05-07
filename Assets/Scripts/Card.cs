@@ -137,7 +137,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			if (Physics.Raycast(ray, out hit, 1000f, ~IgnoreMe))
 			{
 				TileScript tile = hit.collider.GetComponent<TileScript>();
-				if (tile && !tile.IsOccupied())
+				if (tile && !tile.IsOccupied() && tile.xPosition < boardManager.GetMaxPlaceableX())
 				{
 					StartCoroutine(PlaceCardOnCube(tile));
 					transform.position = originalPosition;
