@@ -37,6 +37,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		if (IsDragging)
 		{
+			
+			TileScript.HighlightTilesBasedOnCardPlacable(boardManager);
 			Drag();
 			
 			if(CollidersOn)
@@ -50,6 +52,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			{
 
 				IsDragging = false;
+				TileScript.ResetTileHighlights();
 				ResetCardToOriginalState(); // Reset card to original state when mouse is released
 			}
 		}
@@ -145,6 +148,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 				}
 			}
 			ResetCardToOriginalState();
+			TileScript.ResetTileHighlights();
 		}
     }
 
