@@ -15,12 +15,13 @@ public class TileScript : MonoBehaviour
     public int zPosition;
 	private bool isStateHighlighted = false;
 	public bool IsSelected { get; set; } = false;
-
+	private BoardScript boardManager;
 	void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
 		AllTiles.Add(this);
+		boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
 	}
 
 	void OnDestroy()
@@ -219,6 +220,27 @@ public class TileScript : MonoBehaviour
 				Character character = tile.transform.parent.GetComponentInChildren<Character>();
 				character.ShowCharacterInfoWindow();
 			}
+        }
+    }
+
+	private void HighlightBasedOnPlacable(BoardScript boardManager)
+	{
+		isStateHighlighted = true; // Now tracking highlight state
+		if (xPosition < boardManager.GetMaxPlaceableX())
+		{
+			rend.material.color = Color.red; // Occupied tiles highlighted in red
+		}
+		else
+		{
+			rend.material.color = Color.cyan; // Unoccupied tiles highlighted in white
+		}
+	}
+
+	public static void HighlightTilesBasedOnCardPlacable(BoardScript boardManager)
+    {
+        foreach (var tile in AllTiles)
+        {
+			tile.HighlightBasedOnPlacable(boardManager);
         }
     }
 }
