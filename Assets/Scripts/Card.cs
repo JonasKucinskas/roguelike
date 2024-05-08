@@ -132,6 +132,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			return;
 		}
+		TileScript.ResetTileHighlights();
 
         if (IsDragging)
 		{
@@ -151,7 +152,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 				}
 			}
 			ResetCardToOriginalState();
-			TileScript.ResetTileHighlights();
 		}
     }
 
