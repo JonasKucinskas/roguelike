@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; // Import this namespace to work with UI elements
 
@@ -84,9 +86,17 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (TileScript.IsEnemyInLastRow())
 		{
-			TakeDamage(1);
-			Debug.Log("gyvybes: " + currentHealth);
+			StartCoroutine(DelayedDamage(1, 1.7f));
 		}
+	}
+
+	private IEnumerator DelayedDamage(int damage, float delayTime)
+	{
+		yield return new WaitForSeconds(delayTime);
+
+		// Now apply the damage after the delay
+		TakeDamage(damage);
+		Debug.Log("gyvybes: " + currentHealth);
 	}
 
 	public int absoluteMaxHearts = 10; // Define an absolute maximum number of hearts to avoid infinite expansion
