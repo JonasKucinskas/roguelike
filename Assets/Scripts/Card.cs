@@ -16,6 +16,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private TurnManager turnManager;
 	private BoardScript boardManager;
 	private CardManager cardManager;
+	public bool cardPlaced = false; //for tutorial use
 	public delegate void CardMovedFromHandEventHandler(Card card);
     public event CardMovedFromHandEventHandler OnCardMovedFromHand;
 	public delegate void CardMovedToHandEventHandler(Card card);
@@ -104,6 +105,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		
 		ChangeCharacterColliders(true);
 		CollidersOn=true;
+
+		cardPlaced = true;
 
 		Debug.Log("Card placed on cube.");
 		Destroy(gameObject);//this card object won't be on a tile anymore

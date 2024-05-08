@@ -84,19 +84,14 @@ public class Tutorial : MonoBehaviour
 
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 
-        CardManager cardScript = cardManagerObject.GetComponent<CardManager>();
-        if (cardScript != null)
-        {
-        drawnCardsCopy = cardScript.drawnCards;
-        }
-        Debug.Log("Card count in hand: " + drawnCardsCopy.Count);
-        while (drawnCardsCopy.Count != 0)
-        {
-            yield return null;
-        }
-        yield return new WaitForSeconds(3f);
-        StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+		Card card = GameObject.Find("Neutrophil_card(Clone)").GetComponent<Card>();
+		while (!card.cardPlaced)
+		{
+			yield return null;
+		}
 
+		yield return new WaitForSeconds(2f);
+        StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 
 		///Parodomas judejimo paaiskinimas
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f));
@@ -112,6 +107,7 @@ public class Tutorial : MonoBehaviour
 
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(3f);
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f));
 
 		///Parodomas atakavimo paaiskinimas
 		textMesh.text = "Select a friendly character again. \n\nAttack an enemy by clicking on it.";
@@ -129,6 +125,7 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 0, 1.0f, 2f, 0.5f));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 2, 1.0f, 2f, 0.5f));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f));
 
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
