@@ -127,7 +127,10 @@ public class TileScript : MonoBehaviour
         if (xPosition == 0 && IsEnemyPresent) return true;
         else return false;
     }
-
+	public void CheckForFalseEnemyPresent()
+	{
+		if (IsEnemyPresent && !transform.GetComponentInChildren<Enemy>()) IsEnemyPresent = false;
+	}
 	public static bool IsEnemyInLastRow()
 	{
 		foreach (var tile in AllTiles)
@@ -137,6 +140,10 @@ public class TileScript : MonoBehaviour
 				Debug.Log("Enemy detected on tile (" + tile.xPosition + "," + tile.zPosition + ")");
 				tile.GetComponentInParent<BoardScript>().enemies.Remove(tile.GetComponentInChildren<Enemy>());
 				tile.RemoveChildren();
+				foreach(var tile2 in AllTiles)
+				{
+					tile2.CheckForFalseEnemyPresent();
+				}
 				return true; // Enemy is in the last row
 			}
 		}
@@ -200,6 +207,10 @@ public class TileScript : MonoBehaviour
 			{
                 tile.HighlightBasedOnOccupancy();
             }
+			else
+			{
+				tile.RemoveHighlight();
+			}
         }
     }
     // New static method to reset tile highlights
