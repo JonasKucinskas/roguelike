@@ -226,7 +226,7 @@ public class TileScript : MonoBehaviour
 	private void HighlightBasedOnPlacable(BoardScript boardManager)
 	{
 		isStateHighlighted = true; // Now tracking highlight state
-		if (xPosition < boardManager.GetMaxPlaceableX())
+		if (xPosition >= boardManager.GetMaxPlaceableX() || IsOccupied())
 		{
 			rend.material.color = Color.red; // Occupied tiles highlighted in red
 		}
