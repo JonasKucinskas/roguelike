@@ -326,7 +326,7 @@ public class BoardScript : MonoBehaviour
 		StartCoroutine(EnemyMovement());
 	}
 
-	IEnumerator SpawnEnemy(int i, int j)
+	public IEnumerator SpawnEnemy(int i, int j)
 	{
 		// Spawn enemy on top of the tile.
 		GameObject tile = tiles[i ,j];

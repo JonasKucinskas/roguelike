@@ -12,6 +12,7 @@ public class NeutrophilCell : Character
 	public static int TimesExtraDamageAdded = 0;
 	private int DamageAdded = 2;
 	private BoardScript boardScript; // for tutorial usage
+    public bool hasUsedSpecialAttack; //for tutorial usage
 	public static bool SpecialAttackIgnoresFriendlies = false;
 	[SerializeField] Animator neutrAnimator;
 
@@ -78,7 +79,7 @@ public class NeutrophilCell : Character
         //kelia temperatura
         turnManager.AddTemperature(2f);//laikinai pakeista is 0.5 i 2
 
-        //
+        hasUsedSpecialAttack = true;
 
         bool diceRollResult = false;
 		if (SpecialAttackIgnoresFriendlies) diceRollResult = RollTheDice();
@@ -114,8 +115,10 @@ public class NeutrophilCell : Character
                         {
                             Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
                             Character enemy = tileObject.GetComponentInChildren<Character>();
-                            enemy.TakeDamage(5);
-                            BoardManager.FinishAtack();
+							if (boardScript.isTutorialLevel) enemy.TakeDamage(100); //one shot units for the tutorial
+							else enemy.TakeDamage(5);
+
+							BoardManager.FinishAtack();
                         }
                         if (tile.IsFriendlyOnTile() == true)
                         {
@@ -123,7 +126,8 @@ public class NeutrophilCell : Character
                             {
 								Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
 								Character friendly = tileObject.GetComponentInChildren<Character>();
-								friendly.TakeDamage(5);
+								if (boardScript.isTutorialLevel) friendly.TakeDamage(100); //one shot units for the tutorial
+                                else friendly.TakeDamage(5);
 							}
                             BoardManager.FinishAtack();
                         }
