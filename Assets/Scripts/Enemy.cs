@@ -7,6 +7,7 @@ public class Enemy : Character
     public GameObject HpText;
 
     public GameObject DamageTakenParticles;
+    [SerializeField] Animator virusAnimator;
 
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
@@ -86,6 +87,11 @@ public class Enemy : Character
     public void SpawnDamageTakenParticles()
     {
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
+    }
+
+    public void playDamageAnimation()
+    {
+        virusAnimator.Play("hurt");
     }
 
     //show enemy's information window

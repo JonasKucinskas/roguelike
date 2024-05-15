@@ -155,6 +155,7 @@ public abstract class Character : MonoBehaviour
         if(Enemycomponent!=null)
         {
             Enemycomponent.SpawnDamageTakenParticles();
+            Enemycomponent.playDamageAnimation();
         }
         else if(DendriticCellcomponent!=null)
         {

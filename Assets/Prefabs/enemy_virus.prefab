@@ -150,9 +150,13 @@ MonoBehaviour:
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  hasMoved: 0
+  hasAttacked: 0
   BoardManager: {fileID: 0}
+  turnManager: {fileID: 0}
   HpText: {fileID: 8547143608883073259}
   DamageTakenParticles: {fileID: 4531279948210875721, guid: fe3513bf4f3dbae448cd26dd26f82d83, type: 3}
+  virusAnimator: {fileID: 2873013277609313000}
 --- !u!65 &659779121772976257
 BoxCollider:
   m_ObjectHideFlags: 0
