@@ -452,9 +452,13 @@ MonoBehaviour:
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  hasMoved: 0
+  hasAttacked: 0
   BoardManager: {fileID: 0}
+  turnManager: {fileID: 0}
   HpText: {fileID: 4131004983379600449}
   DamageTakenParticles: {fileID: 4531279948210875721, guid: fe3513bf4f3dbae448cd26dd26f82d83, type: 3}
+  dendrAnimator: {fileID: 6165362475784981042}
 --- !u!4 &2017086351318368299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6bf664c2cfdf1244e946b1eddb8066ce, type: 3}

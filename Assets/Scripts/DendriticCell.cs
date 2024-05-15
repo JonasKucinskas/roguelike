@@ -9,6 +9,7 @@ public class DendriticCell : Character
 { 
     public GameObject HpText;
     public GameObject DamageTakenParticles;
+    [SerializeField] Animator dendrAnimator;
 
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
@@ -104,6 +105,11 @@ public class DendriticCell : Character
     public void SpawnDamageTakenParticles()
     {
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
+    }
+
+    public void playDamageAnimation()
+    {
+        dendrAnimator.Play("hurt");
     }
 
     //displays dendritic cell's information window

@@ -160,6 +160,7 @@ public abstract class Character : MonoBehaviour
         else if(DendriticCellcomponent!=null)
         {
             DendriticCellcomponent.SpawnDamageTakenParticles();
+            DendriticCellcomponent.playDamageAnimation();
         }
         else if(NeutrophilCellcomponent!=null)
         {
