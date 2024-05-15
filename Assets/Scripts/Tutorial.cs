@@ -31,7 +31,6 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(StartTutorial());
 
 		textMesh = tutorialText.GetComponent<TextMeshProUGUI>();
-		
 	}
     IEnumerator StartTutorial()
     {
@@ -140,6 +139,23 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(7f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(2f);
+
+		//Specialios atakos paaiskinimas
+		textMesh.text = "Each friendly character has a special attack. \n\nYou can activate it by selecting an ally and pressing [space].";
+		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
+		BoardScript boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
+		StartCoroutine(boardScript.SpawnEnemy(1, 2));
+		StartCoroutine(boardScript.SpawnEnemy(1, 0));
+
+		NeutrophilCell neutrophil = GameObject.Find("Neutrofilas(Clone)").GetComponent<NeutrophilCell>();
+		while (!neutrophil.hasUsedSpecialAttack)
+		{
+			yield return null;
+		}
+
+		yield return new WaitForSeconds(1f);
+		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+		yield return new WaitForSeconds(1f);
 
 		//Parodoma laimejimo salyga
 		textMesh.text = "Your goal is to defeat all viruses. \n\nKeep going and exterminate them.";
