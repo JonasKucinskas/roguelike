@@ -165,6 +165,7 @@ public abstract class Character : MonoBehaviour
         else if(NeutrophilCellcomponent!=null)
         {
             NeutrophilCellcomponent.SpawnDamageTakenParticles();
+            NeutrophilCellcomponent.playDamageAnimation();
         }
 
         if(hp<=0)

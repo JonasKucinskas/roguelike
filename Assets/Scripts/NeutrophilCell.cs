@@ -184,6 +184,11 @@ public class NeutrophilCell : Character
         Instantiate(DamageTakenParticles,transform.position,Quaternion.Euler(0f, 0f, 0f));
     }
 
+    public void playDamageAnimation()
+    {
+        neutrAnimator.Play("hurt");
+    }
+
     //displays neutrophil's information window
     public override void ShowCharacterInfoWindow()
     {
