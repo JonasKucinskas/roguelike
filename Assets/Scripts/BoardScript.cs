@@ -119,6 +119,25 @@ public class BoardScript : MonoBehaviour
 				Vector3 tilePosition = startPos + new Vector3(i * tilePrefabSize.x, 0, j * tilePrefabSize.z);
 
 				GameObject tileGameObject = Instantiate(TilePrefab, tilePosition, Quaternion.identity);
+				
+				//make last row darker to indicate that player would take damage if enemy reached it.
+				if (i == 0)
+				{
+					Material material = tileGameObject.GetComponentInChildren<Renderer>().material;
+					Color originalColor = material.color;
+
+					float darkenAmount = 0.3f; 
+
+					Color darkerColor = new Color(
+						Mathf.Max(originalColor.r - darkenAmount, 0f), 
+						Mathf.Max(originalColor.g - darkenAmount, 0f),
+						Mathf.Max(originalColor.b - darkenAmount, 0f),
+						originalColor.a
+					);
+
+					material.color = darkerColor;
+				}
+
 				tileGameObject.transform.parent = transform;
 				tileGameObject.name = "Tile_" + i.ToString() + "_" + j.ToString();
 
