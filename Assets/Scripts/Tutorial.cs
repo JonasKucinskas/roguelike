@@ -11,7 +11,9 @@ public class Tutorial : MonoBehaviour
     ///Jeigu rasit kodel, pakeisti teksta i viena objekta
     public GameObject tutorialText;
     private TextMeshProUGUI textMesh;
-
+	private BoardScript boardScript;
+	private TurnManager turnManager;
+	private PlayerHealth playerHealth;
 	public GameObject deckObject;
     public GameObject cardManagerObject;
     private List<GameObject> cardsCopy;
@@ -24,12 +26,22 @@ public class Tutorial : MonoBehaviour
 	private Vector3 startingPosHeart = new Vector3(-430, 190f, 6f);
 	private Vector3 endPosHeart = new Vector3(210, 200f, 6f);
 
+	private bool ForceLose=false;
 
 	void Start()
     {
+		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
+		turnManager=GameObject.Find("TurnManager").GetComponent<TurnManager>();
+		playerHealth=GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
         deckObject.transform.position = endPosGo;
-        Debug.Log(tutorialText.transform.position);
-        StartCoroutine(StartTutorial());
+		if(!ForceLose)
+		{
+        	StartCoroutine(StartTutorial());			
+		}
+		else
+		{
+			StartCoroutine(ForceLoseTutorial());
+		}
 
 		textMesh = tutorialText.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
 	}
@@ -69,7 +81,7 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 		///Parodomas treciasis tekstas
-		
+		boardScript.AllowPlayerInput=false;
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f)); //hides tiles so the player only has one move
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, -1.0f, 0.5f, 0.5f));
@@ -80,6 +92,7 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f));
 
 		yield return new WaitForSeconds(1f);
+		boardScript.AllowPlayerInput=true;
 		textMesh.text = "You can drag cards from your hand onto the tiles on the board, which spawns your loyal ally.";
 
         StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
@@ -94,8 +107,10 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 
 		///Parodomas judejimo paaiskinimas
+		boardScript.AllowPlayerInput=false;
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f));
 		yield return new WaitForSeconds(1f);
+		boardScript.AllowPlayerInput=true;
 		textMesh.text = "You can select a friendly character. \n\nThen click an empty surrounding tile to move.";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 
@@ -118,6 +133,7 @@ public class Tutorial : MonoBehaviour
 			yield return null;
 		}
 
+		boardScript.AllowPlayerInput=false;
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f)); //shows tiles
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, 1.0f, 2f, 0.5f));
@@ -128,6 +144,7 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f));
 
 		yield return new WaitForSeconds(1f);
+		boardScript.AllowPlayerInput=true;
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 		
 		GameObject heart = GameObject.Find("Heart_8");
@@ -144,7 +161,6 @@ public class Tutorial : MonoBehaviour
 		//Specialios atakos paaiskinimas
 		textMesh.text = "Each friendly character has a special attack. \n\nYou can activate it by selecting an ally and pressing [space].";
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
-		BoardScript boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 		StartCoroutine(boardScript.SpawnEnemy(1, 2));
 		StartCoroutine(boardScript.SpawnEnemy(1, 0));
 
@@ -177,8 +193,25 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(5f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+
+		boardScript.isTutorialLevel=2;
+		ForceLose=true;
 	}
 
+	IEnumerator ForceLoseTutorial()
+	{
+		StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
+		yield return new WaitForSeconds(1f);
+		turnManager.SubtractPlayerMove();
+		turnManager.SubtractPlayerMove();
+		playerHealth.currentHealth=1;
+		yield return new WaitForSeconds(3f);
+		textMesh.text = "But not every fight is going to be that easy";
+        tutorialText.SetActive(true);
+        StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
+        yield return new WaitForSeconds(3f);
+        StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+	}
 	IEnumerator MoveAndScaleTileByCoordinatesSmooth(int x, int y, float verticalShift, float scaleTarget, float speed)
 	{
 		// Construct the tile name based on provided coordinates

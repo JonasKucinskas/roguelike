@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Health
   - CharacterModel
+  - GameEndMenuTopButton
   layers:
   - Default
   - TransparentFX

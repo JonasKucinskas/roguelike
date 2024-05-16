@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -7,12 +8,13 @@ public class CameraController : MonoBehaviour
     public float speed;
     public float minYRotation = 180f;
     public float maxYRotation = 270f;
-
     private KeyCode rotateCameraLeft = KeyCode.Q;
     private KeyCode rotateCameraRight = KeyCode.E;
 
     private void Start()
     {
+        StartCoroutine(ZoomInCamera());
+
         LoadKeybinds();
     }
     void Update()
@@ -27,9 +29,12 @@ public class CameraController : MonoBehaviour
             transform.Rotate(0, -speed * Time.deltaTime, 0);
         }
 
+
         Vector3 currentRotation = transform.localRotation.eulerAngles;
         float clampedYRotation = Mathf.Clamp(currentRotation.y, minYRotation, maxYRotation);
-        transform.localRotation = Quaternion.Euler(currentRotation.x, clampedYRotation, currentRotation.z);
+        transform.localRotation = Quaternion.Euler(currentRotation.x, clampedYRotation, currentRotation.z);            
+
+
     }
     void LoadKeybinds()
     {
@@ -50,5 +55,17 @@ public class CameraController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator ZoomInCamera()
+    {
+        Camera camera=Camera.main;
+        camera.fieldOfView=20f;
+        while (camera.fieldOfView>10.3f)
+		{
+            camera.fieldOfView= camera.fieldOfView-0.1f;
+			yield return null;
+		}
+        camera.fieldOfView=10.3f;
     }
 }

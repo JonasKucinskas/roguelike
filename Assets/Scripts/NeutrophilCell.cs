@@ -27,7 +27,7 @@ public class NeutrophilCell : Character
 
 		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 
-		if (boardScript.isTutorialLevel) damage = 100; //extra damage in the tutorial
+		if (boardScript.isTutorialLevel==1) damage = 100; //extra damage in the tutorial
         else damage = 10 + TimesExtraDamageAdded * DamageAdded;
 
 		isFriendly = true;
@@ -122,7 +122,7 @@ public class NeutrophilCell : Character
                         {
                             Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
                             Character enemy = tileObject.GetComponentInChildren<Character>();
-							if (boardScript.isTutorialLevel) enemy.TakeDamage(100); //one shot units for the tutorial
+							if (boardScript.isTutorialLevel==1) enemy.TakeDamage(100); //one shot units for the tutorial
 							else enemy.TakeDamage(5);
 
 							BoardManager.FinishAtack();
@@ -133,7 +133,7 @@ public class NeutrophilCell : Character
                             {
 								Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
 								Character friendly = tileObject.GetComponentInChildren<Character>();
-								if (boardScript.isTutorialLevel) friendly.TakeDamage(100); //one shot units for the tutorial
+								if (boardScript.isTutorialLevel==1) friendly.TakeDamage(100); //one shot units for the tutorial
                                 else friendly.TakeDamage(5);
 							}
                             BoardManager.FinishAtack();

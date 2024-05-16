@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using TMPro;
-using UnityEngine.UI; // Namespace for TextMeshPro
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting; // Namespace for TextMeshPro
 
 [System.Serializable]
 public class Bonus
@@ -134,6 +136,13 @@ public class BonusManager : MonoBehaviour
 				Child.SetActive(true);
 			}
 		}
-		boardScript.StartNewLevel();
+		if(boardScript.isTutorialLevel>0)
+		{
+			Debug.Log("Loading menu");
+			//boardScript.isTutorialLevel=2;
+			SceneManager.LoadScene("MainMenu");
+			return;
+		}
+		boardScript.StartNewLevel();			
 	}
 }
