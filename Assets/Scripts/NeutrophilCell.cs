@@ -92,8 +92,7 @@ public class NeutrophilCell : Character
                 Debug.Log("AudioManager is null");
 
             turnManager.SubtractPlayerMove();
-
-            neutrAnimator.Play("simpleAttack");
+            
             //Einama, per visus 9 langelius (veikejo langeli ir 8 langelius aplink ji)
             for (int x = xPosition - 1; x <= xPosition + 1; x++)
             {
@@ -142,6 +141,7 @@ public class NeutrophilCell : Character
             }
 			//DEAL DAMAGE TO SELF
 			if (!SpecialAttackIgnoresFriendlies || !diceRollResult) this.TakeDamage(4);
+            neutrAnimator.Play("simpleAttack");
         }
     }
 
