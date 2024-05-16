@@ -401,6 +401,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8314537811761521312}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d38eba361880ca147911c1af09b64189, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1170204761242183132}
   m_SourcePrefab: {fileID: 100100000, guid: d38eba361880ca147911c1af09b64189, type: 3}
 --- !u!4 &4932657263646667979 stripped
 Transform:
@@ -472,9 +475,13 @@ MonoBehaviour:
   xPosition: 0
   zPosition: 0
   isFriendly: 0
+  hasMoved: 0
+  hasAttacked: 0
   BoardManager: {fileID: 0}
+  turnManager: {fileID: 0}
   HpText: {fileID: 4505832288623749646}
   DamageTakenParticles: {fileID: 4531279948210875721, guid: fe3513bf4f3dbae448cd26dd26f82d83, type: 3}
+  hasUsedSpecialAttack: 0
   neutrAnimator: {fileID: 5912894489969214330}
 --- !u!137 &8314537811761521312
 SkinnedMeshRenderer:
@@ -529,3 +536,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_DirtyAABB: 0
+--- !u!65 &1170204761242183132
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710424728265076337}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.7, y: 0.1, z: 2.7}
+  m_Center: {x: 0, y: 0.1, z: -0.01}

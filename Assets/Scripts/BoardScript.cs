@@ -222,10 +222,12 @@ public class BoardScript : MonoBehaviour
 		GameObject clickedObject = hit.collider.gameObject;
 		Debug.Log("Clicked on: " + clickedObject.name);
 
+		Character character;
+		if (clickedObject.GetComponent<TileScript>()) character = clickedObject.GetComponentInChildren<Character>(); //when tile is clicked
+		else character = clickedObject.GetComponent<Character>(); //when character is clicked
 
 		if (!selectedCharacter)
 		{
-			Character character = clickedObject.GetComponent<Character>();
 			if (!character)
 			{
 				if (clickedObject.transform.parent)
