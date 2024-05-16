@@ -408,10 +408,7 @@ public class BoardScript : MonoBehaviour
 		{
 			temp = 1;
 		}
-		else
-		{
-			temp = 0;
-		}
+		
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount-temp; w++)
 		{
@@ -437,6 +434,17 @@ public class BoardScript : MonoBehaviour
 			if (!tileinfront.IsOccupied())
 			{
 				enemy.Move(tileinfront);
+
+				//if enemy moved to last tile, despawn it
+				if (tileinfront.xPosition == 0)
+				{
+					//wait for as long as enemy takes to move to the tile
+					yield return new WaitForSeconds(1.8f);
+					tileinfront.ClearCharacterPresence();
+					RemoveEnemy(enemy);
+					Destroy(enemy.gameObject);
+				}
+
 				yield return new WaitForSeconds(1f);
 				continue;
 				//next move.
