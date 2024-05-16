@@ -233,45 +233,68 @@ public abstract class Character : MonoBehaviour
         return newMaterial;
     }
 
-    void OnMouseEnter()
-    {
+	void OnMouseEnter()
+	{
+		if (!isFriendly)
+		{
+			return;
+		}
 
-        if (!isFriendly)
-        {
-            return;
-        }
+		originalMaterials = new List<List<Material>>();
 
-        originalMaterials = new List<List<Material>>();
-        
-        //prefabs have many body parts with many materials, 
-        //do i need to take each body part, and collect each material
-        //in order to reset it to default later.
+		// Highlight character's body parts
+		for (int i = 0; i < gameObject.transform.childCount; i++)
+		{
+			Transform child = gameObject.transform.GetChild(i);
+			SkinnedMeshRenderer renderer = child.GetComponentInChildren<SkinnedMeshRenderer>();
 
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            Transform child = gameObject.transform.GetChild(i);
-            SkinnedMeshRenderer renderer = child.GetComponentInChildren<SkinnedMeshRenderer>();
-            
-            if (!renderer)
-            {
-                continue;
-            }
+			if (!renderer)
+			{
+				continue;
+			}
 
-            originalMaterials.Add(renderer.materials.ToList());
+			originalMaterials.Add(renderer.materials.ToList());
+			Debug.Log("aaaaaaaaaaaaaaaaaaaaaaa");
 
+			List<Material> newMaterials = new List<Material>();
+			foreach (Material originalMaterial in renderer.materials)
+			{
+				// Create a new material with increased brightness
+				Material newMaterial = CreateBrightenedMaterial(originalMaterial, 3);
+				newMaterials.Add(newMaterial);
+			}
+			renderer.materials = newMaterials.ToArray();
+		}
 
-            List<Material> newMaterials = new List<Material>();
-            foreach (Material originalMaterial in renderer.materials)
-            {
-                // Create a new material with increased brightness
-                Material newMaterial = CreateBrightenedMaterial(originalMaterial, 3);
-                newMaterials.Add(newMaterial);
-            }
-            renderer.materials = newMaterials.ToArray();
-        }
-    }
+		// Highlight parent object
+		if (gameObject.transform.parent != null)
+		{
+			Transform parentTransform = gameObject.transform.parent;
+			HighlightParentObject(parentTransform);
+		}
+	}
 
-    void OnMouseExit()
+	void HighlightParentObject(Transform parentTransform)
+	{
+		Renderer parentRenderer = parentTransform.GetComponent<Renderer>();
+
+		if (parentRenderer != null)
+		{
+			// Store original materials
+			originalMaterials.Add(parentRenderer.materials.ToList());
+
+			List<Material> newMaterials = new List<Material>();
+			foreach (Material originalMaterial in parentRenderer.materials)
+			{
+				// Create a new material with increased brightness
+				Material newMaterial = CreateBrightenedMaterial(originalMaterial, 3);
+				newMaterials.Add(newMaterial);
+			}
+			parentRenderer.materials = newMaterials.ToArray();
+		}
+	}
+
+	void OnMouseExit()
     {
         if (!isFriendly)
         {
@@ -290,7 +313,20 @@ public abstract class Character : MonoBehaviour
             renderer.materials = originalMaterials[originalMaterialsIndex].ToArray();
             originalMaterialsIndex++;
         }
-    }
+
+		// De-highlight parent object
+		if (gameObject.transform.parent != null)
+		{
+			Transform parentTransform = gameObject.transform.parent;
+			Renderer parentRenderer = parentTransform.GetComponent<Renderer>();
+
+			if (parentRenderer != null)
+			{
+				parentRenderer.materials = originalMaterials[originalMaterialsIndex].ToArray();
+				originalMaterialsIndex++;
+			}
+		}
+	}
 
     //displays clicked character's information window
     abstract public void ShowCharacterInfoWindow();
