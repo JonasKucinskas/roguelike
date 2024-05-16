@@ -254,4 +254,11 @@ public class TileScript : MonoBehaviour
 			tile.HighlightBasedOnPlacable(boardManager);
         }
     }
+	public static void HighlightAll()
+	{
+		foreach (var tile in AllTiles)
+		{
+			tile.Highlight();
+		}
+	}
 }

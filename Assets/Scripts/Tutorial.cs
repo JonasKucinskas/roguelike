@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Tutorial : MonoBehaviour
 {
@@ -18,8 +19,8 @@ public class Tutorial : MonoBehaviour
 
     private Vector3 startingPosGo = new Vector3(0, -0.73f, 6.7978f);
     private Vector3 endPosGo = new Vector3(0, -0.73f, 27f);
-    private Vector3 startingPosText = new Vector3(-1066f, 710f, -1f);
-    private Vector3 endPosText = new Vector3(0, 710f, 1f);
+    private Vector3 startingPosText = new Vector3(-700f, 710f, -1f);
+    private Vector3 endPosText = new Vector3(0f, 710f, 1f);
 	private Vector3 startingPosHeart = new Vector3(-430, 190f, 6f);
 	private Vector3 endPosHeart = new Vector3(210, 200f, 6f);
 
@@ -30,7 +31,7 @@ public class Tutorial : MonoBehaviour
         Debug.Log(tutorialText.transform.position);
         StartCoroutine(StartTutorial());
 
-		textMesh = tutorialText.GetComponent<TextMeshProUGUI>();
+		textMesh = tutorialText.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
 	}
     IEnumerator StartTutorial()
     {
@@ -218,13 +219,20 @@ public class Tutorial : MonoBehaviour
 	IEnumerator MoveGameObjectSmooth(Vector3 target, float speed, GameObject go)
     {
 		float distanceToTarget = Vector3.Distance(go.transform.position, target);
-
+		float StartSlowingDown=distanceToTarget*0.25f;
+		bool slowedDown= false;
 		// Continue the loop as long as the distance to target is greater than a small value to avoid floating point precision issues.
 		while (distanceToTarget > 0.001f)
 		{
 			go.transform.position = Vector3.Lerp(go.transform.position, target, speed * Time.deltaTime / distanceToTarget);
 
 			distanceToTarget = Vector3.Distance(go.transform.position, target);
+
+			if(slowedDown==false&&distanceToTarget < StartSlowingDown)
+			{
+				speed*=0.5f;
+				slowedDown=true;
+			}
 
 			yield return null;
 		}
