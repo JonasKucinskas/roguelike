@@ -38,8 +38,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		if (IsDragging)
 		{
-			
-			TileScript.HighlightTilesBasedOnCardPlacable(boardManager);
+			//Debug.Log("aaa1	"+transform.gameObject);
+			//Debug.Log(transform.gameObject.tag);
+			if (transform.gameObject.CompareTag("Card"))
+			{
+				TileScript.HighlightTilesBasedOnCardPlacable(boardManager);
+			}
+			else
+			{
+				TileScript.HighlightAll();
+			}
 			Drag();
 			
 			if(CollidersOn)
@@ -87,28 +95,35 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		IsDragging = false;
 		isPlaced = true;
+		if (transform.gameObject.CompareTag("Card"))
+		{
+			Vector3 modelPosition = new Vector3(tileTransform.position.x, tileTransform.position.y + 0.6f, tileTransform.position.z);
+			Vector3 ParticlePosition = new Vector3(modelPosition.x, modelPosition.y + 8f, modelPosition.z);
+			// Instantiate particle effect and character model
+			Instantiate(Particle, ParticlePosition, Quaternion.Euler(90f, 0f, 0f), tileTransform);
+			yield return new WaitForSeconds(1f);
+			GameObject character = Instantiate(CardModel, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
 
-		Vector3 modelPosition = new Vector3(tileTransform.position.x, tileTransform.position.y + 0.6f, tileTransform.position.z);
-		Vector3 ParticlePosition= new Vector3(modelPosition.x,modelPosition.y+8f, modelPosition.z);
-		// Instantiate particle effect and character model
-        Instantiate(Particle, ParticlePosition, Quaternion.Euler(90f, 0f, 0f), tileTransform);
-		yield return new WaitForSeconds(1f);
-        GameObject character = Instantiate(CardModel, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
-        
-        Character friendly = character.GetComponent<Character>();
-        friendly.characterName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
-        friendly.xPosition = tile.xPosition;
-        friendly.zPosition = tile.zPosition;
-		boardManager.Frendlies.Add(friendly);
-        tile.SetFriendlyPresence(true);
-		turnManager.SubtractPlayerMove();
-		
-		ChangeCharacterColliders(true);
-		CollidersOn=true;
+			Character friendly = character.GetComponent<Character>();
+			friendly.characterName = $"Friendly_{tile.xPosition}_{tile.zPosition}";
+			friendly.xPosition = tile.xPosition;
+			friendly.zPosition = tile.zPosition;
+			boardManager.Frendlies.Add(friendly);
+			tile.SetFriendlyPresence(true);
+			turnManager.SubtractPlayerMove();
 
-		cardPlaced = true;
+			ChangeCharacterColliders(true);
+			CollidersOn = true;
 
-		Debug.Log("Card placed on cube.");
+			cardPlaced = true;
+
+			Debug.Log("Card placed on cube.");
+		}
+		else if (transform.gameObject.CompareTag("EffectCard"))
+		{
+				turnManager.LowerTemperature(1);
+				Debug.Log("Temperature Lowered");
+		}
 		Destroy(gameObject);//this card object won't be on a tile anymore
 	}
 
