@@ -193,6 +193,7 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveGameObjectSmooth(endPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(5f);
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
+
 		boardScript.isTutorialLevel=2;
 		ForceLose=true;
 	}
