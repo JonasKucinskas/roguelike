@@ -3169,7 +3169,7 @@ MonoBehaviour:
   AllowPlayerInput: 1
   isTutorialLevel: 0
   ChanceToSpawnEnemies: 30
-  audioManager: {fileID: 0}
+  audioManager: {fileID: 2022377049}
 --- !u!1001 &1006081337
 PrefabInstance:
   m_ObjectHideFlags: 0

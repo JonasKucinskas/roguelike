@@ -2950,7 +2950,7 @@ MonoBehaviour:
   AllowPlayerInput: 1
   isTutorialLevel: 1
   ChanceToSpawnEnemies: 50
-  audioManager: {fileID: 0}
+  audioManager: {fileID: 235815881}
 --- !u!4 &997218512 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2303790651989448907, guid: 315e3037d6061204cad190d8fb3728b6, type: 3}
