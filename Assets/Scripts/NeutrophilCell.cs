@@ -19,6 +19,8 @@ public class NeutrophilCell : Character
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
 
+    private float animOffset;
+
     private void Start()
     {
         hp = 10;
@@ -31,6 +33,12 @@ public class NeutrophilCell : Character
 		isFriendly = true;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BoardManager = GameObject.Find("Board").GetComponent<BoardScript>();
+
+        neutrAnimator = GetComponentInChildren<Animator>();
+        animOffset = UnityEngine.Random.Range(0f, 20f);
+        timeCounter = timeCounter - animOffset;
+        if (neutrAnimator != null)
+            neutrAnimator.Play("idle", 0, animOffset);
     }
 
     public override bool CanMove(TileScript tile)
@@ -52,7 +60,7 @@ public class NeutrophilCell : Character
         {
             randomTime = 2.542f;
             timeCounter = 0.0f;
-            IdleSound();
+            //IdleSound();
         }
 
         timeCounter += Time.deltaTime;
@@ -170,13 +178,13 @@ public class NeutrophilCell : Character
 
     public override void IdleSound()
     {
-        if (audioManager != null)
-        {
-            //StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle1, 0.0f));
-            StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle2, 1.0f));
-        }
-        else
-            Debug.Log("AudioManager is null");
+    //    if (audioManager != null)
+    //    {
+    //        //StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle1, 0.0f));
+    //        StartCoroutine(audioManager.PlaySound(audioManager.neutrophilIdle2, 1.0f));
+    //    }
+    //    else
+    //        Debug.Log("AudioManager is null");
     }
 
     public void SpawnDamageTakenParticles()

@@ -12,10 +12,16 @@ public class Enemy : Character
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
 
+    private float animOffset;
+
     private void Start()
     {
         damage = 7;
-        isFriendly = false;    
+        isFriendly = false;
+
+        animOffset = UnityEngine.Random.Range(0f, 20f);
+        if(virusAnimator != null)
+            virusAnimator.Play("Armature|idle_virus", 0, animOffset);
 	}
     private void Update()
     {
@@ -30,7 +36,7 @@ public class Enemy : Character
 
         if (timeCounter > randomTime)
         {
-            randomTime = UnityEngine.Random.Range(5.0f, 20.0f);
+            randomTime = UnityEngine.Random.Range(5f, 25.0f);
             timeCounter = 0.0f;
             IdleSound();
         }
@@ -77,8 +83,11 @@ public class Enemy : Character
     {
         if (audioManager != null)
         {
-            StartCoroutine(audioManager.PlaySound(audioManager.virusIdle1, 0.0f));
-            StartCoroutine(audioManager.PlaySound(audioManager.virusIdle2, UnityEngine.Random.Range(3.0f, 8.0f)));
+            int clipIndex = UnityEngine.Random.Range(0, audioManager.GetAllVirusIdleSounds().Count);
+            StartCoroutine(audioManager.PlaySound(audioManager.GetAllVirusIdleSounds()[clipIndex], 0.0f));//UnityEngine.Random.Range(2.0f, 7.0f)
+
+            //StartCoroutine(audioManager.PlaySound(audioManager.virusIdle2, UnityEngine.Random.Range(3.0f, 8.0f)));
+            //StartCoroutine(audioManager.PlaySound(audioManager.virusIdle2, UnityEngine.Random.Range(3.0f, 8.0f)));
         }
         else
             Debug.Log("AudioManager is null");

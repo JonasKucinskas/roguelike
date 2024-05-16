@@ -22,11 +22,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public delegate void CardMovedToHandEventHandler(Card card);
     public event CardMovedToHandEventHandler OnCardMovedToHand;
 
+	public AudioManager audioManager;
+
 	void Awake()
 	{
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		boardManager = GameObject.Find("Board").GetComponent<BoardScript>();
 		cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
+		audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 	}
 
 	void Update()
@@ -92,6 +95,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		Vector3 ParticlePosition= new Vector3(modelPosition.x,modelPosition.y+8f, modelPosition.z);
 		// Instantiate particle effect and character model
         Instantiate(Particle, ParticlePosition, Quaternion.Euler(90f, 0f, 0f), tileTransform);
+		StartCoroutine(audioManager.PlaySound(audioManager.spawning, 0f));
 		yield return new WaitForSeconds(1f);
         GameObject character = Instantiate(CardModel, modelPosition, Quaternion.Euler(0f, 90f, 0f), tileTransform);
         

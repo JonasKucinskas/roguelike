@@ -33,9 +33,13 @@ public class BoardScript : MonoBehaviour
 	private bool EnemiesBeingSpawned=true;
 	private KeyCode specialAttack = KeyCode.Space;
 
+	public AudioManager audioManager;
+	private bool IsInitial = true;
+
 	// Start is called before the first frame update
 	void Start()
 	{
+		audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		deck = GameObject.Find("Deck").GetComponent<Deck>();
 		enemies = new List<Character>();
@@ -335,7 +339,12 @@ public class BoardScript : MonoBehaviour
 		Vector3 ParticleCoordinates=new Vector3(coordinates.x-0.25f, coordinates.y+8f,coordinates.z);
 		//Spawn the particles on spawn
 		Instantiate(EnemySpawnParticle,ParticleCoordinates, Quaternion.Euler(90f,0f, 0f));
-        yield return new WaitForSeconds(1f);
+		if (IsInitial)
+		{
+			StartCoroutine(audioManager.PlaySound(audioManager.spawning, 0.0f));
+			IsInitial = false;
+		}
+		yield return new WaitForSeconds(1f);
 		GameObject enemyObject = Instantiate(enemyPrefab.gameObject, coordinates, Quaternion.Euler(0f, -90f, 0f), tile.transform);
 
 		// Set tile as parent.
