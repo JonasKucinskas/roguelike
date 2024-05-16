@@ -134,6 +134,10 @@ public class BonusManager : MonoBehaviour
 				Child.SetActive(true);
 			}
 		}
-		boardScript.StartNewLevel();
+		if(boardScript.isTutorialLevel==1)
+		{
+			boardScript.isTutorialLevel=2;
+		}
+		boardScript.StartNewLevel();			
 	}
 }

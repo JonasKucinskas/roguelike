@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.7456158, g: 0.3673984, b: 0.46049052, a: 1}
+  m_IndirectSpecularColor: {r: 0.74561626, g: 0.3673978, b: 0.46048975, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3851,7 +3851,7 @@ MonoBehaviour:
   VictoryMenuUI: {fileID: 366391272}
   DefeatMenuUI: {fileID: 2102143920}
   BonusSelectUI: {fileID: 1689965582}
-  OpponentsTurnText: {fileID: 0}
+  OpponentsTurnText: {fileID: 934425757}
 --- !u!225 &1313470991
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -6141,6 +6141,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1313470990}
+    - target: {fileID: 4446147960231432409, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
+      propertyPath: m_TagString
+      value: GameEndMenuTopButton
+      objectReference: {fileID: 0}
     - target: {fileID: 5378964918074770612, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

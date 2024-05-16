@@ -26,7 +26,7 @@ public class BoardScript : MonoBehaviour
 	private bool StartedEnemyTurn = false;
 	public bool GameLost = false;
 	public bool AllowPlayerInput = true;
-	public bool isTutorialLevel; //for a constant tutorial level
+	public int isTutorialLevel; //for a constant tutorial level (Changed this to int to correspond to different tutorial sections 0 = not tutorial, 1 = first tutorial, 2 = force losing condition tutorial)
 	public int ChanceToSpawnEnemies;
 	//this is so that while enemies are being spawned do not try to get win condition
 	//since otherwise it insta-wins
@@ -83,7 +83,7 @@ public class BoardScript : MonoBehaviour
 	void MakeBoard()
 	{
 		System.Random random = new System.Random();
-		if(!isTutorialLevel) 
+		if(isTutorialLevel==0) 
 		{
 			X = random.Next(4, 6);
 			Z = random.Next(4, 8);
@@ -153,9 +153,16 @@ public class BoardScript : MonoBehaviour
 
 	void InitializeEnemies()
 	{
-		if(isTutorialLevel) //constant enemy spawns for tutorial
+		if(isTutorialLevel==1) //constant enemy spawns for tutorial
 		{
 			StartCoroutine(SpawnEnemy(2, 0));
+			StartCoroutine(SpawnEnemy(2, 2));
+			StartCoroutine(SpawnEnemy(3, 1));
+		}
+		else if(isTutorialLevel==2)
+		{
+			StartCoroutine(SpawnEnemy(2, 0));
+			StartCoroutine(SpawnEnemy(2, 1));
 			StartCoroutine(SpawnEnemy(2, 2));
 			StartCoroutine(SpawnEnemy(3, 1));
 		}
@@ -591,8 +598,19 @@ public class BoardScript : MonoBehaviour
 		{
 			StartCoroutine(MoveTextAcrossScreen("You lost!"));
 			GameLost=true;
-			yield return new WaitForSeconds(5f);
-			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI.SetActive(true);			
+			GameObject DefeatMenu = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI;			
+			yield return new WaitForSeconds(2f);
+			if(isTutorialLevel!=2)
+			{
+				DefeatMenu.SetActive(true);
+			}
+			else
+			{
+				DefeatMenu.SetActive(true);
+				Transform TopButton = GetChildWithTag(DefeatMenu.transform,"GameEndMenuTopButton");
+				TopButton.gameObject.SetActive(false);
+			}
+						
 		}
 	}
 
@@ -683,4 +701,21 @@ public class BoardScript : MonoBehaviour
 	{
 		return X / 2;
 	}
+
+	//Find the first child with the specified tag.
+    public Transform GetChildWithTag(Transform transform,string tag)
+    {
+        if (transform.childCount == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).CompareTag(tag))
+            {
+                return transform.GetChild(i);
+            }
+        }
+        return null;
+    }
 }
