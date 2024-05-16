@@ -33,7 +33,7 @@ public class DendriticCell : Character
         {
             randomTime = 2.542f;
             timeCounter = 0.0f;
-            IdleSound();
+            //IdleSound();
         }
 
         timeCounter += Time.deltaTime;
@@ -72,12 +72,12 @@ public class DendriticCell : Character
 
     public override void IdleSound()
     {
-        if (audioManager != null)
-        { 
-            StartCoroutine(audioManager.PlaySound(audioManager.dendriticIdle1, 0f));
-        }
-        else
-            Debug.Log("AudioManager is null");
+    //    if (audioManager != null)
+    //    {
+    //        StartCoroutine(audioManager.PlaySound(audioManager.dendriticIdle1, 0f));
+    //    }
+    //    else
+    //        Debug.Log("AudioManager is null");
     }
 
     public override bool CanMove(TileScript tile)

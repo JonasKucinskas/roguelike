@@ -92,6 +92,12 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
                 cardInfoWindow.SetActive(true);
                 // code block
                 break;
+            case "BlankPlaceholder":
+                Character.HideAllInfoWindows();
+                cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation").gameObject;
+                cardInfoWindow.SetActive(true);
+                // code block
+                break;
             default:
                 // code block
                 break;
