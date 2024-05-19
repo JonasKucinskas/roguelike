@@ -460,7 +460,10 @@ public class BoardScript : MonoBehaviour
 					yield return new WaitForSeconds(1.8f);
 					tileinfront.ClearCharacterPresence();
 					RemoveEnemy(enemy);
-					Destroy(enemy.gameObject);
+					AllowPlayerInput=false;
+					//IT DESTROYS THE ENEMY OBJECT IN THE METHOD BELOW
+					StartCoroutine(enemy.GetComponent<ParticleTest>().StartImplosionEffect());
+					AllowPlayerInput=true;
 				}
 
 				yield return new WaitForSeconds(1f);
@@ -737,4 +740,7 @@ public class BoardScript : MonoBehaviour
         }
         return null;
     }
+
+
+
 }

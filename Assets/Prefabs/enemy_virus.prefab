@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 1359233573582126092}
   - component: {fileID: 5498915263225126954}
   - component: {fileID: 659779121772976257}
+  - component: {fileID: 2857696792896603941}
   m_Layer: 0
   m_Name: enemy_virus
   m_TagString: Untagged
@@ -178,6 +179,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5050592, y: 2.1585565, z: 1.2318854}
   m_Center: {x: 0, y: 1, z: 0.11}
+--- !u!114 &2857696792896603941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166766820037242501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475c837d11855334bad9eccfdd7e2e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImplosionStart: {fileID: 6988068448313781953, guid: 832965a5010a3ac4b8132a52e21f500a, type: 3}
+  ImplosionEnd: {fileID: 6988068448313781953, guid: 8fa71dd20bfb6a242b8df1e2552f2e43, type: 3}
 --- !u!1 &5813267111530000497
 GameObject:
   m_ObjectHideFlags: 0
