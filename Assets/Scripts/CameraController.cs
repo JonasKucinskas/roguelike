@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour
     private KeyCode rotateCameraLeft = KeyCode.Q;
     private KeyCode rotateCameraRight = KeyCode.E;
 
+    public bool LockCameraLocation=false;
+
     private void Start()
     {
         StartCoroutine(ZoomInCamera());
@@ -19,12 +21,12 @@ public class CameraController : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetKey(rotateCameraLeft))
+        if(Input.GetKey(rotateCameraLeft)&&LockCameraLocation==false)
         {
             transform.Rotate(0, speed * Time.deltaTime, 0);
         }
         
-        if(Input.GetKey(rotateCameraRight))
+        if(Input.GetKey(rotateCameraRight)&&LockCameraLocation==false)
         {
             transform.Rotate(0, -speed * Time.deltaTime, 0);
         }

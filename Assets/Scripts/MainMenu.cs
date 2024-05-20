@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-
+    public GameObject SuggestTutorialUI;
     public TMP_Dropdown ResolutionDropdown;
     Resolution[] Resolutions;
     int CurrentResolutionIndex = 0;
@@ -35,9 +35,34 @@ public class MainMenu : MonoBehaviour
         ResolutionDropdown.RefreshShownValue();
     }
 
+    public void SuggestTutorial()
+    {
+        if(PlayerPrefs.GetInt("SuggestTutorial",1)==1)
+        {
+            GameObject.Find("MainMenu").SetActive(false);
+            SuggestTutorialUI.SetActive(true);
+        }
+        else
+        {
+            PlayGame();
+        }
+    }
+
+    public void TurnSuggestionOn(bool value)
+    {
+        if(value)
+        {
+            PlayerPrefs.SetInt("SuggestTutorial",1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("SuggestTutorial",0);
+        }
+    }
+
     public void PlayGame()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("GameScene");            
     }
     public void PlayTutorial()
     {

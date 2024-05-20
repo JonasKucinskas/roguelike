@@ -86,7 +86,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (TileScript.IsEnemyInLastRow())
 		{
-			StartCoroutine(DelayedDamage(1, 1.7f));
+			StartCoroutine(DelayedDamage(1, 2.5f));
 		}
 	}
 

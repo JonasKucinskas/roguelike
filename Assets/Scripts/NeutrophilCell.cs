@@ -11,6 +11,8 @@ public class NeutrophilCell : Character
     private bool isClicked = false;
 	public static int TimesExtraDamageAdded = 0;
 	private int DamageAdded = 2;
+    private int SpecialAttackDamageToEnemies=5;
+    private int SpecialAttackDamageToFrendlies=5;
 	private BoardScript boardScript; // for tutorial usage
     public bool hasUsedSpecialAttack; //for tutorial usage
 	public static bool SpecialAttackIgnoresFriendlies = false;
@@ -123,7 +125,7 @@ public class NeutrophilCell : Character
                             Debug.Log("Priesas atakuojamas x = " + x + " z = " + z);
                             Character enemy = tileObject.GetComponentInChildren<Character>();
 							if (boardScript.isTutorialLevel==1) enemy.TakeDamage(100); //one shot units for the tutorial
-							else enemy.TakeDamage(5);
+							else enemy.TakeDamage(SpecialAttackDamageToEnemies);
 
 							BoardManager.FinishAtack();
                         }
@@ -134,7 +136,7 @@ public class NeutrophilCell : Character
 								Debug.Log("Draugiskas veikejas atakuojamas x = " + x + " z = " + z);
 								Character friendly = tileObject.GetComponentInChildren<Character>();
 								if (boardScript.isTutorialLevel==1) friendly.TakeDamage(100); //one shot units for the tutorial
-                                else friendly.TakeDamage(5);
+                                else friendly.TakeDamage(SpecialAttackDamageToFrendlies);
 							}
                             BoardManager.FinishAtack();
                         }
@@ -202,6 +204,18 @@ public class NeutrophilCell : Character
     {
         GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
         characterInfoWindow.SetActive(true);
+
+        Transform Child=GetChildWithName(characterInfoWindow.transform,"HealthValue");
+        Child.gameObject.GetComponent<TextMeshProUGUI>().text=hp.ToString();
+
+        Child=GetChildWithName(characterInfoWindow.transform,"AttackValue");
+        Child.gameObject.GetComponent<TextMeshProUGUI>().text=damage.ToString();
+
+        // Child=GetChildWithName(characterInfoWindow.transform,"ToFriendlyValue");
+        // Child.gameObject.GetComponent<TextMeshProUGUI>().text=SpecialAttackDamageToFrendlies.ToString();
+
+        // Child=GetChildWithName(characterInfoWindow.transform,"ToEnemyValue");
+        // Child.gameObject.GetComponent<TextMeshProUGUI>().text=SpecialAttackDamageToEnemies.ToString();
     }
 
     public override void HideCharacterInfoWindow()
@@ -209,4 +223,6 @@ public class NeutrophilCell : Character
         GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
         characterInfoWindow.SetActive(false);
     }
+
+    
 }
