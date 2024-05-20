@@ -254,7 +254,6 @@ public abstract class Character : MonoBehaviour
 			}
 
 			originalMaterials.Add(renderer.materials.ToList());
-			Debug.Log("aaaaaaaaaaaaaaaaaaaaaaa");
 
 			List<Material> newMaterials = new List<Material>();
 			foreach (Material originalMaterial in renderer.materials)
@@ -328,6 +327,22 @@ public abstract class Character : MonoBehaviour
 		}
 	}
 
+    public Transform GetChildWithName(Transform transform,string Name)
+    {
+        if (transform.childCount == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).name==Name)
+            {
+                return transform.GetChild(i);
+            }
+        }
+        return null;
+    }
+
     //displays clicked character's information window
     abstract public void ShowCharacterInfoWindow();
     abstract public void HideCharacterInfoWindow();
@@ -336,5 +351,6 @@ public abstract class Character : MonoBehaviour
     {
         GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject.SetActive(false);
         GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject.SetActive(false);
+        GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation").gameObject.SetActive(false);
     }
 }

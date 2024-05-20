@@ -228,8 +228,12 @@ public class TileScript : MonoBehaviour
         {
 			if(tile.IsSelected)
             {
-				Character character = tile.transform.parent.GetComponentInChildren<Character>();
-				character.ShowCharacterInfoWindow();
+				Character character=tile.transform.parent.GetComponentInChildren<Character>();
+				if(character !=null)
+				{
+					character.ShowCharacterInfoWindow();					
+				}
+
 			}
         }
     }
