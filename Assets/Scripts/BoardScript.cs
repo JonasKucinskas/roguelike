@@ -677,9 +677,9 @@ public class BoardScript : MonoBehaviour
 		GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
 		TextObject.GetComponent<TextMeshProUGUI>().text=text;
 		RectTransform ObjTransform=TextObject.GetComponent<RectTransform>();
-		Vector3 StartingPosition = ObjTransform.position;
-		Vector3 MiddlePosition = new Vector3(554,ObjTransform.position.y,ObjTransform.position.z);
-		Vector3 FinalPosition = new Vector3(1430,ObjTransform.position.y,ObjTransform.position.z);
+		Vector3 StartingPosition = ObjTransform.localPosition;
+		Vector3 MiddlePosition = new Vector3(0,ObjTransform.localPosition.y,ObjTransform.localPosition.z);
+		Vector3 FinalPosition = new Vector3(1000,ObjTransform.localPosition.y,ObjTransform.localPosition.z);
 
 		TextObject.SetActive(true);
 
@@ -690,7 +690,7 @@ public class BoardScript : MonoBehaviour
 		{
 			float t = elapsedTime / timeToMove;
 			float smoothStepT = t * t * (3f - 2f * t);
-			ObjTransform.position = Vector3.Lerp(StartingPosition,MiddlePosition,smoothStepT);
+			ObjTransform.localPosition = Vector3.Lerp(StartingPosition,MiddlePosition,smoothStepT);
 			elapsedTime += Time.deltaTime; // Update elapsed time
 			yield return null; // Wait until next frame		
 		}
@@ -701,11 +701,12 @@ public class BoardScript : MonoBehaviour
 		{
 			float t = elapsedTime / timeToMove;
 			float smoothStepT = t * t * (3f - 2f * t);
-			ObjTransform.position = Vector3.Lerp(MiddlePosition,FinalPosition,smoothStepT);
+			ObjTransform.localPosition = Vector3.Lerp(MiddlePosition,FinalPosition,smoothStepT);
 			elapsedTime += Time.deltaTime; // Update elapsed time
 			yield return null; // Wait until next frame		
 		}
-		ObjTransform.position=StartingPosition;
+		yield return new WaitForSeconds(.5f);
+		ObjTransform.localPosition=StartingPosition;
 		TextObject.SetActive(false);
 	}
 	public void dmgAll(int damage)
