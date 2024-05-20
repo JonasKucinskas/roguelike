@@ -463,6 +463,7 @@ public class BoardScript : MonoBehaviour
 					AllowPlayerInput=false;
 					//IT DESTROYS THE ENEMY OBJECT IN THE METHOD BELOW
 					StartCoroutine(enemy.GetComponent<ParticleTest>().StartImplosionEffect());
+					StartCoroutine(Camera.main.GetComponent<CameraEffects>().ShakeCamera());
 					AllowPlayerInput=true;
 				}
 
@@ -740,7 +741,5 @@ public class BoardScript : MonoBehaviour
         }
         return null;
     }
-
-
 
 }

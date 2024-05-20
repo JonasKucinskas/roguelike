@@ -6,10 +6,11 @@ public class ParticleTest : MonoBehaviour
 {
     public ParticleSystem ImplosionStart;
     public ParticleSystem ImplosionEnd;
+
+
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -26,4 +27,5 @@ public class ParticleTest : MonoBehaviour
         Instantiate(ImplosionEnd,SpawnPosition,Quaternion.Euler(0f, 0f, 0f));
         Destroy(gameObject);
     }
+
 }
