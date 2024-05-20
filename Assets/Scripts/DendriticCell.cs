@@ -116,6 +116,13 @@ public class DendriticCell : Character
     public override void ShowCharacterInfoWindow()
     {
         GameObject characterInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
+        
+        Transform Child=GetChildWithName(characterInfoWindow.transform,"HealthValue");
+        Child.gameObject.GetComponent<TextMeshProUGUI>().text=hp.ToString();
+
+        Child=GetChildWithName(characterInfoWindow.transform,"AttackValue");
+        Child.gameObject.GetComponent<TextMeshProUGUI>().text=damage.ToString();
+
         characterInfoWindow.SetActive(true);
     }
 

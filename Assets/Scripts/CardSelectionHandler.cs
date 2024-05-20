@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -84,12 +85,31 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
                 Character.HideAllInfoWindows();
                 cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject;
                 cardInfoWindow.SetActive(true);
+
+                Transform Child=GetChildWithName(cardInfoWindow.transform,"HealthValue");
+                Child.gameObject.GetComponent<TextMeshProUGUI>().text="10";
+
+                int Damage=10+NeutrophilCell.TimesExtraDamageAdded*2;
+                Child=GetChildWithName(cardInfoWindow.transform,"AttackValue");
+                Child.gameObject.GetComponent<TextMeshProUGUI>().text=Damage.ToString();
+
+                // Child=GetChildWithName(cardInfoWindow.transform,"ToFriendlyValue");
+                // Child.gameObject.GetComponent<TextMeshProUGUI>().text="5";
+
+                // Child=GetChildWithName(cardInfoWindow.transform,"ToEnemyValue");
+                // Child.gameObject.GetComponent<TextMeshProUGUI>().text="5";
                 // code block
                 break;
             case "Dendritic cell":
                 Character.HideAllInfoWindows();
                 cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject;
                 cardInfoWindow.SetActive(true);
+
+                Child=GetChildWithName(cardInfoWindow.transform,"HealthValue");
+                Child.gameObject.GetComponent<TextMeshProUGUI>().text="10";
+                Damage=5+DendriticCell.TimesExtraDamageAdded*2;
+                Child=GetChildWithName(cardInfoWindow.transform,"AttackValue");
+                Child.gameObject.GetComponent<TextMeshProUGUI>().text=Damage.ToString();
                 // code block
                 break;
             case "BlankPlaceholder":
@@ -137,5 +157,21 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             StartCoroutine(MoveCard(false));
         }
+    }
+
+    private Transform GetChildWithName(Transform transform,string Name)
+    {
+        if (transform.childCount == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).name==Name)
+            {
+                return transform.GetChild(i);
+            }
+        }
+        return null;
     }
 }
