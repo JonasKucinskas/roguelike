@@ -12,32 +12,41 @@ public class MainMenu : MonoBehaviour
     public TMP_Dropdown ResolutionDropdown;
     Resolution[] Resolutions;
     int CurrentResolutionIndex = 0;
+    List<Resolution> UniqueResolutionsList = new List<Resolution>();
 
     void Start()
     {
-        Resolutions=Screen.resolutions;
+        Resolutions = Screen.resolutions;
         ResolutionDropdown.ClearOptions();
 
-        List<string> ScreenSizes =new List<string>();
-        for(int i=0; i<Resolutions.Length; i++)
+        HashSet<string> UniqueResolutions = new HashSet<string>();
+        List<string> ScreenSizes = new List<string>();
+
+        for (int i = 0; i < Resolutions.Length; i++)
         {
             string Option = Resolutions[i].width + " x " + Resolutions[i].height;
-            ScreenSizes.Add(Option);
 
-            if(Resolutions[i].width == Screen.currentResolution.width &&
+            if (UniqueResolutions.Add(Option))
+            {
+                ScreenSizes.Add(Option);
+                UniqueResolutionsList.Add(Resolutions[i]);
+            }
+
+            if (Resolutions[i].width == Screen.currentResolution.width &&
                 Resolutions[i].height == Screen.currentResolution.height)
             {
-                CurrentResolutionIndex = i;
+                CurrentResolutionIndex = UniqueResolutionsList.Count - 1;
             }
         }
+
         ResolutionDropdown.AddOptions(ScreenSizes);
-        ResolutionDropdown.value=CurrentResolutionIndex;
+        ResolutionDropdown.value = CurrentResolutionIndex;
         ResolutionDropdown.RefreshShownValue();
     }
 
     public void SuggestTutorial()
     {
-        if(PlayerPrefs.GetInt("SuggestTutorial",1)==1)
+        if (PlayerPrefs.GetInt("SuggestTutorial", 1) == 1)
         {
             GameObject.Find("MainMenu").SetActive(false);
             SuggestTutorialUI.SetActive(true);
@@ -50,24 +59,26 @@ public class MainMenu : MonoBehaviour
 
     public void TurnSuggestionOn(bool value)
     {
-        if(value)
+        if (value)
         {
-            PlayerPrefs.SetInt("SuggestTutorial",1);
+            PlayerPrefs.SetInt("SuggestTutorial", 1);
         }
         else
         {
-            PlayerPrefs.SetInt("SuggestTutorial",0);
+            PlayerPrefs.SetInt("SuggestTutorial", 0);
         }
     }
 
     public void PlayGame()
     {
-        SceneManager.LoadScene("GameScene");            
+        SceneManager.LoadScene("GameScene");
     }
+
     public void PlayTutorial()
     {
         SceneManager.LoadScene("Tutorial");
     }
+
     public void EndGame()
     {
         Debug.Log("App quit");
@@ -77,12 +88,12 @@ public class MainMenu : MonoBehaviour
     public void SetFullscreen(bool IsFullscreen)
     {
         Debug.Log("Changed fullscreen");
-        Screen.fullScreen=IsFullscreen;
+        Screen.fullScreen = IsFullscreen;
     }
 
     public void SetResolution(int ResolutionIndex)
     {
-        Resolution resolution = Resolutions[ResolutionIndex];
-        Screen.SetResolution(resolution.width,resolution.height, Screen.fullScreen);
+        Resolution resolution = UniqueResolutionsList[ResolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 }
