@@ -90,7 +90,7 @@ public class BoardScript : MonoBehaviour
 		if(isTutorialLevel==0) 
 		{
 			X = random.Next(4, 6);
-			Z = random.Next(4, 8);
+			Z = random.Next(4, 6);
 		}
 		else //constant tutorial level
 		{
