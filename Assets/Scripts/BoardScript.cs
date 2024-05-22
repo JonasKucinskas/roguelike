@@ -417,7 +417,7 @@ public class BoardScript : MonoBehaviour
 			int randomIndex = rand.Next(0, filteredList.Count);
 			return filteredList[randomIndex];
 		}
-		else return GetRandomClosestEnemy(xCoord + 1);
+		else return GetRandomEnemy(xCoord + 1);
 	}
 
 	IEnumerator EnemyMovement()
