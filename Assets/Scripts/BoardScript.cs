@@ -268,6 +268,7 @@ public class BoardScript : MonoBehaviour
 			{
  				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
 
+
 				if (!tile || (selectedCharacter.xPosition == tile.xPosition &&
 							 selectedCharacter.zPosition == tile.zPosition))
 				{
@@ -295,6 +296,10 @@ public class BoardScript : MonoBehaviour
 				selectedCharacter = null;
 				tile.IsSelected = false;//
 				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
+			}
+			else if(!selectedCharacter.CanMove(tile))
+			{
+				UnselectCharacter();
 			}
 			else
 			{

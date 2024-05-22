@@ -40,7 +40,6 @@ public class TurnManager : MonoBehaviour
         timer += Time.deltaTime;
         if (timer > temperatureUpdateInterval)
         {
-            Debug.Log("Update!!!"); 
             float temperatureActual = PlayerPrefs.GetFloat("Temperature");
             float temperatureDisplayed = PlayerPrefs.GetFloat("TemperatureDisplay");
             if (temperatureDisplayed != temperatureActual)
