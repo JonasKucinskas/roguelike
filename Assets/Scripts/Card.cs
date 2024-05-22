@@ -126,6 +126,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		else if (transform.gameObject.CompareTag("EffectCard"))
 		{
 				turnManager.LowerTemperature(1);
+				GameObject cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation").gameObject;
+				cardInfoWindow.SetActive(false);
 				Debug.Log("Temperature Lowered");
 		}
 		Destroy(gameObject);//this card object won't be on a tile anymore
