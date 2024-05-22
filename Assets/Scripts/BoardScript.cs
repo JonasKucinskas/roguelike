@@ -70,7 +70,6 @@ public class BoardScript : MonoBehaviour
 	{
 		HandleFriendlyMovement();
 		HandleFriendlyAttack();
-		CheckForCancelMovement();
 		HandleEnemyMovement();
 		CheckWinConditions();
 	}
@@ -269,8 +268,11 @@ public class BoardScript : MonoBehaviour
 			{
  				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
 
-				if (!tile)
+
+				if (!tile || (selectedCharacter.xPosition == tile.xPosition &&
+							 selectedCharacter.zPosition == tile.zPosition))
 				{
+					UnselectCharacter();
 					return;
 				}
 			}
@@ -295,6 +297,10 @@ public class BoardScript : MonoBehaviour
 				tile.IsSelected = false;//
 				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
 			}
+			else if(!selectedCharacter.CanMove(tile))
+			{
+				UnselectCharacter();
+			}
 			else
 			{
 				selectedCharacter.Move(tile);
@@ -315,7 +321,7 @@ public class BoardScript : MonoBehaviour
 
 	}
 
-	void CheckForCancelMovement()
+	private void UnselectCharacter()
 	{
 
 		if (!selectedCharacter)
@@ -323,10 +329,6 @@ public class BoardScript : MonoBehaviour
 			return;
 		}
 
-		if (!Input.GetMouseButtonDown(1)) // Right-click to cancel
-		{
-			return;
-		}
 		if (lastHighlightedTile != null)
 		{
 			// Access the TileScript component and call RemoveHighlight
@@ -659,7 +661,7 @@ public class BoardScript : MonoBehaviour
 				TileScript.ResetTileHighlights();
 				Character.HideAllInfoWindows();
 				tileScript.IsSelected = false;//
-				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+				Debug.Log("Is Tile_" + tileScript.GetXPosition() + "_" + tileScript.GetZPosition() + " selected? " + tileScript.IsSelected);
 			}
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
