@@ -409,9 +409,9 @@ public class BoardScript : MonoBehaviour
 	/// <returns></returns>
 	private Character GetRandomEnemy(int xCoord)
 	{
-		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition >= xCoord && obj.xPosition <= xCoord + 2);
+		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition <= xCoord);
 
-		if (filteredList.Count > 1)
+		if (filteredList.Count > 1 || xCoord > X)
 		{
 			System.Random rand = new System.Random();
 			int randomIndex = rand.Next(0, filteredList.Count);
