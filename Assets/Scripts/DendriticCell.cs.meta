@@ -3,7 +3,13 @@ guid: 585b1572abfc344cc8dff282c7c82f60
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - BoardManager: {instanceID: 0}
+  - turnManager: {instanceID: 0}
+  - HpText: {instanceID: 0}
+  - DamageTakenParticles: {instanceID: 0}
+  - dendrAnimator: {instanceID: 0}
+  - tcellModel: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

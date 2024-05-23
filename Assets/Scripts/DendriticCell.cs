@@ -10,6 +10,7 @@ public class DendriticCell : Character
     public GameObject HpText;
     public GameObject DamageTakenParticles;
     [SerializeField] Animator dendrAnimator;
+    [SerializeField] GameObject tcellModel;
 
     private float timeCounter = 0.0f;
     private float randomTime = 0.0f;
@@ -51,9 +52,15 @@ public class DendriticCell : Character
         {
             if (currentTurnCount + turnsTillTCell == TurnManager.totalMovesMade)
             {
+                GameObject tcellObject = Instantiate(tcellModel, gameObject.transform.position, Quaternion.Euler(0f, 90f, 0f), gameObject.transform.parent);
+                TCell tcell = tcellObject.GetComponent<TCell>();
+
+                tcell.xPosition = xPosition;
+                tcell.zPosition = zPosition;
+                
                 Debug.Log("T CELL MADE");
-                gameObject.AddComponent<TCell>();
-                Destroy(this);
+                BoardManager.RemoveFriendly(gameObject.GetComponent<Character>());
+                Destroy(gameObject);
             }
         }
     }
@@ -164,6 +171,5 @@ public class DendriticCell : Character
         enemy.TakeDamage(int.MaxValue);
         Move(tile);
         tCellInitiated = true;
-        
     }
 }

@@ -142,6 +142,8 @@ public abstract class Character : MonoBehaviour
         gameObject.TryGetComponent<Enemy>(out Enemy Enemycomponent);
         gameObject.TryGetComponent<DendriticCell>(out DendriticCell DendriticCellcomponent);
         gameObject.TryGetComponent<NeutrophilCell>(out NeutrophilCell NeutrophilCellcomponent);
+        gameObject.TryGetComponent<TCell>(out TCell TCellcomponent);
+
 
         if(Enemycomponent!=null)
         {
@@ -157,6 +159,11 @@ public abstract class Character : MonoBehaviour
         {
             NeutrophilCellcomponent.SpawnDamageTakenParticles();
             NeutrophilCellcomponent.playDamageAnimation();
+        }
+        else if(TCellcomponent!=null)
+        {
+            TCellcomponent.SpawnDamageTakenParticles();
+            TCellcomponent.playDamageAnimation();
         }
 
         if(hp<=0)
