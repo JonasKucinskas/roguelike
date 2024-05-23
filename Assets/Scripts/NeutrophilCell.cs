@@ -41,6 +41,10 @@ public class NeutrophilCell : Character
         timeCounter = timeCounter - animOffset;
         if (neutrAnimator != null)
             neutrAnimator.Play("idle", 0, animOffset);
+        PlayerPrefs.SetInt("IsNeutrsUnlocked", 1);
+        PlayerPrefs.Save();
+        Debug.Log("Spawned neutr, bestiary log update");
+
     }
 
     public override bool CanMove(TileScript tile)

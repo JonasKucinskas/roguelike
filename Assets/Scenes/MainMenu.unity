@@ -712,7 +712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 79616065}
   m_Layer: 0
-  m_Name: Level1
+  m_Name: Epidermis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2088,8 +2088,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 270737664}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.000030517578, y: 0.000022888184, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2099,7 +2099,7 @@ Transform:
   - {fileID: 2031241173}
   - {fileID: 890205526}
   - {fileID: 355119725}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &314301781
 GameObject:
@@ -3762,7 +3762,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 578877644}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3808,11 +3808,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 482514595}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1998582558}
+        m_TargetAssemblyTypeName: Bestiary, Assembly-CSharp
+        m_MethodName: EnableEntry
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &482514595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4754,7 +4766,7 @@ GameObject:
   - component: {fileID: 551209798}
   - component: {fileID: 551209797}
   m_Layer: 0
-  m_Name: CharacterImage (1)
+  m_Name: LevelImageFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6194,6 +6206,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1998582558}
+        m_TargetAssemblyTypeName: Bestiary, Assembly-CSharp
+        m_MethodName: LoadPrefs
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7984,8 +8008,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973771358}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.000030517578, y: 0.000022888184, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7995,7 +8019,7 @@ Transform:
   - {fileID: 1676735771}
   - {fileID: 2108470888}
   - {fileID: 1551596089}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &981750843
 GameObject:
@@ -9442,7 +9466,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 502250061}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9488,11 +9512,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1166045405}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1998582558}
+        m_TargetAssemblyTypeName: Bestiary, Assembly-CSharp
+        m_MethodName: EnableEntry
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1166045405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11039,7 +11075,7 @@ GameObject:
   - component: {fileID: 1323002689}
   - component: {fileID: 1323002688}
   m_Layer: 0
-  m_Name: CharacterImage
+  m_Name: LevelImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11550,7 +11586,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1022868344}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11596,7 +11632,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1384208088}
   m_OnClick:
     m_PersistentCalls:
@@ -11817,7 +11853,7 @@ GameObject:
   - component: {fileID: 1435336240}
   - component: {fileID: 1435336239}
   m_Layer: 0
-  m_Name: CharacterButton4
+  m_Name: EnemyButton1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11836,7 +11872,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 404557212}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11882,11 +11918,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1435336240}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1998582558}
+        m_TargetAssemblyTypeName: Bestiary, Assembly-CSharp
+        m_MethodName: EnableEntry
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1435336240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12997,14 +13045,8 @@ Transform:
   - {fileID: 1317093069}
   - {fileID: 894534291}
   - {fileID: 1755083564}
-  - {fileID: 1166045403}
-  - {fileID: 482514593}
-  - {fileID: 1384208086}
-  - {fileID: 1435336238}
-  - {fileID: 973771359}
-  - {fileID: 270737665}
-  - {fileID: 2107518671}
   - {fileID: 79616065}
+  - {fileID: 1691067481}
   m_Father: {fileID: 1998582555}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1589044407
@@ -14237,6 +14279,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676735770}
   m_CullTransparentMesh: 1
+--- !u!1 &1691067480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1691067481}
+  m_Layer: 0
+  m_Name: CharacterTab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1691067481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691067480}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1166045403}
+  - {fileID: 482514593}
+  - {fileID: 1384208086}
+  - {fileID: 1435336238}
+  - {fileID: 973771359}
+  - {fileID: 270737665}
+  - {fileID: 2107518671}
+  m_Father: {fileID: 1579869635}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1695823497
 GameObject:
   m_ObjectHideFlags: 0
@@ -14715,7 +14795,7 @@ GameObject:
   - component: {fileID: 1734312154}
   - component: {fileID: 1734312153}
   m_Layer: 0
-  m_Name: DendriticCellText (1)
+  m_Name: EpidermisText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15931,7 +16011,7 @@ GameObject:
   - component: {fileID: 1910100970}
   - component: {fileID: 1910100969}
   m_Layer: 0
-  m_Name: DendriticCellText (2)
+  m_Name: EpidermisText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16069,7 +16149,7 @@ GameObject:
   - component: {fileID: 1917355420}
   - component: {fileID: 1917355419}
   m_Layer: 0
-  m_Name: DendriticCellText
+  m_Name: EpidermisText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16883,6 +16963,7 @@ GameObject:
   - component: {fileID: 1998582552}
   - component: {fileID: 1998582556}
   - component: {fileID: 1998582557}
+  - component: {fileID: 1998582558}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -17011,6 +17092,28 @@ MonoBehaviour:
   musicVolumeSlider: {fileID: 1623570842}
   sfxVolumeSlider: {fileID: 1953747037}
   MasterMixer: {fileID: 24100000, guid: 1d46c3f54236cc345b188aa5ea792a91, type: 2}
+--- !u!114 &1998582558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998582551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 432cca79aa9f95b47882167925ded2db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - {fileID: 973771358}
+  - {fileID: 270737664}
+  - {fileID: 973771358}
+  - {fileID: 2107518670}
+  buttons:
+  - {fileID: 1166045404}
+  - {fileID: 482514594}
+  - {fileID: 1384208087}
+  - {fileID: 1435336239}
 --- !u!1 &2001738913
 GameObject:
   m_ObjectHideFlags: 0
@@ -18272,8 +18375,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107518670}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.000030517578, y: 0.000022888184, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18281,7 +18384,7 @@ Transform:
   - {fileID: 495431757}
   - {fileID: 2040676319}
   - {fileID: 1196757992}
-  m_Father: {fileID: 1579869635}
+  m_Father: {fileID: 1691067481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2108470887
 GameObject:
@@ -18407,7 +18510,7 @@ GameObject:
   - component: {fileID: 2126381003}
   - component: {fileID: 2126381002}
   m_Layer: 0
-  m_Name: BG10
+  m_Name: BG10-TypeDevider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

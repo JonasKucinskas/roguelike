@@ -165,6 +165,13 @@ public abstract class Character : MonoBehaviour
             BoardManager.Frendlies.Remove(this);
             this.transform.parent.GetComponentInChildren<TileScript>().ClearCharacterPresence();
             StartCoroutine(WaitBeforeDestroying(0.5f));
+
+            if(Enemycomponent != null)
+            {
+                PlayerPrefs.SetInt("IsVirusUnlocked", 1);
+                PlayerPrefs.Save();
+                Debug.Log("Killed virus, bestiary log update");
+            }
         }
     }
 
