@@ -60,7 +60,7 @@ public abstract class Character : MonoBehaviour
 
 	public void Move(TileScript tile)
     {
-        if (tile.IsOccupied() || !CanMove(tile))
+        if (tile.IsOccupied() || !CanMove(tile) || tile.IsDisabled())
         {
             Debug.LogWarning("Cant move here.");
             return;

@@ -14,6 +14,7 @@ public class TileScript : MonoBehaviour
 	public int xPosition;
     public int zPosition;
 	private bool isStateHighlighted = false;
+	private bool disabled = false; //for tutorial usage
 	public bool IsSelected { get; set; } = false;
 	private BoardScript boardManager;
 	void Start()
@@ -59,6 +60,16 @@ public class TileScript : MonoBehaviour
     {
         return isFriendlyPresent || IsEnemyPresent;
     }
+
+	public bool IsDisabled()
+	{
+		return disabled;
+	}
+
+	public void DisableForTutorial(bool status)
+	{
+		disabled = status;
+	}
 
     public bool IsEnemyOnTile()
     {
