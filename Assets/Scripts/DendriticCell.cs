@@ -25,6 +25,9 @@ public class DendriticCell : Character
         isFriendly = true;
         turnsTillTCell = 3;
         tCellInitiated = false;
+        PlayerPrefs.SetInt("IsDendrUnlocked", 1);
+        PlayerPrefs.Save();
+        Debug.Log("Spawned dendr, bestiary log update");
     }
 
     void Update()

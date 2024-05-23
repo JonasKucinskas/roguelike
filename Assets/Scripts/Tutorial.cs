@@ -82,14 +82,14 @@ public class Tutorial : MonoBehaviour
 
 		///Parodomas treciasis tekstas
 		boardScript.AllowPlayerInput=false;
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f)); //hides tiles so the player only has one move
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 2, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 0, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 2, -1.0f, 0.5f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f, true)); //hides tiles so the player only has one move
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 2, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 2, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f, true));
 
 		yield return new WaitForSeconds(1f);
 		boardScript.AllowPlayerInput=true;
@@ -108,7 +108,7 @@ public class Tutorial : MonoBehaviour
 
 		///Parodomas judejimo paaiskinimas
 		boardScript.AllowPlayerInput=false;
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 1, 1.0f, 2f, 0.5f, false));
 		yield return new WaitForSeconds(1f);
 		boardScript.AllowPlayerInput=true;
 		textMesh.text = "You can select a friendly character. \n\nThen click an empty surrounding tile to move.";
@@ -122,7 +122,7 @@ public class Tutorial : MonoBehaviour
 
 		StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 		yield return new WaitForSeconds(3f);
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
 
 		///Parodomas atakavimo paaiskinimas
 		textMesh.text = "Select a friendly character again. \n\nAttack an enemy by clicking on it.";
@@ -134,14 +134,14 @@ public class Tutorial : MonoBehaviour
 		}
 
 		boardScript.AllowPlayerInput=false;
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f)); //shows tiles
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 2, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 0, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 2, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false)); //shows tiles
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(3, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
 
 		yield return new WaitForSeconds(1f);
 		boardScript.AllowPlayerInput=true;
@@ -212,7 +212,7 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(3f);
         StartCoroutine(MoveGameObjectSmooth(startingPosText, 1000f, tutorialText));
 	}
-	IEnumerator MoveAndScaleTileByCoordinatesSmooth(int x, int y, float verticalShift, float scaleTarget, float speed)
+	IEnumerator MoveAndScaleTileByCoordinatesSmooth(int x, int y, float verticalShift, float scaleTarget, float speed, bool disable)
 	{
 		// Construct the tile name based on provided coordinates
 		string tileName = $"Tile_{x}_{y}";
@@ -223,6 +223,9 @@ public class Tutorial : MonoBehaviour
 			Debug.LogError("Tile not found: " + tileName);
 			yield break;
 		}
+
+		TileScript tilescript = GameObject.Find(tileName).GetComponentInChildren<TileScript>();
+		tilescript.DisableForTutorial(disable);
 
 		Vector3 startPosition = tile.transform.position;
 		Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + verticalShift, startPosition.z);
