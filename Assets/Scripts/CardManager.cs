@@ -29,7 +29,26 @@ public class CardManager : MonoBehaviour
     void Update()
     {
         MovesLeftText.GetComponent<TextMeshProUGUI>().text="Moves left: "+ PlayerPrefs.GetInt("MovesLeft").ToString();
-        TemperatureText.GetComponent<TextMeshProUGUI>().text="Temperature: "+ PlayerPrefs.GetFloat("Temperature").ToString();
+        //TemperatureText.GetComponent<TextMeshProUGUI>().text="Temperature: "+ PlayerPrefs.GetFloat("TemperatureDisplay").ToString();
+
+
+        float temperature = PlayerPrefs.GetFloat("TemperatureDisplay");
+
+        Color startColor = Color.white;
+        Color endColor = Color.red;
+
+        float t = Mathf.InverseLerp(35.5f, 45f, temperature);
+        Color interpolatedColor = Color.Lerp(startColor, endColor, t);
+        string numberColorHex = UnityEngine.ColorUtility.ToHtmlStringRGB(interpolatedColor);
+
+        string text = "Temperature:";
+        string number = temperature.ToString("F1"); // Format the number to one decimal place
+
+        string formattedText = $"<color=#FFFFFF>{text}</color> <color=#{numberColorHex}>{number}</color>";
+
+        TemperatureText.GetComponent<TextMeshProUGUI>().text = formattedText;
+
+
         DrawCardCheck();
     }
 

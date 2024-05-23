@@ -14,11 +14,15 @@ public class TurnManager : MonoBehaviour
     int movesLeft;
 
     private BoardScript bs;
+
+    private float timer=0f;
+    private float temperatureUpdateInterval=0.1f;
     // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetInt("MovesLeft", initialPlayerMoves);
         PlayerPrefs.SetFloat("Temperature", initialPlayerTemperature);
+        PlayerPrefs.SetFloat("TemperatureDisplay", initialPlayerTemperature);
         effectActive = new bool[3] { false, false, false };
     }
 
@@ -30,6 +34,28 @@ public class TurnManager : MonoBehaviour
         {
             //Debug.Log("ENEMY'S TURN");
             isPlayersMove = false;
+        }
+
+        //makes temperature change slower
+        timer += Time.deltaTime;
+        if (timer > temperatureUpdateInterval)
+        {
+            float temperatureActual = PlayerPrefs.GetFloat("Temperature");
+            float temperatureDisplayed = PlayerPrefs.GetFloat("TemperatureDisplay");
+            if (temperatureDisplayed != temperatureActual)
+            {
+                if (temperatureDisplayed > temperatureActual)//krenta
+                {
+                    temperatureDisplayed -= Mathf.Min(temperatureDisplayed - temperatureActual, 0.1f);
+                }
+                else
+                {
+                    temperatureDisplayed += Mathf.Min(temperatureActual - temperatureDisplayed, 0.1f);
+                }
+                temperatureDisplayed = (float)System.Math.Round(temperatureDisplayed, 1);
+            }   
+            PlayerPrefs.SetFloat("TemperatureDisplay", temperatureDisplayed);
+            timer = 0;
         }
     }
 

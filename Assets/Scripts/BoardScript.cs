@@ -70,7 +70,6 @@ public class BoardScript : MonoBehaviour
 	{
 		HandleFriendlyMovement();
 		HandleFriendlyAttack();
-		CheckForCancelMovement();
 		HandleEnemyMovement();
 		CheckWinConditions();
 	}
@@ -269,8 +268,11 @@ public class BoardScript : MonoBehaviour
 			{
  				tile = clickedObject.transform.parent.GetComponentInChildren<TileScript>();
 
-				if (!tile)
+
+				if (!tile || (selectedCharacter.xPosition == tile.xPosition &&
+							 selectedCharacter.zPosition == tile.zPosition))
 				{
+					UnselectCharacter();
 					return;
 				}
 			}
@@ -295,6 +297,10 @@ public class BoardScript : MonoBehaviour
 				tile.IsSelected = false;//
 				Debug.Log("Is Tile_" + tile.xPosition + "_" + tile.zPosition + " selected? " + tile.IsSelected);//                    
 			}
+			else if(!selectedCharacter.CanMove(tile))
+			{
+				UnselectCharacter();
+			}
 			else
 			{
 				selectedCharacter.Move(tile);
@@ -315,7 +321,7 @@ public class BoardScript : MonoBehaviour
 
 	}
 
-	void CheckForCancelMovement()
+	private void UnselectCharacter()
 	{
 
 		if (!selectedCharacter)
@@ -323,10 +329,6 @@ public class BoardScript : MonoBehaviour
 			return;
 		}
 
-		if (!Input.GetMouseButtonDown(1)) // Right-click to cancel
-		{
-			return;
-		}
 		if (lastHighlightedTile != null)
 		{
 			// Access the TileScript component and call RemoveHighlight
@@ -401,21 +403,21 @@ public class BoardScript : MonoBehaviour
 	}
 
 	/// <summary>
-	/// takes closes row possible and gets random enemy from it.
+	/// takes random enemy from two closest possible rows.
 	/// </summary>
 	/// <param name="xCoord">starting row</param>
 	/// <returns></returns>
-	private Character GetRandomClosestEnemy(int xCoord)
+	private Character GetRandomEnemy(int xCoord)
 	{
-		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition == xCoord);
+		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition >= xCoord && obj.xPosition <= xCoord + 2);
 
-		if (filteredList.Count > 0)
+		if (filteredList.Count > 1)
 		{
 			System.Random rand = new System.Random();
 			int randomIndex = rand.Next(0, filteredList.Count);
 			return filteredList[randomIndex];
 		}
-		else return GetRandomClosestEnemy(xCoord + 1);
+		else return GetRandomEnemy(xCoord + 1);
 	}
 
 	IEnumerator EnemyMovement()
@@ -430,8 +432,7 @@ public class BoardScript : MonoBehaviour
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount-temp; w++)
 		{
-			bool EnemyMoved = false;
-			Character enemy = GetRandomClosestEnemy(0);
+			Character enemy = GetRandomEnemy(0);
 			
 			/*	
 				enemy checks tiles like this :
@@ -441,24 +442,66 @@ public class BoardScript : MonoBehaviour
 				X - enemy position
 				Z - checked tiles
 				
-				enemy goes forward. If there is an obsticle in a way, 
-				it checks tiles next to it, if one of them is free, it moves there.
-				if all of them are blocked, it attacks weakest friendly character.
+				enemy goes forward. if it finds friendly characters it always attacks them
 			*/
 			
-			//index out of bounds should not happen since enemies despawn on the last tile.
-			TileScript tileinfront = tiles[enemy.xPosition - 1, enemy.zPosition].GetComponentInChildren<TileScript>();
-			
-			if (!tileinfront.IsOccupied())
+			List<TileScript> freeTiles = new List<TileScript>();
+			bool enemyAttacked = false;
+
+			/*
+				this loop moves through Z tiles
+				ZZZ
+				 X
+			*/
+			System.Random random = new System.Random();
+			for (int j = enemy.zPosition - 1; j <= enemy.zPosition + 1; j++)
 			{
-				enemy.Move(tileinfront);
+				if (j < 0 || j >= Z)
+				{
+					continue;
+				}
+
+				TileScript tile = tiles[enemy.xPosition - 1, j].GetComponentInChildren<TileScript>();
+
+				Character character = tile.GetComponentInChildren<Character>();
+				if (character && character is not Enemy)
+				{
+					int randomNum = random.Next(100);
+
+					//70% chance to attack enemy
+					if (randomNum < 70)
+					{
+						enemy.Attack(character);
+						enemyAttacked = true;
+						yield return new WaitForSeconds(2f);
+						break;
+					}
+				}
+
+				if (!tile.IsOccupied())
+				{
+					freeTiles.Add(tile);
+				}
+			}
+
+			if (!enemyAttacked)
+			{
+				if (freeTiles.Count == 0)
+				{
+					yield return new WaitForSeconds(1f);
+					break;
+				}
+        		int randomIndex = random.Next(freeTiles.Count);
+        		TileScript randomtile = freeTiles[randomIndex];
+
+				enemy.Move(randomtile);
 
 				//if enemy moved to last tile, despawn it
-				if (tileinfront.xPosition == 0)
+				if (randomtile.xPosition == 0)
 				{
 					//wait for as long as enemy takes to move to the tile
 					yield return new WaitForSeconds(1.8f);
-					tileinfront.ClearCharacterPresence();
+					randomtile.ClearCharacterPresence();
 					RemoveEnemy(enemy);
 					AllowPlayerInput=false;
 					//IT DESTROYS THE ENEMY OBJECT IN THE METHOD BELOW
@@ -468,81 +511,8 @@ public class BoardScript : MonoBehaviour
 				}
 
 				yield return new WaitForSeconds(1f);
-				continue;
-				//next move.
+				break;
 			}
-
-			/*
-				this loop moves through Z tiles
-				ZZZ
-				 X
-			*/
-
-			int minHealth = int.MaxValue;
-			int minHealthCharacterIndex = 0;
-
-			for (int j = enemy.zPosition - 1; j <= enemy.zPosition + 1; j++)
-			{
-				if (j < 0 || j > Z)
-				{
-					continue;
-				}
-
-				TileScript tile = tiles[enemy.xPosition - 1, j].GetComponentInChildren<TileScript>();
-
-				if (!tile.IsOccupied())
-				{
-					//free tile found, move there.
-					enemy.Move(tile);
-					EnemyMoved = true;
-					yield return new WaitForSeconds(1f);
-					break;
-				}
-				else 
-				{
-					Character character = tile.GetComponentInChildren<Character>();
-					if (character.hp < minHealth)
-					{
-						minHealthCharacterIndex = j;
-						minHealth = character.hp;
-					}
-				}
-			}
-
-			//no free tiles, attack weakest friendly character.
-			if (!EnemyMoved)
-			{
-				Character weakest = tiles[enemy.xPosition - 1, minHealthCharacterIndex].GetComponentInChildren<Character>();
-				enemy.Attack(weakest);
-			}
-
-			/*
-			if (!EnemyMoved)
-			{
-				//all current enemies are blocked, look for a free path and if found, spawn enemy there.
-				for (int i = 0; i < Z; i++)
-				{
-					bool isObstacleInTheWay = false;
-					for (int j = 0; j < X; j++)
-					{
-						TileScript tile = tiles[j, i].GetComponentInChildren<TileScript>();
-
-						if (tile.IsOccupied())
-						{
-							isObstacleInTheWay = true;
-							break;
-						}
-					}
-
-					if (!isObstacleInTheWay)
-					{
-						StartCoroutine(SpawnEnemy(X / 2, i));
-						yield return new WaitForSeconds(1f);
-						break;
-					}
-				}
-			}
-			*/
 		}
 
 		turnManager.EndEnemyTurn();
@@ -659,7 +629,7 @@ public class BoardScript : MonoBehaviour
 				TileScript.ResetTileHighlights();
 				Character.HideAllInfoWindows();
 				tileScript.IsSelected = false;//
-				Debug.Log("Is Tile_" + tileScript.xPosition + "_" + tileScript.zPosition + " selected? " + tileScript.IsSelected);
+				Debug.Log("Is Tile_" + tileScript.GetXPosition() + "_" + tileScript.GetZPosition() + " selected? " + tileScript.IsSelected);
 			}
 			lastHighlightedTile = null; // Clear the reference to the last highlighted tile
 		}
