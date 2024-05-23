@@ -55,6 +55,7 @@ public class MainMenu : MonoBehaviour
         {
             PlayGame();
         }
+
     }
 
     public void TurnSuggestionOn(bool value)
@@ -72,11 +73,15 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("GameScene");
+        PlayerPrefs.SetInt("IsEpidermisUnlocked", 1);
+        PlayerPrefs.Save();
     }
 
     public void PlayTutorial()
     {
         SceneManager.LoadScene("Tutorial");
+        PlayerPrefs.SetInt("IsEpidermisUnlocked", 1);
+        PlayerPrefs.Save();
     }
 
     public void EndGame()
