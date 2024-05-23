@@ -262,12 +262,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5189030302714823036}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1 &6545077867320496814
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,6 +462,7 @@ MonoBehaviour:
   HpText: {fileID: 4131004983379600449}
   DamageTakenParticles: {fileID: 4531279948210875721, guid: fe3513bf4f3dbae448cd26dd26f82d83, type: 3}
   dendrAnimator: {fileID: 6165362475784981042}
+  tcellModel: {fileID: 1204134513738685073, guid: ba3df48c8d330c122a4756eebe2ff6d3, type: 3}
 --- !u!65 &8033422686245524590
 BoxCollider:
   m_ObjectHideFlags: 0
