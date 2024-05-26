@@ -363,8 +363,19 @@ public abstract class Character : MonoBehaviour
     //hides all info windows
     public static void HideAllInfoWindows()
     {
-        GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation").gameObject.SetActive(false);
-        GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation").gameObject.SetActive(false);
-        GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation").gameObject.SetActive(false);
+        Transform neutrCardInfo = GameObject.Find("MenuUI's").transform.Find("NeutrophilCardInformation");
+        Transform dendrCardInfo = GameObject.Find("MenuUI's").transform.Find("DendriticCellCardInformation");
+        Transform TempCardInfo = GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation");
+
+        //these are null in tutorial
+        if (neutrCardInfo){
+            neutrCardInfo.gameObject.SetActive(false);
+        }
+        if (dendrCardInfo){
+            dendrCardInfo.gameObject.SetActive(false);
+        }
+        if (TempCardInfo){
+            TempCardInfo.gameObject.SetActive(false);
+        }
     }
 }

@@ -409,9 +409,15 @@ public class BoardScript : MonoBehaviour
 	/// <returns></returns>
 	private Character GetRandomEnemy(int xCoord)
 	{
+		int enemiesToChooseFrom = 2;
+		if (isTutorialLevel == 1)
+		{
+			enemiesToChooseFrom = 1;
+		}
+
 		List<Character> filteredList = enemies.FindAll(obj => obj.xPosition <= xCoord);
 
-		if (filteredList.Count > 1 || xCoord > X)
+		if (filteredList.Count == enemiesToChooseFrom || xCoord > X)
 		{
 			System.Random rand = new System.Random();
 			int randomIndex = rand.Next(0, filteredList.Count);
@@ -429,6 +435,16 @@ public class BoardScript : MonoBehaviour
 			temp = 1;
 		}
 		
+		int attackChance = 70;
+
+		if (isTutorialLevel == 1)
+		{
+			attackChance = 0;
+			//this is made so that enemy has enough moves to harm player in the tutorial.
+			//enemies are hard coded to spawn at x = 2, to just subtract 2 from x.
+			EnemyTurnCount = X - 2;
+		}
+
 		yield return new WaitForSeconds(3f);
 		for (int w = 0; w < EnemyTurnCount-temp; w++)
 		{
@@ -442,7 +458,7 @@ public class BoardScript : MonoBehaviour
 				X - enemy position
 				Z - checked tiles
 				
-				enemy goes forward. if it finds friendly characters it always attacks them
+				enemy goes forward. if it finds friendly characters, theres a chance it attacks them
 			*/
 			
 			List<TileScript> freeTiles = new List<TileScript>();
@@ -468,8 +484,8 @@ public class BoardScript : MonoBehaviour
 				{
 					int randomNum = random.Next(100);
 
-					//70% chance to attack enemy
-					if (randomNum < 70)
+					//chance to attack friendly character
+					if (randomNum < attackChance)
 					{
 						enemy.Attack(character);
 						enemyAttacked = true;
@@ -489,7 +505,7 @@ public class BoardScript : MonoBehaviour
 				if (freeTiles.Count == 0)
 				{
 					yield return new WaitForSeconds(1f);
-					break;
+					continue;
 				}
         		int randomIndex = random.Next(freeTiles.Count);
         		TileScript randomtile = freeTiles[randomIndex];
@@ -511,7 +527,6 @@ public class BoardScript : MonoBehaviour
 				}
 
 				yield return new WaitForSeconds(1f);
-				break;
 			}
 		}
 
