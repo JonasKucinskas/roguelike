@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -13,6 +13,8 @@ public class Tutorial : MonoBehaviour
 	private PlayerHealth playerHealth;
 	public GameObject deckObject;
 	public GameObject cardManagerObject;
+	public GameObject temperatureText;
+	public GameObject tempretureEffectText;
 	private List<GameObject> cardsCopy;
 	private List<GameObject> drawnCardsCopy;
 
@@ -30,6 +32,7 @@ public class Tutorial : MonoBehaviour
 		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		playerHealth = GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
+
 		deckObject.transform.position = endPosGo;
 		if (!ForceLose)
 		{
@@ -158,6 +161,15 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(2f);
 
+		//Pristatoma temperatūra
+		textMesh.text = "Temperature is a resource that gives different game effects depending on its value. \n\nActive effect can be seen written below temperature.";
+		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		StartCoroutine(SetObjectActive(temperatureText));
+		StartCoroutine(SetObjectActive(tempretureEffectText));
+		yield return new WaitForSeconds(7f);
+		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(2f);
+
 		//Specialios atakos paaiskinimas
 		textMesh.text = "Each friendly character has a special attack. \n\nYou can activate it by selecting an ally and pressing [space].";
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
@@ -190,6 +202,26 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		character.basicAttackDisabled = false; //reenables basic attack
+
+		//Paaiškinama temperatura
+		textMesh.text = "Special attack activation increases temperature. \n\nWhen temperature reaches 45 degrees Celsius, the game is over.";
+		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(7f);
+		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(2f);
+		textMesh.text = "Medicine card can help to bring temperature down. \n\nWhen in need you can always drag it to the board. \n\nTry taking the card from the deck.";
+		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		deckObject.SetActive(true);
+		StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
+		//yield return new WaitForSeconds(7f);
+		Debug.Log("Card count: " + cardsCopy.Count);
+		while (cardsCopy.Count != 0)
+		{
+			yield return null;
+		}
+		Debug.Log("Card count: " + cardsCopy.Count);
+		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(3f);
 
 		//Parodoma laimejimo salyga
 		textMesh.text = "Your goal is to defeat all viruses. \n\nKeep going and exterminate them.";
@@ -304,4 +336,29 @@ public class Tutorial : MonoBehaviour
 
 		rectTransform.anchoredPosition = target;
 	}
+
+	IEnumerator SetObjectActive(GameObject go)
+    {
+		if(go == null)
+        {
+			yield return null;
+        }
+
+		if (go.active == false)
+		{
+			go.SetActive(true);
+		}
+		else if (go.active == true)
+		{
+			go.SetActive(false);
+		}
+	}
+
+	IEnumerator AddACardToTheDeck(GameObject card)
+    {
+		if (card == null)
+			yield return null;
+
+		deckObject.GetComponent<Deck>().AddACard(card);
+    }
 }

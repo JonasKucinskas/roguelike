@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class TurnManager : MonoBehaviour
 
     private float timer=0f;
     private float temperatureUpdateInterval=0.1f;
+
+    public GameObject temperatureEffectText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -139,6 +143,23 @@ public class TurnManager : MonoBehaviour
                     effectActive[i] = false;
                 }
             }
+        }
+
+        if(effectActive[0] == true)
+        {
+            temperatureEffectText.GetComponent<TextMeshProUGUI>().text = "Friendly characters get +1 additional damage";
+        }
+        else if(effectActive[1] == true)
+        {
+            temperatureEffectText.GetComponent<TextMeshProUGUI>().text = "Enemies loses 1 move";
+        }
+        else if(effectActive[2] == true)
+        {
+            temperatureEffectText.GetComponent<TextMeshProUGUI>().text = "Both friendly characters and enemies lose 2HP";
+        }
+        else
+        {
+            temperatureEffectText.GetComponent<TextMeshProUGUI>().text = "No effect";
         }
 	}
     public void AddTemperature(float temperature)
