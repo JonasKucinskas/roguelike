@@ -15,6 +15,7 @@ public abstract class Character : MonoBehaviour
     public bool isFriendly;
     public bool hasMoved = false; //for tutorial usage
     public bool hasAttacked = false; //for tutorial usage
+    public bool basicAttackDisabled = false; //for tutorial usage
     protected AudioManager audioManager;
     public BoardScript BoardManager;
     private List<List<Material>> originalMaterials;
@@ -105,6 +106,8 @@ public abstract class Character : MonoBehaviour
     public abstract void IdleSound();
     public void Attack(Character character)
 	{
+        if (basicAttackDisabled) return;
+
         HideCharacterInfoWindow();
         TileScript.ResetTileHighlights();
         NormalAttackSound();

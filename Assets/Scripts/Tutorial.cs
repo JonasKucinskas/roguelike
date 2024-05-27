@@ -171,6 +171,8 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, -1.0f, 0.5f, 0.5f, true));
 
+		character.basicAttackDisabled = true; //disables basic attack
+
 		NeutrophilCell neutrophil = GameObject.Find("Neutrofilas(Clone)").GetComponent<NeutrophilCell>();
 		while (!neutrophil.hasUsedSpecialAttack)
 		{
@@ -186,6 +188,8 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, 1.0f, 2f, 0.5f, false));
 		yield return new WaitForSeconds(1f);
+
+		character.basicAttackDisabled = false; //reenables basic attack
 
 		//Parodoma laimejimo salyga
 		textMesh.text = "Your goal is to defeat all viruses. \n\nKeep going and exterminate them.";
