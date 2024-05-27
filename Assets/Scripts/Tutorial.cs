@@ -176,6 +176,15 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(boardScript.SpawnEnemy(1, 2));
 		StartCoroutine(boardScript.SpawnEnemy(1, 0));
 
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, -1.0f, 0.5f, 0.5f, true));
+
+		character.basicAttackDisabled = true; //disables basic attack
+
 		NeutrophilCell neutrophil = GameObject.Find("Neutrofilas(Clone)").GetComponent<NeutrophilCell>();
 		while (!neutrophil.hasUsedSpecialAttack)
 		{
@@ -184,7 +193,15 @@ public class Tutorial : MonoBehaviour
 
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, 1.0f, 2f, 0.5f, false));
 		yield return new WaitForSeconds(1f);
+
+		character.basicAttackDisabled = false; //reenables basic attack
 
 		//Paaiškinama temperatura
 		textMesh.text = "Special attack activation increases temperature. \n\nWhen temperature reaches 45 degrees Celsius, the game is over.";
@@ -205,7 +222,6 @@ public class Tutorial : MonoBehaviour
 		Debug.Log("Card count: " + cardsCopy.Count);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(3f);
-
 
 		//Parodoma laimejimo salyga
 		textMesh.text = "Your goal is to defeat all viruses. \n\nKeep going and exterminate them.";
