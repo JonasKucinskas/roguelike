@@ -112,7 +112,7 @@ public class CardSelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointe
                 Child.gameObject.GetComponent<TextMeshProUGUI>().text=Damage.ToString();
                 // code block
                 break;
-            case "BlankPlaceholder":
+            case "medicineCard":
                 Character.HideAllInfoWindows();
                 cardInfoWindow = GameObject.Find("MenuUI's").transform.Find("TemperatureCardInformation").gameObject;
                 cardInfoWindow.SetActive(true);

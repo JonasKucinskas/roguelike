@@ -144,6 +144,7 @@ public class DendriticCell : Character
 
     public override void SpecialAttack()
     {
+        Debug.Log("Dendritic cells special attack");
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 
