@@ -164,6 +164,13 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(boardScript.SpawnEnemy(1, 2));
 		StartCoroutine(boardScript.SpawnEnemy(1, 0));
 
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f, true));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, -1.0f, 0.5f, 0.5f, true));
+
 		NeutrophilCell neutrophil = GameObject.Find("Neutrofilas(Clone)").GetComponent<NeutrophilCell>();
 		while (!neutrophil.hasUsedSpecialAttack)
 		{
@@ -172,6 +179,12 @@ public class Tutorial : MonoBehaviour
 
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, 1.0f, 2f, 0.5f, false));
 		yield return new WaitForSeconds(1f);
 
 		//Parodoma laimejimo salyga
