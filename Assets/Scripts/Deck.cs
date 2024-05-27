@@ -64,4 +64,10 @@ public class Deck : MonoBehaviour
             cards.Add(card);
         }
     }
+
+    public void AddACard(GameObject go)
+    {
+        cards.Add(go);
+        UpdateHeight();
+    }
 }
