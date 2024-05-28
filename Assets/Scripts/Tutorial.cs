@@ -121,7 +121,6 @@ public class Tutorial : MonoBehaviour
 		{
 			yield return null;
 		}
-		boardScript.AllowPlayerInput = false;
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(3f);
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
