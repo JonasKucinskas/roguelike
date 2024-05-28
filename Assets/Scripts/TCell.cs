@@ -16,6 +16,9 @@ public class TCell : Character
         hp = 16;
         damage = 15;
         isFriendly = true;
+        PlayerPrefs.SetInt("IsTcellUnlocked", 1);
+        PlayerPrefs.Save();
+        Debug.Log("Spawned tcell, bestiary log update");
     }
 
     void Update()
