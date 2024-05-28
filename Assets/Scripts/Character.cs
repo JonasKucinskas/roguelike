@@ -16,6 +16,7 @@ public abstract class Character : MonoBehaviour
     public bool hasMoved = false; //for tutorial usage
     public bool hasAttacked = false; //for tutorial usage
     public bool basicAttackDisabled = false; //for tutorial usage
+    public bool movementDisabled = false; //for tutorial usage
     protected AudioManager audioManager;
     public BoardScript BoardManager;
     private List<List<Material>> originalMaterials;
@@ -61,6 +62,7 @@ public abstract class Character : MonoBehaviour
 
 	public void Move(TileScript tile)
     {
+        if (movementDisabled) return;
         if (tile.IsOccupied() || !CanMove(tile) || tile.IsDisabled())
         {
             Debug.LogWarning("Cant move here.");

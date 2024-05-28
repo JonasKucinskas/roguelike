@@ -76,6 +76,7 @@ public class Tutorial : MonoBehaviour
 			yield return null;
 		}
 		Debug.Log("Card count: " + cardsCopy.Count);
+		boardScript.AllowPlayerInput = false;
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		///Yra sansas, kad imanoma paspausti ant kalades kol ji stutoriala atgal
 		StartCoroutine(MoveGameObjectSmooth(endPosGo, 1000f, deckObject));
@@ -83,7 +84,7 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		///Parodomas treciasis tekstas
-		boardScript.AllowPlayerInput = false;
+		
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f, true)); //hides tiles so the player only has one move
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(1, 0, -1.0f, 0.5f, 0.5f, true));
@@ -121,11 +122,14 @@ public class Tutorial : MonoBehaviour
 		{
 			yield return null;
 		}
+		character.movementDisabled = true;
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(3f);
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
+		yield return new WaitForSeconds(0.5f);
 
 		///Parodomas atakavimo paaiskinimas
+		character.movementDisabled = false;
 		textMesh.text = "Select a friendly character again. \n\nAttack an enemy by clicking on it.";
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 
@@ -133,6 +137,7 @@ public class Tutorial : MonoBehaviour
 		{
 			yield return null;
 		}
+		character.movementDisabled = true;
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false)); //shows tiles
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
@@ -144,7 +149,6 @@ public class Tutorial : MonoBehaviour
 		
 
 		yield return new WaitForSeconds(1f);
-		boardScript.AllowPlayerInput = true;
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 
 		GameObject heart = GameObject.Find("Heart_8");
@@ -164,23 +168,25 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		StartCoroutine(SetObjectActive(temperatureText));
 		StartCoroutine(SetObjectActive(tempretureEffectText));
-		yield return new WaitForSeconds(7f);
-		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
-		yield return new WaitForSeconds(2f);
-
-		//Specialios atakos paaiskinimas
-		textMesh.text = "Each friendly character has a special attack. \n\nYou can activate it by selecting an ally and pressing [space].";
-		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
-		StartCoroutine(boardScript.SpawnEnemy(1, 2));
-		StartCoroutine(boardScript.SpawnEnemy(1, 0));
-
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, -1.0f, 0.5f, 0.5f, true));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, -1.0f, 0.5f, 0.5f, true));
+		yield return new WaitForSeconds(7f);
+		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(2f);
 
+		//Specialios atakos paaiskinimas
+		boardScript.AllowPlayerInput = true;
+		character.movementDisabled = false;
+		textMesh.text = "Each friendly character has a special attack. \n\nYou can activate it by selecting an ally and pressing [space].";
+		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		StartCoroutine(boardScript.SpawnEnemy(1, 2));
+		StartCoroutine(boardScript.SpawnEnemy(1, 0));
+
+		
 		character.basicAttackDisabled = true; //disables basic attack
 
 		NeutrophilCell neutrophil = GameObject.Find("Neutrofilas(Clone)").GetComponent<NeutrophilCell>();
@@ -191,16 +197,10 @@ public class Tutorial : MonoBehaviour
 
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, 1.0f, 2f, 0.5f, false));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
-		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, 1.0f, 2f, 0.5f, false));
 		yield return new WaitForSeconds(1f);
 
 		character.basicAttackDisabled = false; //reenables basic attack
-
+		character.movementDisabled = true;
 		//Paaiškinama temperatura
 		textMesh.text = "Special attack activation increases temperature. \n\nWhen temperature reaches 45 degrees Celsius, the game is over.";
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
@@ -218,7 +218,14 @@ public class Tutorial : MonoBehaviour
 			yield return null;
 		}
 		Debug.Log("Card count: " + cardsCopy.Count);
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 0, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 1, 1.0f, 2f, 0.5f, false));
+		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(2, 2, 1.0f, 2f, 0.5f, false));
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		character.movementDisabled = false;
 		yield return new WaitForSeconds(3f);
 
 		//Parodoma laimejimo salyga

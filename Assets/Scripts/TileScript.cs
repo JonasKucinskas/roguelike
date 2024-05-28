@@ -153,7 +153,7 @@ public class TileScript : MonoBehaviour
                 tile.RemoveChildren();
                 foreach (var tile2 in AllTiles)
                 {
-                    ///tile2.CheckForFalseEnemyPresent();
+                    tile2.CheckForFalseEnemyPresent();
                 }
                 return true; // Enemy is in the last row
             }
