@@ -82,15 +82,15 @@ public class PlayerHealth : MonoBehaviour
 		CheckIfPlayerIsDead();
 	}
 
-	private void TakeDamageToPlayerHealth()
-	{
-		if (TileScript.IsEnemyInLastRow())
-		{
-			StartCoroutine(DelayedDamage(1, 2.5f));
-		}
-	}
+    private void TakeDamageToPlayerHealth()
+    {
+        if (TileScript.IsEnemyInLastRow())
+        {
+            StartCoroutine(DelayedDamage(1, 2.5f));
+        }
+    }
 
-	private IEnumerator DelayedDamage(int damage, float delayTime)
+    private IEnumerator DelayedDamage(int damage, float delayTime)
 	{
 		yield return new WaitForSeconds(delayTime);
 

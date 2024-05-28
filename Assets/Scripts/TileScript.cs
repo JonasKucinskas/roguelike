@@ -140,30 +140,30 @@ public class TileScript : MonoBehaviour
     }
 	public void CheckForFalseEnemyPresent()
 	{
-		if (IsEnemyPresent && !transform.GetComponentInChildren<Enemy>()) IsEnemyPresent = false;
+		if (IsEnemyPresent && transform.childCount >= 2) IsEnemyPresent = false;
 	}
-	public static bool IsEnemyInLastRow()
-	{
-		foreach (var tile in AllTiles)
-		{
-			if (tile.CheckForEnemyInLastRow())
-			{
-				Debug.Log("Enemy detected on tile (" + tile.xPosition + "," + tile.zPosition + ")");
-				tile.GetComponentInParent<BoardScript>().enemies.Remove(tile.GetComponentInChildren<Enemy>());
-				tile.RemoveChildren();
-				foreach(var tile2 in AllTiles)
-				{
-					tile2.CheckForFalseEnemyPresent();
-				}
-				return true; // Enemy is in the last row
-			}
-		}
-		return false; // No enemy in the last row
-	}
+    public static bool IsEnemyInLastRow()
+    {
+        foreach (var tile in AllTiles)
+        {
+            if (tile.CheckForEnemyInLastRow())
+            {
+                Debug.Log("Enemy detected on tile (" + tile.xPosition + "," + tile.zPosition + ")");
+                tile.GetComponentInParent<BoardScript>().enemies.Remove(tile.GetComponentInChildren<Enemy>());
+                tile.RemoveChildren();
+                foreach (var tile2 in AllTiles)
+                {
+                    ///tile2.CheckForFalseEnemyPresent();
+                }
+                return true; // Enemy is in the last row
+            }
+        }
+        return false; // No enemy in the last row
+    }
 
-	
 
-	public void Highlight()
+
+    public void Highlight()
 	{
 		Debug.Log("Highlighting tile");
 		//IsHighlighted = true;
