@@ -47,7 +47,7 @@ public class BoardScript : MonoBehaviour
 		MakeBoard();
 		InitializeEnemies();
 		LoadKeybinds();
-		boardCount = 0;
+		boardCount = 3;
 		Debug.Log(boardCount + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	}
 	void LoadKeybinds()
@@ -95,17 +95,20 @@ public class BoardScript : MonoBehaviour
             {
 				X = random.Next(4, 6);
 				Z = random.Next(3, 4);
+				Debug.Log("Spawning 0 board enemies" + X + " " + Z);
 			}
-			else if (boardCount >= 1 && boardCount <= 3)
+			else if (boardCount >= 1 && boardCount <= 2)
 			{
 				X = random.Next(4, 6);
 				Z = random.Next(4, 6);
-			}
+                Debug.Log("Spawning 1-2 board enemies" + X + " " + Z);
+            }
 			else
             {
-				X = random.Next(4, 6);
-				Z = random.Next(4, 7);
-			}
+				X = random.Next(5, 7);
+				Z = random.Next(5, 8);
+                Debug.Log("Spawning 4 board enemies" + X + " " + Z);
+            }
 
 		}
 		else //constant tutorial level
@@ -197,11 +200,11 @@ public class BoardScript : MonoBehaviour
 			}
 			else if (boardCount >= 1 && boardCount <= 3)
 			{
-				enemiesToSpawn = random.Next(3, 6); // Spawns between 3 and 5 enemies
+				enemiesToSpawn = random.Next(4, 7); // Spawns between 4 and 6 enemies
 			}
 			else
 			{
-				enemiesToSpawn = random.Next(4, 9); // Spawns between 4 and 8 enemies
+				enemiesToSpawn = random.Next(5, 10); // Spawns between 5 and 9 enemies
 			}
 
 			List<(int, int)> possibleTiles = new List<(int, int)>();
@@ -590,9 +593,11 @@ public class BoardScript : MonoBehaviour
 		//give player a card
 		CardManager cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
 		///These cause the turns to overflow into the negatives
-		///cardManager.ResetTheDeck();
+		cardManager.LevelStart = true;
+        cardManager.ResetTheDeck();
 		///cardManager.DrawACard();
-		boardCount++;
+        cardManager.LevelStart = false;
+        boardCount++;
 		Debug.Log(boardCount + " <- board count!");
 	}
 

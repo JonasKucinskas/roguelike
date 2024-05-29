@@ -17,6 +17,7 @@ public class CardManager : MonoBehaviour
     public bool ExtraCardDrawBonusChosen = false;
     private Deck deck;
     private Deck originalDeck;
+    public bool LevelStart = false;
 
     void Start()
     {
@@ -84,7 +85,7 @@ public class CardManager : MonoBehaviour
 
 			InstantiateCardInHand(drawnCards, card);
 			DrawCards(drawnCards);
-			if (!isExtraDraw) turnManager.SubtractPlayerMove();
+			if (!isExtraDraw&& !LevelStart) turnManager.SubtractPlayerMove();
 		}
 	}
 
