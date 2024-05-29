@@ -37,7 +37,11 @@ public abstract class Character : MonoBehaviour
         else
             Debug.Log("AudioManager is null");
 
-        Vector3 startPosition = transform.position; // Starting position
+		/// Update parent to the new tile at the beginning of the movement
+		if (!isFriendly)
+			gameObject.transform.SetParent(targetTile.gameObject.transform.parent, true);
+
+		Vector3 startPosition = transform.position; // Starting position
 		float yOffset = startPosition.y - targetTile.transform.position.y;
 		Vector3 endPosition = targetTile.transform.position + new Vector3(0, yOffset, 0); // Adjusted destination to maintain height
 
