@@ -91,6 +91,12 @@ public class TurnManager : MonoBehaviour
         PlayerPrefs.SetInt("MovesLeft", movesLeft);
     }
 
+    public void TutorialReset()
+    {
+        if (!isPlayersMove) EndEnemyTurn();
+        else PlayerPrefs.SetInt("MovesLeft", 2);
+        totalMovesMade = 0;
+	}
     public void NewLevelPlayerTurnReset()
     {
         if (!isPlayersMove) EndEnemyTurn();

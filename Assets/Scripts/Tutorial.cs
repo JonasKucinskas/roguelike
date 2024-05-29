@@ -22,7 +22,7 @@ public class Tutorial : MonoBehaviour
 	private Vector3 endPosGo = new Vector3(0, -0.73f, 27f);
 	private Vector3 startingPosText = new Vector3(-1224f, 315f, -1f);
 	private Vector3 endPosText = new Vector3(-683f, 315f, 0f);
-	private Vector3 startingPosHeart = new Vector3(-430, 200f, 6f);
+	private Vector3 startingPosHeart = new Vector3(-440, 200f, 6f);
 	private Vector3 endPosHeart = new Vector3(210, 200f, 6f);
 
 
@@ -33,7 +33,6 @@ public class Tutorial : MonoBehaviour
 		playerHealth = GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
 
 		deckObject.transform.position = endPosGo;
-
 		StartCoroutine(StartTutorial());
 
 		textMesh = tutorialText.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
@@ -64,7 +63,7 @@ public class Tutorial : MonoBehaviour
 			cardsCopy = deckScript.cards;
 		}
 		Debug.Log("Card count: " + cardsCopy.Count);
-		while (cardsCopy.Count != 1)
+		while (cardsCopy.Count != 2)
 		{
 			yield return null;
 		}
@@ -206,11 +205,12 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
 		//yield return new WaitForSeconds(7f);
 		Debug.Log("Card count: " + cardsCopy.Count);
-		while (cardsCopy.Count != 0)
+		while (cardsCopy.Count != 1)
 		{
 			yield return null;
 		}
 		Debug.Log("Card count: " + cardsCopy.Count);
+		StartCoroutine(MoveGameObjectSmooth(endPosGo, 1000f, deckObject));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 0, 1.0f, 2f, 0.5f, false));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 1, 1.0f, 2f, 0.5f, false));
 		StartCoroutine(MoveAndScaleTileByCoordinatesSmooth(0, 2, 1.0f, 2f, 0.5f, false));
@@ -247,12 +247,16 @@ public class Tutorial : MonoBehaviour
 	{
 		StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
 		yield return new WaitForSeconds(1f);
-		turnManager.SubtractPlayerMove();
-		turnManager.SubtractPlayerMove();
+		// turnManager.SubtractPlayerMove();
+		// turnManager.SubtractPlayerMove();
 		playerHealth.currentHealth = 1;
 		yield return new WaitForSeconds(3f);
-		textMesh.text = "But not every fight is going to be that easy";
+		textMesh.text = "But sometimes there is just nothing you can do";
 		tutorialText.SetActive(true);
+		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		yield return new WaitForSeconds(3f);
+		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
+		textMesh.text = "After death you lose all collected bonuses";
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(3f);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));

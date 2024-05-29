@@ -105,6 +105,10 @@ public class BonusManager : MonoBehaviour
 				DendriticCell.AddExtraDamage();
 				break;
 			case "Bonus 3":
+				if(boardScript.isTutorialLevel!=0)
+				{
+					break;
+				}
 				playerHealth.AddLife();
 				break;
 			case "Bonus 4":

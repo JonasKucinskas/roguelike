@@ -41,7 +41,6 @@ public class BoardScript : MonoBehaviour
 	void Start()
 	{
 		boardCount = 0;
-		Debug.Log(boardCount + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		deck = GameObject.Find("Deck").GetComponent<Deck>();
@@ -464,7 +463,7 @@ public class BoardScript : MonoBehaviour
 	private Character GetRandomEnemy(int xCoord)
 	{
 		int enemiesToChooseFrom = 2;
-		if (isTutorialLevel == 1)
+		if (isTutorialLevel !=0) 
 		{
 			enemiesToChooseFrom = 1;
 		}
@@ -491,12 +490,17 @@ public class BoardScript : MonoBehaviour
 		
 		int attackChance = 70;
 
-		if (isTutorialLevel >0)
+		if (isTutorialLevel ==1)
 		{
 			attackChance = 0;
 			//this is made so that enemy has enough moves to harm player in the tutorial.
 			//enemies are hard coded to spawn at x = 2, to just subtract 2 from x.
 			EnemyTurnCount = X - 2;
+		}
+		if(isTutorialLevel ==2)
+		{
+			attackChance = 0;
+			EnemyTurnCount=3;
 		}
 
 		yield return new WaitForSeconds(3f);
@@ -596,7 +600,15 @@ public class BoardScript : MonoBehaviour
 	public void StartNewLevel()
 	{
 		EnemiesBeingSpawned=true;
-		turnManager.NewLevelPlayerTurnReset();
+		if(isTutorialLevel==2)
+		{
+        	turnManager.TutorialReset();
+		}
+		else
+		{
+			turnManager.NewLevelPlayerTurnReset();			
+		}
+
 		TileScript.ClearAllTiles();
 		enemies = new List<Character>();
 		Frendlies = new List<Character>();
@@ -655,7 +667,8 @@ public class BoardScript : MonoBehaviour
 		yield return new WaitForSeconds(3f);
 		Character.HideAllInfoWindows();
 		if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
-		GameEnded=false;
+		GameEnded=false;			
+
 		levelStarted = false;
 	}
 
@@ -681,6 +694,7 @@ public class BoardScript : MonoBehaviour
 			yield return new WaitForSeconds(2f);
 			if(isTutorialLevel==2)
 			{
+				GameObject.Find("CardsUI").SetActive(false);
 				DefeatMenu.SetActive(true);
 				Transform TopButton = GetChildWithTag(DefeatMenu.transform,"GameEndMenuTopButton");
 				TopButton.gameObject.SetActive(false);				
@@ -689,7 +703,10 @@ public class BoardScript : MonoBehaviour
 			{
 				DefeatMenu.SetActive(true);
 			}
-			GameEnded=false;
+			if(isTutorialLevel!=2)
+			{
+				GameEnded=false;			
+			}
 		}
 	}
 

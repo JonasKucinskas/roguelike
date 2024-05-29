@@ -6913,6 +6913,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DefeatMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 8091321509614343940, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9208762678488891404, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

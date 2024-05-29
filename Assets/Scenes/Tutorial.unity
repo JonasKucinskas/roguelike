@@ -7151,16 +7151,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: cards.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: cards.Array.data[0]
       value: 
-      objectReference: {fileID: 2246310166062435280, guid: fc47040947cecdb46bac6ffb37e6a38d, type: 3}
+      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
     - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: cards.Array.data[1]
       value: 
-      objectReference: {fileID: 2246310166062435280, guid: c661605b30a199b448d96368a0feb601, type: 3}
+      objectReference: {fileID: 2246310166062435280, guid: fc47040947cecdb46bac6ffb37e6a38d, type: 3}
     - target: {fileID: 3448223230715630672, guid: 5abdbd1340b1991678e809c60d93a5c2, type: 3}
       propertyPath: cards.Array.data[3]
       value: 
@@ -7911,6 +7911,10 @@ PrefabInstance:
     - target: {fileID: 8091321509614343940, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
       propertyPath: m_Name
       value: DefeatMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091321509614343940, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9208762678488891404, guid: 9bb3f94a9da3e6348afea7b09228104a, type: 3}
       propertyPath: m_Pivot.x
