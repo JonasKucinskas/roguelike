@@ -40,6 +40,8 @@ public class BoardScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		boardCount = 0;
+		Debug.Log(boardCount + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 		turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
 		deck = GameObject.Find("Deck").GetComponent<Deck>();
@@ -47,8 +49,6 @@ public class BoardScript : MonoBehaviour
 		MakeBoard();
 		InitializeEnemies();
 		LoadKeybinds();
-		boardCount = 3;
-		Debug.Log(boardCount + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	}
 	void LoadKeybinds()
 	{
@@ -91,23 +91,21 @@ public class BoardScript : MonoBehaviour
 		System.Random random = new System.Random();
 		if(isTutorialLevel==0) 
 		{
+			Debug.Log("Board check success, board count: " + boardCount);
 			if(boardCount == 0)
             {
 				X = random.Next(4, 6);
 				Z = random.Next(3, 4);
-				Debug.Log("Spawning 0 board enemies" + X + " " + Z);
 			}
 			else if (boardCount >= 1 && boardCount <= 2)
 			{
 				X = random.Next(4, 6);
 				Z = random.Next(4, 6);
-                Debug.Log("Spawning 1-2 board enemies" + X + " " + Z);
             }
 			else
             {
 				X = random.Next(5, 7);
-				Z = random.Next(5, 8);
-                Debug.Log("Spawning 4 board enemies" + X + " " + Z);
+				Z = random.Next(5, 7);
             }
 
 		}
@@ -126,6 +124,8 @@ public class BoardScript : MonoBehaviour
 		Renderer boardRenderer = gameObject.GetComponentInChildren<Renderer>();
 		Vector3 boardSize = boardRenderer.bounds.size;
 
+		Debug.Log("X size: " + X);
+		Debug.Log("Z size: " + Z);
 		float boardX = X * tilePrefabSize.x;
 		float boardZ = Z * tilePrefabSize.z;
 
@@ -198,9 +198,9 @@ public class BoardScript : MonoBehaviour
 			{
 				enemiesToSpawn = random.Next(2, 4); // Spawns between 2 and 3 enemies
 			}
-			else if (boardCount >= 1 && boardCount <= 3)
+			else if (boardCount >= 1 && boardCount <= 2)
 			{
-				enemiesToSpawn = random.Next(4, 7); // Spawns between 4 and 6 enemies
+				enemiesToSpawn = random.Next(3, 5); // Spawns between 3 and 4 enemies
 			}
 			else
 			{
@@ -427,7 +427,19 @@ public class BoardScript : MonoBehaviour
 		enemy.characterName = $"enemy_{i}_{j}";
 		enemy.xPosition = i;
 		enemy.zPosition = j;
-		enemy.hp = Random.Range(5, 15);
+		if (boardCount == 0)
+		{
+			enemy.hp = Random.Range(5, 10);
+		}
+		else if (boardCount >= 1 && boardCount <= 2)
+		{
+			enemy.hp = Random.Range(8, 12);
+		}
+		else
+		{
+			enemy.hp = Random.Range(10, 25);
+		}
+		
 
 		enemies.Add(enemy);
 
@@ -603,6 +615,11 @@ public class BoardScript : MonoBehaviour
 
 	void CheckWinConditions()
 	{
+		//THIS IS THE LOSE CONDITION
+		if (GameObject.Find("Cards").transform.childCount == 0 && deck.cards.Count == 0 && Frendlies.Count == 0)
+		{
+			StartCoroutine(ShowLoseScreenAfterDelay());
+		}
 		if (enemies.Count == 0&&!EnemiesBeingSpawned)
 		{
 			PlayerHealth playerHealth =FindFirstObjectByType<PlayerHealth>();
@@ -610,11 +627,6 @@ public class BoardScript : MonoBehaviour
 			{
 				StartCoroutine(ShowWinScreenAfterDelay());
 			}
-		}
-		//THIS IS THE LOSE CONDITION
-		if(GameObject.Find("Cards").transform.childCount==0 && deck.cards.Count == 0 && Frendlies.Count == 0)
-		{
-			StartCoroutine(ShowLoseScreenAfterDelay());
 		}
 	}
 

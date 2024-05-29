@@ -53,7 +53,7 @@ public class BonusManager : MonoBehaviour
 			new Bonus { bonusName = "Bonus 2", bonusDescription = "Dendritic cell deals +2 damage" },
 			new Bonus { bonusName = "Bonus 3", bonusDescription = "Player gains +1 health" },
 			new Bonus { bonusName = "Bonus 4", bonusDescription = "There is a small chance to draw 2 cards instead of 1" },
-			new Bonus { bonusName = "Bonus 5", bonusDescription = "Neutrophil has a small % not to damage allies with the special attack" },
+			new Bonus { bonusName = "Bonus 5", bonusDescription = "Neutrophil has a small chance to not damage allies with the special attack" },
 			//new Bonus { bonusName = "Bonus 6", bonusDescription = "Dendritic cell's special attack takes 1 less turn to get ready" },
         };
 	}
