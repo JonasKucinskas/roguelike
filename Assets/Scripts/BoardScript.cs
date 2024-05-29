@@ -32,6 +32,7 @@ public class BoardScript : MonoBehaviour
 	//since otherwise it insta-wins
 	private bool EnemiesBeingSpawned=true;
 	private KeyCode specialAttack = KeyCode.Space;
+	public int boardCount;
 
 	public AudioManager audioManager;
 	private bool IsInitial = true;
@@ -46,6 +47,8 @@ public class BoardScript : MonoBehaviour
 		MakeBoard();
 		InitializeEnemies();
 		LoadKeybinds();
+		boardCount = 0;
+		Debug.Log(boardCount + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	}
 	void LoadKeybinds()
 	{
@@ -88,8 +91,22 @@ public class BoardScript : MonoBehaviour
 		System.Random random = new System.Random();
 		if(isTutorialLevel==0) 
 		{
-			X = random.Next(4, 6);
-			Z = random.Next(4, 6);
+			if(boardCount == 0)
+            {
+				X = random.Next(4, 6);
+				Z = random.Next(3, 4);
+			}
+			else if (boardCount >= 1 && boardCount <= 3)
+			{
+				X = random.Next(4, 6);
+				Z = random.Next(4, 6);
+			}
+			else
+            {
+				X = random.Next(4, 6);
+				Z = random.Next(4, 7);
+			}
+
 		}
 		else //constant tutorial level
 		{
@@ -172,21 +189,43 @@ public class BoardScript : MonoBehaviour
 		else
 		{
 			System.Random random = new System.Random();
+			int enemiesToSpawn = 0;
+
+			if (boardCount == 0)
+			{
+				enemiesToSpawn = random.Next(2, 4); // Spawns between 2 and 3 enemies
+			}
+			else if (boardCount >= 1 && boardCount <= 3)
+			{
+				enemiesToSpawn = random.Next(3, 6); // Spawns between 3 and 5 enemies
+			}
+			else
+			{
+				enemiesToSpawn = random.Next(4, 9); // Spawns between 4 and 8 enemies
+			}
+
+			List<(int, int)> possibleTiles = new List<(int, int)>();
 
 			for (int i = GetMaxPlaceableX(); i < X; i++)
 			{
 				for (int j = 0; j < Z; j++)
 				{
-					int randomNumber = random.Next(100);
-
-					// 50% chance to spawn an enemy.
-					if (randomNumber > ChanceToSpawnEnemies)
-					{
-						continue;
-					}
-
-					StartCoroutine(SpawnEnemy(i, j));
+					possibleTiles.Add((i, j));
 				}
+			}
+
+			for (int i = 0; i < enemiesToSpawn; i++)
+			{
+				if (possibleTiles.Count == 0)
+				{
+					break;
+				}
+
+				int randomIndex = random.Next(possibleTiles.Count);
+				(int x, int z) = possibleTiles[randomIndex];
+				possibleTiles.RemoveAt(randomIndex);
+
+				StartCoroutine(SpawnEnemy(x, z));
 			}
 		}
 	}
@@ -550,8 +589,11 @@ public class BoardScript : MonoBehaviour
 		InitializeEnemies();
 		//give player a card
 		CardManager cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
-		cardManager.ResetTheDeck();
-		cardManager.DrawACard();
+		///These cause the turns to overflow into the negatives
+		///cardManager.ResetTheDeck();
+		///cardManager.DrawACard();
+		boardCount++;
+		Debug.Log(boardCount + " <- board count!");
 	}
 
 	void CheckWinConditions()

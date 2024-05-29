@@ -61,6 +61,7 @@ public class Deck : MonoBehaviour
         cards.Clear();
         foreach (GameObject card in originalCards)
         {
+            Debug.Log(card);
             cards.Add(card);
         }
     }

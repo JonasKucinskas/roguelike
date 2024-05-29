@@ -12,7 +12,7 @@ public class TurnManager : MonoBehaviour
     private const float maxPlayerTemperature = 45f;
     public PlayerHealth ph;
     public float temperatureLowerBy;
-    int movesLeft;
+    public int movesLeft;
 
     private BoardScript bs;
 

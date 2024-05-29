@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.7456157, g: 0.36739796, b: 0.46048993, a: 1}
+  m_IndirectSpecularColor: {r: 0.7456158, g: 0.3673984, b: 0.46049052, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1485,6 +1485,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8053852135540591740, guid: 6edc61a1dd7363964b537d7ce36b18f6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 994740816}
+    - targetCorrespondingSourceObject: {fileID: 8053852135540591740, guid: 6edc61a1dd7363964b537d7ce36b18f6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 994740817}
   m_SourcePrefab: {fileID: 100100000, guid: 6edc61a1dd7363964b537d7ce36b18f6, type: 3}
 --- !u!4 &492771910 stripped
 Transform:
@@ -3828,6 +3831,27 @@ MonoBehaviour:
   isTutorialLevel: 0
   ChanceToSpawnEnemies: 30
   audioManager: {fileID: 2022377049}
+--- !u!65 &994740817
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994740814}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1006081337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4534,6 +4558,7 @@ MonoBehaviour:
   initialPlayerMoves: 3
   ph: {fileID: 0}
   temperatureLowerBy: 0.1
+  movesLeft: 0
   temperatureEffectText: {fileID: 1993088005}
   effectActive: 
 --- !u!4 &1233758184
