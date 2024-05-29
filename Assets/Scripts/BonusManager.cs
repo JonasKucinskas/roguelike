@@ -34,7 +34,6 @@ public class BonusManager : MonoBehaviour
 		cardManager = GameObject.Find("CardManager").GetComponent<CardManager>();
 		boardScript = GameObject.Find("Board").GetComponent<BoardScript>();
 		playerHealth = GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
-
 		InitializeBonuses();
 		AssignBonusTextToButtons();
 		// You can also load bonuses from a file or database here
@@ -138,11 +137,10 @@ public class BonusManager : MonoBehaviour
 		}
 		if(boardScript.isTutorialLevel>0)
 		{
-			Debug.Log("Loading menu");
-			//boardScript.isTutorialLevel=2;
-			SceneManager.LoadScene("MainMenu");
-			return;
+			boardScript.isTutorialLevel=2;
+			Tutorial tutorial=GameObject.Find("TutorialManager").GetComponent<Tutorial>();
+			StartCoroutine(tutorial.ForceLoseTutorial());
 		}
-		boardScript.StartNewLevel();			
+		boardScript.StartNewLevel();	
 	}
 }

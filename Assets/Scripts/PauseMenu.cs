@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject DefeatMenuUI;
 	public GameObject BonusSelectUI;
     public GameObject OpponentsTurnText;
+    public GameObject WinLoseText;
     private BoardScript boardManager;
     private KeyCode pause = KeyCode.Escape;
 

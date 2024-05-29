@@ -100,6 +100,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		isPlaced = true;
 		if (transform.gameObject.CompareTag("Card"))
 		{
+			boardManager.AllowPlayerInput=false;
 			Vector3 modelPosition = new Vector3(tileTransform.position.x, tileTransform.position.y + 0.6f, tileTransform.position.z);
 			Vector3 ParticlePosition= new Vector3(modelPosition.x,modelPosition.y+8f, modelPosition.z);
 			// Instantiate particle effect and character model
@@ -118,7 +119,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			
 			ChangeCharacterColliders(true);
 			CollidersOn=true;
-
+			boardManager.AllowPlayerInput=true;
 			cardPlaced = true;
 
 			Debug.Log("Card placed on cube.");

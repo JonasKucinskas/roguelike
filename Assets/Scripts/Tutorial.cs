@@ -25,7 +25,6 @@ public class Tutorial : MonoBehaviour
 	private Vector3 startingPosHeart = new Vector3(-430, 200f, 6f);
 	private Vector3 endPosHeart = new Vector3(210, 200f, 6f);
 
-	private bool ForceLose = false;
 
 	void Start()
 	{
@@ -34,14 +33,8 @@ public class Tutorial : MonoBehaviour
 		playerHealth = GameObject.Find("PlayerHealthIndicator").GetComponent<PlayerHealth>();
 
 		deckObject.transform.position = endPosGo;
-		if (!ForceLose)
-		{
-			StartCoroutine(StartTutorial());
-		}
-		else
-		{
-			StartCoroutine(ForceLoseTutorial());
-		}
+
+		StartCoroutine(StartTutorial());
 
 		textMesh = tutorialText.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
 	}
@@ -247,12 +240,10 @@ public class Tutorial : MonoBehaviour
 		StartCoroutine(MoveTextSmooth(endPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
 		yield return new WaitForSeconds(5f);
 		StartCoroutine(MoveTextSmooth(startingPosText, 1000f, tutorialText.GetComponent<RectTransform>()));
-
 		boardScript.isTutorialLevel = 2;
-		ForceLose = true;
 	}
 
-	IEnumerator ForceLoseTutorial()
+	public IEnumerator ForceLoseTutorial()
 	{
 		StartCoroutine(MoveGameObjectSmooth(startingPosGo, 10f, deckObject));
 		yield return new WaitForSeconds(1f);
@@ -349,11 +340,11 @@ public class Tutorial : MonoBehaviour
 			yield return null;
         }
 
-		if (go.active == false)
+		if (go.activeSelf == false)
 		{
 			go.SetActive(true);
 		}
-		else if (go.active == true)
+		else if (go.activeSelf == true)
 		{
 			go.SetActive(false);
 		}

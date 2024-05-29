@@ -24,7 +24,7 @@ public class BoardScript : MonoBehaviour
 	private bool levelStarted = true; //made so that the game isnt won after completing a single level
 	private int EnemyTurnCount = 2;
 	private bool StartedEnemyTurn = false;
-	public bool GameLost = false;
+	public bool GameEnded = false;
 	public bool AllowPlayerInput = true;
 	public int isTutorialLevel; //for a constant tutorial level (Changed this to int to correspond to different tutorial sections 0 = not tutorial, 1 = first tutorial, 2 = force losing condition tutorial)
 	public int ChanceToSpawnEnemies;
@@ -482,7 +482,7 @@ public class BoardScript : MonoBehaviour
 
 	IEnumerator EnemyMovement()
 	{
-		StartCoroutine(MoveTextAcrossScreen("Opponents turn"));
+		StartCoroutine(MoveTextAcrossScreen(false,"Opponents turn"));
 		int temp = 0;
 		if (turnManager.effectActive[1])
 		{
@@ -491,7 +491,7 @@ public class BoardScript : MonoBehaviour
 		
 		int attackChance = 70;
 
-		if (isTutorialLevel == 1)
+		if (isTutorialLevel >0)
 		{
 			attackChance = 0;
 			//this is made so that enemy has enough moves to harm player in the tutorial.
@@ -585,9 +585,9 @@ public class BoardScript : MonoBehaviour
 		}
 
 		turnManager.EndEnemyTurn();
-		if(!GameLost)
+		if(!GameEnded)
 		{
-			StartCoroutine(MoveTextAcrossScreen("Players turn"));			
+			StartCoroutine(MoveTextAcrossScreen(true,"Players turn"));			
 		}
 		AllowPlayerInput = true;
 		StartedEnemyTurn = false;
@@ -646,9 +646,16 @@ public class BoardScript : MonoBehaviour
 				Child.SetActive(false);
 			}
 		}
-		StartCoroutine(MoveTextAcrossScreen("You won!"));
+		if(FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText.activeSelf)
+		{
+			FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText.SetActive(false);
+		}
+		StartCoroutine(MoveTextAcrossScreen(false,"You won!"));
+		GameEnded=true;
 		yield return new WaitForSeconds(3f);
+		Character.HideAllInfoWindows();
 		if(levelStarted) FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().BonusSelectUI.SetActive(true);
+		GameEnded=false;
 		levelStarted = false;
 	}
 
@@ -661,23 +668,28 @@ public class BoardScript : MonoBehaviour
 	}
 	public IEnumerator ShowLoseScreenAfterDelay()
 	{
-		if(!GameLost)
+		if(!GameEnded)
 		{
-			StartCoroutine(MoveTextAcrossScreen("You lost!"));
-			GameLost=true;
-			GameObject DefeatMenu = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI;			
+			if(FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText.activeSelf)
+			{
+				FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText.SetActive(false);
+			}
+			StartCoroutine(MoveTextAcrossScreen(false,"You lost!"));
+			GameEnded=true;
+			Character.HideAllInfoWindows();
+			GameObject DefeatMenu = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI;
 			yield return new WaitForSeconds(2f);
-			if(isTutorialLevel!=2)
+			if(isTutorialLevel==2)
 			{
 				DefeatMenu.SetActive(true);
+				Transform TopButton = GetChildWithTag(DefeatMenu.transform,"GameEndMenuTopButton");
+				TopButton.gameObject.SetActive(false);				
 			}
 			else
 			{
 				DefeatMenu.SetActive(true);
-				Transform TopButton = GetChildWithTag(DefeatMenu.transform,"GameEndMenuTopButton");
-				TopButton.gameObject.SetActive(false);
 			}
-						
+			GameEnded=false;
 		}
 	}
 
@@ -711,15 +723,24 @@ public class BoardScript : MonoBehaviour
 		selectedCharacter = null;
 		//Debug.Log("Attack done");
 	}
-	private IEnumerator MoveTextAcrossScreen(string text)
+	private IEnumerator MoveTextAcrossScreen(bool TurnText,string text)
 	{
-		if(GameLost)
+		if(GameEnded)
 		{
 			yield break;
 		}
 
-		GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
-		TextObject.GetComponent<TextMeshProUGUI>().text=text;
+        GameObject TextObject;
+        if (TurnText)
+        {
+            TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
+        }
+        else
+        {
+            TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().WinLoseText;
+        }
+
+        TextObject.GetComponent<TextMeshProUGUI>().text=text;
 		RectTransform ObjTransform=TextObject.GetComponent<RectTransform>();
 		Vector3 StartingPosition = ObjTransform.localPosition;
 		Vector3 MiddlePosition = new Vector3(0,ObjTransform.localPosition.y,ObjTransform.localPosition.z);

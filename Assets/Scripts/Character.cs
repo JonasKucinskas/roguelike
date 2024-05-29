@@ -120,7 +120,7 @@ public abstract class Character : MonoBehaviour
         //character.TakeDamage(damage);
         hp--;
         int DAMAGE = damage;
-        if (turnManager.effectActive[0]) DAMAGE+=10;
+        if (turnManager.effectActive[0]) DAMAGE+=1;
         character.TakeDamage(DAMAGE);
         //Debug.Log(DAMAGE);
         //int MovesLeft = PlayerPrefs.GetInt("MovesLeft");
@@ -258,7 +258,7 @@ public abstract class Character : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (!isFriendly)
+		if (!isFriendly||!BoardManager.AllowPlayerInput)
 		{
 			return;
 		}
