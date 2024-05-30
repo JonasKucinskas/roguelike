@@ -690,6 +690,7 @@ public class BoardScript : MonoBehaviour
 			StartCoroutine(MoveTextAcrossScreen(false,"You lost!"));
 			GameEnded=true;
 			Character.HideAllInfoWindows();
+			GameObject TextObject = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().OpponentsTurnText;
 			GameObject DefeatMenu = FindAnyObjectByType<PauseMenu>().GetComponent<PauseMenu>().DefeatMenuUI;
 			yield return new WaitForSeconds(2f);
 			if(isTutorialLevel==2)
@@ -707,6 +708,8 @@ public class BoardScript : MonoBehaviour
 			{
 				GameEnded=false;			
 			}
+			GameObject.Find("CardsUI").SetActive(false);
+			TextObject.SetActive(false);
 		}
 	}
 
